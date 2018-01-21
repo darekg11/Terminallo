@@ -1,0 +1,13 @@
+{
+  "env": {
+    "browser": true
+  },
+  "parser": "babel-eslint",
+  "extends": "airbnb",
+  "plugins": ["react", "import"],
+  "rules": {
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "max-len": [2, 120, 2, { "ignoreUrls": true }],
+    "no-confusing-arrow": "off"
+  }
+}
