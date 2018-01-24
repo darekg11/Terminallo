@@ -16,7 +16,7 @@
     "babel-preset-stage-0": "^6.24.1",
     "cross-env": "^5.1.3",
     "css-loader": "^0.28.9",
-    "electron": "^1.7.10",
+    "electron": "^1.7.11",
     "electron-builder": "^19.54.0",
     "eslint": "^4.16.0",
     "eslint-config-airbnb": "^16.1.0",
@@ -35,6 +35,7 @@
     "lodash": "^4.17.4",
     "material-ui": "^1.0.0-beta.29",
     "material-ui-icons": "^1.0.0-beta.17",
+    "node-pty": "^0.7.4",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
@@ -42,26 +43,33 @@
     "redux": "^3.7.2",
     "typeface-roboto": "0.0.50",
     "uglifyjs-webpack-plugin": "^1.1.6",
-    "webpack": "^3.10.0"
+    "webpack": "^3.10.0",
+    "xterm": "^3.0.2"
   },
   "engines": {
     "node": "8.5.0"
   },
   "scripts": {
     "watch": "./node_modules/.bin/webpack-dev-server --config=webpack.dev.config.js",
-    "start": "cross-env NODE_ENV=development ./node_modules/.bin/electron .",
+    "start": "cross-env NODE_ENV=development electron .",
     "build-dev": "./node_modules/.bin/webpack --config=webpack.dev.config.js && electron-builder",
     "build-prod": "./node_modules/.bin/webpack --config=webpack.prod.config.js && electron-builder"
   },
   "build": {
     "appId": "Terminallo",
     "productName": "Terminallo",
-    "files": ["**/*", "!src/app/**/*"],
+    "files": [
+      "**/*",
+      "!src/app/**/*"
+    ],
     "win": {
       "target": [
         {
           "target": "nsis",
-          "arch": ["x64", "ia32"]
+          "arch": [
+            "x64",
+            "ia32"
+          ]
         }
       ],
       "artifactName": "${productName}-${version}-setup.${ext}"
