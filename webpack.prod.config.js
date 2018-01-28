@@ -21,5 +21,9 @@ module.exports = {
     ],
   },
 
-  plugins: [new webpack.HotModuleReplacementPlugin(), new UglifyJs()],
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.ExternalsPlugin('commonjs', ['node-pty']),
+    new UglifyJs(),
+  ],
 };
