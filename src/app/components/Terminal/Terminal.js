@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import os from 'os';
 import { Terminal } from 'xterm';
+import * as fit from 'xterm/lib/addons/fit/fit';
 import './Terminal.css';
 
 const shell = process.env[os.platform() === 'win32' ? 'COMSPEC' : 'SHELL'];
@@ -24,8 +25,10 @@ class TerminalView extends Component {
       env: {},
     });
 
+    Terminal.applyAddon(fit);
     const xTermInstance = new Terminal();
     xTermInstance.open(this.terminalInstanceDiv);
+    xTermInstance.fit();
     xTermInstance.on('data', (data) => {
       ptyInstance.write(data);
     });
@@ -42,6 +45,7 @@ class TerminalView extends Component {
   render() {
     return (
       <div
+        style={{ height: '100%' }}
         id="xterm_dynamic_id_uuid"
         ref={(c) => {
           this.terminalInstanceDiv = c;
