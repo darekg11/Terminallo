@@ -9,15 +9,12 @@ import Collapse from 'material-ui/transitions/Collapse';
 import KeyboardIcon from 'material-ui-icons/Keyboard';
 import ExpandLess from 'material-ui-icons/ExpandLess';
 import ExpandMore from 'material-ui-icons/ExpandMore';
-import StarBorder from 'material-ui-icons/StarBorder';
-
-import TerminalView from '../Terminal/Terminal';
+import Star from 'material-ui-icons/Grade';
 
 const drawerWidth = 200;
 
 const styles = theme => ({
   root: {
-    width: '100%',
     height: '100vh',
     zIndex: 1,
     overflow: 'hidden',
@@ -35,18 +32,6 @@ const styles = theme => ({
   },
   nested: {
     paddingLeft: theme.spacing.unit * 4,
-  },
-  appFrame: {
-    position: 'relative',
-    display: 'flex',
-    width: '100%',
-    height: '100%',
-  },
-  content: {
-    backgroundColor: theme.palette.background.default,
-    width: '100%',
-    height: '100%',
-    padding: theme.spacing.unit * 2,
   },
 });
 
@@ -89,31 +74,35 @@ class SidePanel extends React.Component {
           <Collapse component="li" in={this.state.open} timeout="auto" unmountOnExit>
             <List disablePadding>
               <ListItem button className={classes.nested}>
-                <ListItemIcon>
-                  <StarBorder />
-                </ListItemIcon>
                 <ListItemText inset primary="Terminal 1" />
               </ListItem>
             </List>
           </Collapse>
+          <ListItem button>
+            <ListItemIcon>
+              <Star />
+            </ListItemIcon>
+            <ListItemText inset primary="Favourites terminals" />
+            {this.state.open ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
         </List>
       </Drawer>
     );
     return (
       <div className={classes.root}>
-        <div className={classes.appFrame}>
-          {drawer}
-          <main className={classes.content}>
-            <TerminalView />
-          </main>
-        </div>
+        <div className={classes.appFrame}>{drawer}</div>
       </div>
     );
   }
 }
 
 SidePanel.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.shape({
+    root: PropTypes.string,
+    drawerPaper: PropTypes.string,
+    drawerHeader: PropTypes.string,
+    nested: PropTypes.string,
+  }).isRequired,
 };
 
 export default withStyles(styles)(SidePanel);

@@ -13,7 +13,7 @@ app.on('ready', () => {
     height: 720,
     title: 'Terminallo',
   });
-  mainWindow.setMinimumSize(800, 600);
+  mainWindow.setMinimumSize(1280, 720);
 
   const indexPathToLoad = isDev
     ? `file://${__dirname}/public/index.dev.html`

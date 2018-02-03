@@ -19,8 +19,6 @@ class TerminalView extends Component {
   componentDidMount() {
     const ptyInstance = pty.spawn(shell, [], {
       name: 'xterm-color',
-      cols: 80,
-      rows: 30,
       cwd: process.cwd(),
       env: {},
     });
@@ -45,7 +43,6 @@ class TerminalView extends Component {
   render() {
     return (
       <div
-        style={{ height: '100%' }}
         id="xterm_dynamic_id_uuid"
         ref={(c) => {
           this.terminalInstanceDiv = c;

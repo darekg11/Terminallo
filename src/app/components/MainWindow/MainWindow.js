@@ -2,7 +2,10 @@ import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { createMuiTheme, lightBaseTheme } from 'material-ui/styles';
 import Reboot from 'material-ui/Reboot';
+import MainPanel from '../MainPanel/MainPanel';
 import SidePanel from '../SidePanel/SidePanel';
+import AppBarMain from '../AppBarMain/AppBarMain';
+import TerminalTabs from '../TerminalTabs/TerminalTabs';
 import './MainWindow.css';
 
 const theme = createMuiTheme({
@@ -12,7 +15,13 @@ const theme = createMuiTheme({
 export default () => (
   <MuiThemeProvider theme={theme}>
     <Reboot>
-      <SidePanel />
+      <div className="App">
+        <SidePanel />
+        <MainPanel>
+          <AppBarMain />
+          <TerminalTabs />
+        </MainPanel>
+      </div>
     </Reboot>
   </MuiThemeProvider>
 );

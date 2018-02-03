@@ -1,0 +1,9 @@
+.App-Bar-Main {
+  width: 100%;
+  min-height: 56px;
+  flex: 1;
+}
+
+.App-Bar-Main .content {
+  align-items: flex-end;
+}
