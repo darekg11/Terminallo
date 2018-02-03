@@ -9,7 +9,7 @@ import Collapse from 'material-ui/transitions/Collapse';
 import KeyboardIcon from 'material-ui-icons/Keyboard';
 import ExpandLess from 'material-ui-icons/ExpandLess';
 import ExpandMore from 'material-ui-icons/ExpandMore';
-import Star from 'material-ui-icons/Grade';
+import Star from 'material-ui-icons/Star';
 
 const drawerWidth = 200;
 
