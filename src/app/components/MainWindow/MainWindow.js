@@ -6,6 +6,7 @@ import MainPanel from '../MainPanel/MainPanel';
 import SidePanel from '../SidePanel/SidePanel';
 import AppBarMain from '../AppBarMain/AppBarMain';
 import TerminalTabs from '../TerminalTabs/TerminalTabs';
+import AddNewTerminalModalWindow from '../AddTerminalWindow/AddTerminalWindow';
 import './MainWindow.css';
 
 const theme = createMuiTheme({
@@ -21,6 +22,7 @@ export default () => (
           <AppBarMain />
           <TerminalTabs />
         </MainPanel>
+        <AddNewTerminalModalWindow />
       </div>
     </Reboot>
   </MuiThemeProvider>

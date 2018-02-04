@@ -4,7 +4,7 @@ import { Terminal } from 'xterm';
 import * as fit from 'xterm/lib/addons/fit/fit';
 import './Terminal.css';
 
-const shell = process.env[os.platform() === 'win32' ? 'COMSPEC' : 'SHELL'];
+const shell = os.platform() === 'win32' ? 'cmd.exe' : 'SHELL';
 const pty = require('node-pty');
 
 class TerminalView extends Component {
