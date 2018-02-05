@@ -1,43 +1,22 @@
 import React, { Component } from 'react';
-import os from 'os';
-import { Terminal } from 'xterm';
-import * as fit from 'xterm/lib/addons/fit/fit';
+import PropTypes from 'prop-types';
 import './Terminal.css';
 
-const shell = os.platform() === 'win32' ? 'cmd.exe' : 'SHELL';
-const pty = require('node-pty');
-
 class TerminalView extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      xTermInstance: {},
-      virtualTerminalInstance: {},
-    };
-  }
-
   componentDidMount() {
-    const ptyInstance = pty.spawn(shell, [], {
-      name: 'xterm-color',
-      cwd: process.cwd(),
-      env: {},
-    });
-
-    Terminal.applyAddon(fit);
-    const xTermInstance = new Terminal();
+    const { xTermInstance, virtualTerminalInstance, terminalStartupCommands } = this.props.terminal;
     xTermInstance.open(this.terminalInstanceDiv);
     xTermInstance.fit();
     xTermInstance.on('data', (data) => {
-      ptyInstance.write(data);
+      virtualTerminalInstance.write(data);
     });
-    ptyInstance.on('data', (data) => {
+    virtualTerminalInstance.on('data', (data) => {
       xTermInstance.write(data);
     });
 
-    ptyInstance.write('SET SOME=test\r');
-    ptyInstance.write('cd ..\r');
-
-    this.setState({ xTermInstance, virtualTerminalInstance: ptyInstance });
+    terminalStartupCommands.forEach((singleCommand) => {
+      virtualTerminalInstance.write(`${singleCommand}\r`);
+    });
   }
 
   render() {
@@ -51,5 +30,21 @@ class TerminalView extends Component {
     );
   }
 }
+
+TerminalView.propTypes = {
+  terminal: PropTypes.shape({
+    xTermInstance: PropTypes.shape({
+      open: PropTypes.func.isRequired,
+      fit: PropTypes.func.isRequired,
+      on: PropTypes.func.isRequired,
+      write: PropTypes.func.isRequired,
+    }).isRequired,
+    virtualTerminalInstance: PropTypes.shape({
+      on: PropTypes.func.isRequired,
+      write: PropTypes.func.isRequired,
+    }).isRequired,
+    terminalStartupCommands: PropTypes.arrayOf(PropTypes.string),
+  }).isRequired,
+};
 
 export default TerminalView;

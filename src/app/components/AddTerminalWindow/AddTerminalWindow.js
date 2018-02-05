@@ -1,6 +1,7 @@
 import electron from 'electron';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { batchActions } from 'redux-batched-actions';
 import os from 'os';
 import { forIn } from 'lodash';
 import { withStyles } from 'material-ui/styles';
@@ -18,6 +19,7 @@ import AddIcon from 'material-ui-icons/Add';
 import IconButton from 'material-ui/IconButton';
 import Tooltip from 'material-ui/Tooltip';
 import ApplicationActions from '../../actions/ApplicationActions';
+import TerminalActions from '../../actions/TerminalActions';
 import TerminalTypes from '../../enums/TerminalTypes';
 import './AddTerminalWindow.css';
 
@@ -88,6 +90,17 @@ class AddNewTerminalWindow extends Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
+  handleFormSubmit = (event) => {
+    event.preventDefault();
+    const terminalDataObject = {
+      terminalType: this.state.terminalType,
+      terminalName: this.state.terminalName,
+      terminalStartupDir: this.state.terminalStartupDir,
+      terminalStartupCommands: this.state.terminalStartupCommands,
+    };
+    this.props.addNewTerminal(terminalDataObject);
+  };
+
   renderAvailableTerminalList = () => {
     const availableTerminals = this.getRenderedTerminalTypesList();
     return availableTerminals.map(singleTerminalType => (
@@ -108,7 +121,7 @@ class AddNewTerminalWindow extends Component {
           onClose={this.props.close}
         >
           <div style={getModalStyle()} className={classes.paper}>
-            <form className="Add-Terminal" autoComplete="off">
+            <form className="Add-Terminal" autoComplete="off" onSubmit={this.handleFormSubmit}>
               <Typography type="title" align="center" id="modal-title">
                 Add new Terminal
               </Typography>
@@ -171,6 +184,7 @@ class AddNewTerminalWindow extends Component {
 AddNewTerminalWindow.propTypes = {
   opened: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
+  addNewTerminal: PropTypes.func.isRequired,
   classes: PropTypes.shape({
     paper: PropTypes.string,
     button: PropTypes.string,
@@ -185,6 +199,11 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   close: () => dispatch(ApplicationActions.closeAddNewTerminalModalWindow()),
+  addNewTerminal: terminalData =>
+    dispatch(batchActions([
+      TerminalActions.addNewTerminalInstance(terminalData),
+      ApplicationActions.closeAddNewTerminalModalWindow(),
+    ])),
 });
 
 const styledComponent = withStyles(styles)(AddNewTerminalWindow);

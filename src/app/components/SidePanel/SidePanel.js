@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Drawer from 'material-ui/Drawer';
@@ -73,9 +74,11 @@ class SidePanel extends React.Component {
           </ListItem>
           <Collapse component="li" in={this.state.open} timeout="auto" unmountOnExit>
             <List disablePadding>
-              <ListItem button className={classes.nested}>
-                <ListItemText inset primary="Terminal 1" />
-              </ListItem>
+              {this.props.terminals.map(singleTerminal => (
+                <ListItem key={singleTerminal.uuid} button className={classes.nested}>
+                  <ListItemText inset primary={singleTerminal.terminalName} />
+                </ListItem>
+              ))}
             </List>
           </Collapse>
           <ListItem button>
@@ -103,6 +106,18 @@ SidePanel.propTypes = {
     drawerHeader: PropTypes.string,
     nested: PropTypes.string,
   }).isRequired,
+  terminals: PropTypes.arrayOf(PropTypes.shape({
+    terminalName: PropTypes.string.isRequired,
+  })),
 };
 
-export default withStyles(styles)(SidePanel);
+SidePanel.defaultProps = {
+  terminals: [],
+};
+
+const mapStateToProps = state => ({
+  terminals: state.TerminalsReducer.terminals,
+});
+
+const styledComponent = withStyles(styles)(SidePanel);
+export default connect(mapStateToProps, null)(styledComponent);

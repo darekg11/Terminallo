@@ -23,7 +23,7 @@ class TerminalTabs extends React.Component {
           <Tab label="Item Two" />
           <Tab label="Item Three" />
         </Tabs>
-        {value === 0 && <Terminal />}
+        {/* {value === 0 && <Terminal />} */}
       </Paper>
     );
   }
