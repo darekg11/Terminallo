@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+// import TerminalActions from '../../actions/TerminalActions';
 import './Terminal.css';
 
 class TerminalView extends Component {
@@ -13,10 +15,18 @@ class TerminalView extends Component {
     virtualTerminalInstance.on('data', (data) => {
       xTermInstance.write(data);
     });
-
+    // if (!initialized) {
     terminalStartupCommands.forEach((singleCommand) => {
       virtualTerminalInstance.write(`${singleCommand}\r`);
     });
+    //   this.props.terminalFinishedInitialization(this.props.terminal);
+    // }
+  }
+
+  componentWillUnmount() {
+    const { xTermInstance, virtualTerminalInstance } = this.props.terminal;
+    xTermInstance.removeAllListeners('data');
+    virtualTerminalInstance.removeAllListeners('data');
   }
 
   render() {
@@ -45,6 +55,15 @@ TerminalView.propTypes = {
     }).isRequired,
     terminalStartupCommands: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
+  // terminalFinishedInitialization: PropTypes.func.isRequired,
 };
 
-export default TerminalView;
+const mapStateToProps = state => ({
+  selectedTerminal: state.TerminalsReducer.selectedTerminal,
+});
+
+// const mapDispatchToProps = dispatch => ({
+//   terminalFinishedInitialization: terminal => dispatch(TerminalActions.terminalDoneInitialization(terminal)),
+// });
+
+export default connect(mapStateToProps, null)(TerminalView);

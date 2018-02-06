@@ -61,7 +61,7 @@ class AddNewTerminalWindow extends Component {
       terminalType: '',
       terminalName: '',
       terminalStartupDir: '',
-      terminalStartupCommands: [],
+      terminalStartupCommands: '',
     };
   }
 
@@ -92,11 +92,14 @@ class AddNewTerminalWindow extends Component {
 
   handleFormSubmit = (event) => {
     event.preventDefault();
+    const terminalCommandsStartup = this.state.terminalStartupCommands
+      .split(/\r?\n/)
+      .filter(singleLine => singleLine !== '');
     const terminalDataObject = {
       terminalType: this.state.terminalType,
       terminalName: this.state.terminalName,
       terminalStartupDir: this.state.terminalStartupDir,
-      terminalStartupCommands: this.state.terminalStartupCommands,
+      terminalStartupCommands: terminalCommandsStartup,
     };
     this.props.addNewTerminal(terminalDataObject);
   };
@@ -167,6 +170,8 @@ class AddNewTerminalWindow extends Component {
                   rowsMax="5"
                   defaultValue="Each line is separate command that is run when terminal is launched"
                   margin="normal"
+                  name="terminalStartupCommands"
+                  onChange={this.handleChange}
                 />
               </FormControl>
               <Button className={classes.button} raised color="primary" type="submit">
