@@ -10,11 +10,5 @@ const selectTerminalInstance = terminalUuid => ({
   terminalUUID: terminalUuid,
 });
 
-// const terminalDoneInitialization = terminalUuid => ({
-//   type: TerminalActionTypes.TERMINAL_DONE_INITIALIZATION,
-//   terminalUUID: terminalUuid,
-// });
-
 exports.addNewTerminalInstance = addNewTerminalInstance;
 exports.selectTerminalInstance = selectTerminalInstance;
-// exports.terminalDoneInitialization = terminalDoneInitialization;

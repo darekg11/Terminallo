@@ -16,7 +16,6 @@ export default function terminalReducer(state = initialState, action) {
       newTerminalInstance.uuid = uuid.v4();
       newTerminalInstance.xTermInstance = createdTerminalInstance.xTermInstance;
       newTerminalInstance.virtualTerminalInstance = createdTerminalInstance.virtualTerminalInstance;
-      // newTerminalInstance.initialized = false;
       return { ...state, terminals: [...state.terminals, newTerminalInstance] };
     }
     case TerminalActionTypes.SELECT_TERMINAL_INSTANCE: {
@@ -25,15 +24,6 @@ export default function terminalReducer(state = initialState, action) {
       terminalInstance = isUndefined(terminalInstance) ? '' : terminalInstance.uuid;
       return { ...state, selectedTerminal: terminalInstance };
     }
-    // case TerminalActionTypes.TERMINAL_DONE_INITIALIZATION: {
-    //   const destinationUUID = action.terminalUUID;
-    //   const terminalInstancesCopy = cloneDeep(state.terminals);
-    //   const terminalInstance = terminalInstancesCopy.find(singleTerminal => singleTerminal.uuid === destinationUUID);
-    //   if (!isUndefined(terminalInstance)) {
-    //     terminalInstance.initialized = true;
-    //   }
-    //   return
-    // }
     default:
       return state;
   }

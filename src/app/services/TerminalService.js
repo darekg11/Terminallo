@@ -18,6 +18,15 @@ const createNewTerminalInstance = (terminalData) => {
 
   Terminal.applyAddon(fit);
   const xTermInstance = new Terminal();
+  xTermInstance.on('data', (data) => {
+    virtualTerminalInstance.write(data);
+  });
+  virtualTerminalInstance.on('data', (data) => {
+    xTermInstance.write(data);
+  });
+  terminalData.terminalStartupCommands.forEach((singleCommand) => {
+    virtualTerminalInstance.write(`${singleCommand}\r`);
+  });
   return {
     xTermInstance,
     virtualTerminalInstance,
