@@ -3,9 +3,9 @@ import { Terminal } from 'xterm';
 import * as fit from 'xterm/lib/addons/fit/fit';
 import TerminalTypes from '../enums/TerminalTypes';
 
-const pty = require('node-pty');
-
 const createNewTerminalInstance = (terminalData) => {
+  const pty = require('node-pty');
+
   const osType = os.platform() === 'win32' ? 'windows' : 'unix';
   const terminalsForGivenOs = TerminalTypes[osType];
   const selectedTerminalType = terminalsForGivenOs[terminalData.terminalType];
@@ -33,4 +33,4 @@ const createNewTerminalInstance = (terminalData) => {
   };
 };
 
-exports.createNewTerminalInstance = createNewTerminalInstance;
+export { createNewTerminalInstance };

@@ -1,7 +1,7 @@
 import * as uuid from 'uuid';
 import { isUndefined } from 'lodash';
 import TerminalActionTypes from '../actions/TerminalActionTypes';
-import TerminalService from '../services/TerminalService';
+import * as TerminalService from '../services/TerminalService';
 
 const initialState = {
   terminals: [],
@@ -16,13 +16,19 @@ export default function terminalReducer(state = initialState, action) {
       newTerminalInstance.uuid = uuid.v4();
       newTerminalInstance.xTermInstance = createdTerminalInstance.xTermInstance;
       newTerminalInstance.virtualTerminalInstance = createdTerminalInstance.virtualTerminalInstance;
-      return { ...state, terminals: [...state.terminals, newTerminalInstance] };
+      return {
+        ...state,
+        terminals: [...state.terminals, newTerminalInstance],
+        selectedTerminal: newTerminalInstance.uuid,
+      };
     }
     case TerminalActionTypes.SELECT_TERMINAL_INSTANCE: {
       const destinationUUID = action.terminalUUID;
-      let terminalInstance = state.terminals.find(singleTerminal => singleTerminal.uuid === destinationUUID);
-      terminalInstance = isUndefined(terminalInstance) ? '' : terminalInstance.uuid;
-      return { ...state, selectedTerminal: terminalInstance };
+      const terminalInstance = state.terminals.find(singleTerminal => singleTerminal.uuid === destinationUUID);
+      if (isUndefined(terminalInstance)) {
+        return state;
+      }
+      return { ...state, selectedTerminal: terminalInstance.uuid };
     }
     default:
       return state;
