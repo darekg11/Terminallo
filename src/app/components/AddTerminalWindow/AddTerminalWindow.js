@@ -116,72 +116,70 @@ class AddNewTerminalWindow extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <div>
-        <Modal
-          aria-labelledby="Add new Terminal instance"
-          aria-describedby="Add new Terminal instance to your list of terminals and start hacking : )"
-          open={this.props.opened}
-          onClose={this.props.close}
-        >
-          <div style={getModalStyle()} className={classes.paper}>
-            <form className="Add-Terminal" autoComplete="off" onSubmit={this.handleFormSubmit}>
-              <Typography type="title" align="center" id="modal-title">
-                Add new Terminal
-              </Typography>
-              <FormControl className={classes.formControl} required>
-                <InputLabel htmlFor="terminal-type">Type</InputLabel>
-                <Select
-                  value={this.state.terminalType}
-                  onChange={this.handleChange}
-                  input={<Input name="terminalType" id="terminal-type" />}
-                >
-                  {this.renderAvailableTerminalList()}
-                </Select>
-                <FormHelperText>Please choose terminal type to launch for Your OS</FormHelperText>
-              </FormControl>
-              <FormControl className={classes.formControl} required>
-                <InputLabel htmlFor="terminal-name">Name</InputLabel>
-                <Input name="terminalName" id="terminal-name" onChange={this.handleChange} />
-                <FormHelperText>Enter terminal custom name</FormHelperText>
-              </FormControl>
-              <FormControl className={classes.formControl} required disabled>
-                <InputLabel htmlFor="terminal-directory">Terminal startup path</InputLabel>
-                <Input
-                  name="terminalStartupDir"
-                  id="terminal-directory"
-                  value={this.state.terminalStartupDir}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <Tooltip id="tooltip-add-new" title="Select directory">
-                        <IconButton aria-label="Select directory" onClick={this.openDirectoryChooserDialog}>
-                          <FolderOpenIcon />
-                        </IconButton>
-                      </Tooltip>
-                    </InputAdornment>
-                  }
-                />
-                <FormHelperText>Terminal startup path</FormHelperText>
-              </FormControl>
-              <FormControl className={classes.formControl}>
-                <TextField
-                  id="terminal-commands"
-                  label="Terminal startup commands"
-                  multiline
-                  rowsMax="5"
-                  defaultValue="Each line is separate command that is run when terminal is launched"
-                  margin="normal"
-                  name="terminalStartupCommands"
-                  onChange={this.handleChange}
-                />
-              </FormControl>
-              <Button className={classes.button} raised color="primary" type="submit">
-                <AddIcon className={classes.leftIcon} />
-                Add
-              </Button>
-            </form>
-          </div>
-        </Modal>
-      </div>
+      <Modal
+        aria-labelledby="Add new Terminal instance"
+        aria-describedby="Add new Terminal instance to your list of terminals and start hacking : )"
+        open={this.props.opened}
+        onClose={this.props.close}
+      >
+        <div style={getModalStyle()} className={classes.paper}>
+          <form className="Add-Terminal" autoComplete="off" onSubmit={this.handleFormSubmit}>
+            <Typography type="title" align="center" id="modal-title">
+              Add new Terminal
+            </Typography>
+            <FormControl className={classes.formControl} required>
+              <InputLabel htmlFor="terminal-type">Type</InputLabel>
+              <Select
+                value={this.state.terminalType}
+                onChange={this.handleChange}
+                input={<Input name="terminalType" id="terminal-type" />}
+              >
+                {this.renderAvailableTerminalList()}
+              </Select>
+              <FormHelperText>Please choose terminal type to launch for Your OS</FormHelperText>
+            </FormControl>
+            <FormControl className={classes.formControl} required>
+              <InputLabel htmlFor="terminal-name">Name</InputLabel>
+              <Input name="terminalName" id="terminal-name" onChange={this.handleChange} />
+              <FormHelperText>Enter terminal custom name</FormHelperText>
+            </FormControl>
+            <FormControl className={classes.formControl} required disabled>
+              <InputLabel htmlFor="terminal-directory">Terminal startup path</InputLabel>
+              <Input
+                name="terminalStartupDir"
+                id="terminal-directory"
+                value={this.state.terminalStartupDir}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <Tooltip id="tooltip-add-new" title="Select directory">
+                      <IconButton aria-label="Select directory" onClick={this.openDirectoryChooserDialog}>
+                        <FolderOpenIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </InputAdornment>
+                }
+              />
+              <FormHelperText>Terminal startup path</FormHelperText>
+            </FormControl>
+            <FormControl className={classes.formControl}>
+              <TextField
+                id="terminal-commands"
+                label="Terminal startup commands"
+                multiline
+                rowsMax="5"
+                defaultValue="Each line is separate command that is run when terminal is launched"
+                margin="normal"
+                name="terminalStartupCommands"
+                onChange={this.handleChange}
+              />
+            </FormControl>
+            <Button className={classes.button} raised color="primary" type="submit">
+              <AddIcon className={classes.leftIcon} />
+              Add
+            </Button>
+          </form>
+        </div>
+      </Modal>
     );
   }
 }
