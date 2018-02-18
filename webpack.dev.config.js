@@ -4,6 +4,7 @@ const path = require('path');
 module.exports = {
   entry: ['babel-polyfill', './src/app/App.js'],
   target: 'electron',
+  devtool: 'source-map',
 
   output: {
     path: path.join(__dirname, '/public/built'),
