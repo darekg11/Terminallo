@@ -18,7 +18,6 @@ const styles = theme => ({
   root: {
     height: '100vh',
     zIndex: 1,
-    overflow: 'hidden',
   },
   drawerPaper: {
     position: 'relative',

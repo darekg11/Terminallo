@@ -14,6 +14,8 @@ const TerminalTabs = props => (
       onChange={(event, value) => props.selectTerminal(value)}
       indicatorColor="primary"
       textColor="primary"
+      scrollable
+      scrollButtons="auto"
     >
       {props.terminals.map(singleTerminal => (
         <Tab key={singleTerminal.uuid} label={singleTerminal.terminalName} value={singleTerminal.uuid} />
