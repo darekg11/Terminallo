@@ -1,4 +1,5 @@
 import os from 'os';
+import * as uuid from 'uuid';
 import { Terminal } from 'xterm';
 import * as fit from 'xterm/lib/addons/fit/fit';
 import TerminalTypes from '../enums/TerminalTypes';
@@ -33,4 +34,14 @@ const createNewTerminalInstance = (terminalData) => {
   };
 };
 
-export { createNewTerminalInstance };
+const exportTermninalsToObject = terminals => ({
+  terminals: terminals.map(singleTerminal => ({
+    uuid: singleTerminal.uuid || uuid.v4(),
+    terminalType: singleTerminal.terminalType,
+    name: singleTerminal.name || 'Terminal',
+    terminalStartupDir: singleTerminal.terminalStartupDir,
+    terminalStartupCommands: singleTerminal.terminalStartupCommands || [],
+  })),
+});
+
+export { createNewTerminalInstance, exportTermninalsToObject };
