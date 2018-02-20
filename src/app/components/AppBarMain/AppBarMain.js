@@ -33,7 +33,7 @@ const AppBarMain = props => (
           </IconButton>
         </Tooltip>
         <Tooltip id="tooltip-save-as" title="Save terminals as">
-          <IconButton aria-label="Save terminals as">
+          <IconButton aria-label="Save terminals as" onClick={props.exportTerminals}>
             <SaveAsIcon />
           </IconButton>
         </Tooltip>
@@ -49,10 +49,12 @@ const AppBarMain = props => (
 
 AppBarMain.propTypes = {
   openAddNewTerminalWindow: PropTypes.func.isRequired,
+  exportTerminals: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
   openAddNewTerminalWindow: () => dispatch(ApplicationActions.openAddNewTerminalModalWindow()),
+  exportTerminals: () => dispatch(ApplicationActions.exportTerminals()),
 });
 
 export default connect(null, mapDispatchToProps)(AppBarMain);

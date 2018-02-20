@@ -34,8 +34,8 @@ const createNewTerminalInstance = (terminalData) => {
   };
 };
 
-const exportTermninalsToObject = terminals => ({
-  terminals: terminals.map(singleTerminal => ({
+const exportTermninalsToObject = terminalInstances => ({
+  terminals: terminalInstances.map(singleTerminal => ({
     uuid: singleTerminal.uuid || uuid.v4(),
     terminalType: singleTerminal.terminalType,
     name: singleTerminal.name || 'Terminal',
