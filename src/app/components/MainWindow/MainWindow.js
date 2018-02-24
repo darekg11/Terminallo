@@ -7,6 +7,7 @@ import SidePanel from '../SidePanel/SidePanel';
 import AppBarMain from '../AppBarMain/AppBarMain';
 import TerminalTabs from '../TerminalTabs/TerminalTabs';
 import AddNewTerminalModalWindow from '../AddTerminalWindow/AddTerminalWindow';
+import Spinner from '../Spinner/Spinner';
 import './MainWindow.css';
 
 const theme = createMuiTheme({
@@ -23,6 +24,7 @@ export default () => (
           <TerminalTabs />
         </MainPanel>
         <AddNewTerminalModalWindow />
+        <Spinner />
       </div>
     </Reboot>
   </MuiThemeProvider>

@@ -2,18 +2,21 @@ import electron from 'electron';
 import * as TerminalService from '../services/TerminalService';
 import * as FileService from '../services/FileService';
 import ApplicationActionTypes from './ApplicationActionTypes';
+import SpinnerActionTypes from './SpinnerActionTypes';
 
 const startExportTerminals = () => ({
-  type: ApplicationActionTypes.START_EXPORT_TERMINALS,
+  type: SpinnerActionTypes.SPINNER_SHOW,
+  loadingMessage: 'Exporting terminals... Please wait',
 });
 
 const exportTerminalError = error => ({
-  type: ApplicationActionTypes.ERROR_EXPORT_TERMINALS,
-  error,
+  type: SpinnerActionTypes.SPINNER_LOADING_ERROR,
+  errorMessage: `Could not export terminals :( Error: ${error.message}`,
 });
 
 const exportTerminalSuccess = () => ({
-  type: ApplicationActionTypes.SUCCESS_EXPORT_TERMINALS,
+  type: SpinnerActionTypes.SPINNER_LOADING_SUCCESS,
+  successMessage: 'Terminals exported successfully.',
 });
 
 const exportTerminals = () => async (dispatch, getState) => {
