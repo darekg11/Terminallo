@@ -11,4 +11,4 @@ const saveJsonToFile = async (filePath, jsonObject) => {
   }
 };
 
-exports.saveJsonToFile = saveJsonToFile;
+export { saveJsonToFile };

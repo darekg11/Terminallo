@@ -1,45 +1,21 @@
-import electron from 'electron';
 import * as TerminalService from '../services/TerminalService';
 import * as FileService from '../services/FileService';
 import ApplicationActionTypes from './ApplicationActionTypes';
-import SpinnerActionTypes from './SpinnerActionTypes';
+import SpinnerActions from './SpinnerActions';
 
-const startExportTerminals = () => ({
-  type: SpinnerActionTypes.SPINNER_SHOW,
-  loadingMessage: 'Exporting terminals... Please wait',
-});
-
-const exportTerminalError = error => ({
-  type: SpinnerActionTypes.SPINNER_LOADING_ERROR,
-  errorMessage: `Could not export terminals :( Error: ${error.message}`,
-});
-
-const exportTerminalSuccess = () => ({
-  type: SpinnerActionTypes.SPINNER_LOADING_SUCCESS,
-  successMessage: 'Terminals exported successfully.',
-});
-
-const exportTerminals = () => async (dispatch, getState) => {
-  const path = electron.remote.dialog.showSaveDialog({
-    title: 'Enter file name for your export',
-    defaultPath: 'terminals',
-    filters: [
-      {
-        name: 'JSON File',
-        extensions: ['json'],
-      },
-    ],
-  });
+const exportTerminals = path => async (dispatch, getState) => {
+  dispatch(SpinnerActions.showSpinner('Exporting terminals... Please wait'));
   if (path) {
-    dispatch(startExportTerminals());
     try {
       const { terminals } = getState().TerminalsReducer;
       const terminalExportObject = TerminalService.exportTermninalsToObject(terminals);
       await FileService.saveJsonToFile(path, terminalExportObject);
-      dispatch(exportTerminalSuccess());
+      dispatch(SpinnerActions.showSpinnerSuccess('Terminals exported successfully.'));
     } catch (err) {
-      dispatch(exportTerminalError(err));
+      dispatch(SpinnerActions.showSpinnerError(`Could not export terminals :( Error: ${err.message}`));
     }
+  } else {
+    dispatch(SpinnerActions.showSpinnerError('Missing save path'));
   }
 };
 

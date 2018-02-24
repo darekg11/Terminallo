@@ -38,7 +38,7 @@ const exportTermninalsToObject = terminalInstances => ({
   terminals: terminalInstances.map(singleTerminal => ({
     uuid: singleTerminal.uuid || uuid.v4(),
     terminalType: singleTerminal.terminalType,
-    name: singleTerminal.name || 'Terminal',
+    name: singleTerminal.terminalName || 'Terminal',
     terminalStartupDir: singleTerminal.terminalStartupDir,
     terminalStartupCommands: singleTerminal.terminalStartupCommands || [],
   })),

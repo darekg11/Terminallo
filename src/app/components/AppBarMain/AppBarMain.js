@@ -1,3 +1,4 @@
+import electron from 'electron';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -54,7 +55,19 @@ AppBarMain.propTypes = {
 
 const mapDispatchToProps = dispatch => ({
   openAddNewTerminalWindow: () => dispatch(ApplicationActions.openAddNewTerminalModalWindow()),
-  exportTerminals: () => dispatch(ApplicationActions.exportTerminals()),
+  exportTerminals: () => {
+    const path = electron.remote.dialog.showSaveDialog({
+      title: 'Enter file name for your export',
+      defaultPath: 'terminals',
+      filters: [
+        {
+          name: 'JSON File',
+          extensions: ['json'],
+        },
+      ],
+    });
+    dispatch(ApplicationActions.exportTerminals(path));
+  },
 });
 
 export default connect(null, mapDispatchToProps)(AppBarMain);

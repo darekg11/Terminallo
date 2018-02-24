@@ -24,18 +24,22 @@ export default function spinnerState(state = initialState, action) {
     case SpinnerActionTypes.SPINNER_LOADING_SUCCESS: {
       return {
         ...state,
+        loadingMessage: '',
         loading: false,
         showSuccessMessage: true,
         showErrorMessage: false,
+        errorMessage: '',
         successMessage: action.successMessage,
       };
     }
     case SpinnerActionTypes.SPINNER_LOADING_ERROR: {
       return {
         ...state,
+        loadingMessage: '',
         loading: false,
         showSuccessMessage: false,
         showErrorMessage: true,
+        successMessage: '',
         errorMessage: action.errorMessage,
       };
     }

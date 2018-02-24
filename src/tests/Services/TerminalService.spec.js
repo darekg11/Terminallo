@@ -17,14 +17,14 @@ describe('Terminal service', () => {
         {
           uuid: '1234abcd',
           terminalType: 'CMD',
-          name: 'Test 1',
+          terminalName: 'Test 1',
           terminalStartupDir: '../someDir/dir1',
           terminalStartupCommands: ['cd ..', 'cd ..'],
         },
         {
           uuid: '1234abcd5678',
           terminalType: 'CMD',
-          name: 'Test 2',
+          terminalName: 'Test 2',
           terminalStartupDir: '../someDir/dir2',
           terminalStartupCommands: ['cd ..', 'cd ..', 'cd dir', 'ls'],
         },
