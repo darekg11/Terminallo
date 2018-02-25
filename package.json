@@ -16,6 +16,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
     "cross-env": "^5.1.3",
     "css-loader": "^0.28.9",
     "electron": "^1.7.11",
@@ -81,7 +82,9 @@
       "!**/public/**"
     ],
     "coverageDirectory": "coverage",
-    "coverageReporters": ["html"],
+    "coverageReporters": [
+      "html"
+    ],
     "moduleNameMapper": {
       "\\.(css|less)$": "<rootDir>/src/tests/__mocks__/CSSMocksForJest.js"
     }
@@ -89,12 +92,18 @@
   "build": {
     "appId": "Terminallo",
     "productName": "Terminallo",
-    "files": ["**/*", "!src/app/**/*"],
+    "files": [
+      "**/*",
+      "!src/app/**/*"
+    ],
     "win": {
       "target": [
         {
           "target": "nsis",
-          "arch": ["x64", "ia32"]
+          "arch": [
+            "x64",
+            "ia32"
+          ]
         }
       ],
       "artifactName": "${productName}-${version}-setup.${ext}"
