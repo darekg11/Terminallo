@@ -11,4 +11,15 @@ const saveJsonToFile = async (filePath, jsonObject) => {
   }
 };
 
-export { saveJsonToFile };
+const loadJsonFromFile = async (filePath) => {
+  if (!filePath) {
+    throw new Error('Missing file path');
+  }
+  try {
+    return await fsEtra.readJson(filePath);
+  } catch (err) {
+    throw err;
+  }
+};
+
+export { saveJsonToFile, loadJsonFromFile };
