@@ -14,7 +14,6 @@ const createNewTerminalInstance = (terminalData) => {
   const virtualTerminalInstance = pty.spawn(shellStartCommand, [], {
     name: 'xterm-color',
     cwd: terminalData.terminalStartupDir,
-    env: {},
   });
 
   Terminal.applyAddon(fit);
@@ -36,7 +35,6 @@ const createNewTerminalInstance = (terminalData) => {
 
 const exportTermninalsToObject = terminalInstances => ({
   terminals: terminalInstances.map(singleTerminal => ({
-    uuid: singleTerminal.uuid || uuid.v4(),
     terminalType: singleTerminal.terminalType,
     name: singleTerminal.terminalName || 'Terminal',
     terminalStartupDir: singleTerminal.terminalStartupDir,
@@ -44,14 +42,28 @@ const exportTermninalsToObject = terminalInstances => ({
   })),
 });
 
-const importTerminalsToObject = jsonFile => ({
-  terminals: jsonFile.terminal.map(singleTerminal => ({
-    uuid: singleTerminal.uuid || uuid.v4(),
-    terminalType: singleTerminal.terminalType,
-    terminalName: singleTerminal.terminalName || 'Terminal',
-    terminalStartupDir: singleTerminal.terminalStartupDir || '',
-    terminalStartupCommands: singleTerminal.terminalStartupCommands || [],
-  })),
-});
+const importTerminalsToObject = (jsonFile) => {
+  if (!jsonFile || !jsonFile.terminals) {
+    throw new Error('Selected file is not valid for terminals import');
+  }
+  return {
+    terminals: jsonFile.terminals.map(singleTerminal => ({
+      uuid: uuid.v4(),
+      terminalType: singleTerminal.terminalType,
+      terminalName: singleTerminal.name || 'Terminal',
+      terminalStartupDir: singleTerminal.terminalStartupDir || '',
+      terminalStartupCommands: singleTerminal.terminalStartupCommands || [],
+    })),
+  };
+};
 
-export { createNewTerminalInstance, exportTermninalsToObject, importTerminalsToObject };
+const killTerminalInstance = (terminalInstance) => {
+  if (terminalInstance.xTermInstance) {
+    terminalInstance.xTermInstance.destroy();
+  }
+  if (terminalInstance.virtualTerminalInstance) {
+    terminalInstance.virtualTerminalInstance.kill();
+  }
+};
+
+export { createNewTerminalInstance, exportTermninalsToObject, importTerminalsToObject, killTerminalInstance };

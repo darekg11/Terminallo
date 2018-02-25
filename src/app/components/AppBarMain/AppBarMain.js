@@ -73,7 +73,9 @@ const mapDispatchToProps = dispatch => ({
         },
       ],
     });
-    dispatch(ApplicationActions.exportTerminals(path));
+    if (path) {
+      dispatch(ApplicationActions.exportTerminals(path));
+    }
   },
   importTerminals: () => {
     const filePath = electron.remote.dialog.showOpenDialog({
@@ -86,6 +88,9 @@ const mapDispatchToProps = dispatch => ({
       ],
       properties: ['openFile'],
     });
+    if (filePath && filePath[0]) {
+      dispatch(ApplicationActions.importTerminals(filePath[0]));
+    }
   },
 });
 

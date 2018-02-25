@@ -10,5 +10,11 @@ const selectTerminalInstance = terminalUuid => ({
   terminalUUID: terminalUuid,
 });
 
+const importTerminalInstances = terminalInstances => ({
+  type: TerminalActionTypes.IMPORT_TERMINALS,
+  terminals: terminalInstances,
+});
+
 exports.addNewTerminalInstance = addNewTerminalInstance;
 exports.selectTerminalInstance = selectTerminalInstance;
+exports.importTerminalInstances = importTerminalInstances;
