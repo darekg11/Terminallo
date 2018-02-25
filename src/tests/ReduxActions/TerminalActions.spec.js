@@ -31,4 +31,27 @@ describe('actions', () => {
     };
     expect(TerminalActions.selectTerminalInstance('123456789')).to.deep.equal(expectedAction);
   });
+
+  it('should create an action to export terminal instances', () => {
+    const expectedAction = {
+      type: TerminalActionTypes.IMPORT_TERMINALS,
+      terminals: [
+        {
+          terminalName: 'test1',
+        },
+        {
+          terminalName: 'test2',
+        },
+      ],
+    };
+    const testTerminalInstances = [
+      {
+        terminalName: 'test1',
+      },
+      {
+        terminalName: 'test2',
+      },
+    ];
+    expect(TerminalActions.importTerminalInstances(testTerminalInstances)).to.deep.equal(expectedAction);
+  });
 });

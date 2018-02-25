@@ -30,6 +30,27 @@ export default function terminalReducer(state = initialState, action) {
       }
       return { ...state, selectedTerminal: terminalInstance.uuid };
     }
+    case TerminalActionTypes.IMPORT_TERMINALS: {
+      const terminalInstances = action.terminals;
+      state.terminals.forEach((singleTerminalInstance) => {
+        TerminalService.killTerminalInstance(singleTerminalInstance);
+        singleTerminalInstance.xTermInstance = null;
+        singleTerminalInstance.virtualTerminalInstance = null;
+      });
+      const createdTerminalInstances = terminalInstances.map((singleInstance) => {
+        const createdTerminalInstance = TerminalService.createNewTerminalInstance(singleInstance);
+        return {
+          ...singleInstance,
+          xTermInstance: createdTerminalInstance.xTermInstance,
+          virtualTerminalInstance: createdTerminalInstance.virtualTerminalInstance,
+        };
+      });
+      return {
+        ...state,
+        terminals: createdTerminalInstances,
+        selectedTerminal: createdTerminalInstances.length > 0 ? createdTerminalInstances[0].uuid : '',
+      };
+    }
     default:
       return state;
   }

@@ -1,4 +1,5 @@
 import os from 'os';
+import * as uuid from 'uuid';
 import { Terminal } from 'xterm';
 import * as fit from 'xterm/lib/addons/fit/fit';
 import TerminalTypes from '../enums/TerminalTypes';
@@ -13,7 +14,6 @@ const createNewTerminalInstance = (terminalData) => {
   const virtualTerminalInstance = pty.spawn(shellStartCommand, [], {
     name: 'xterm-color',
     cwd: terminalData.terminalStartupDir,
-    env: {},
   });
 
   Terminal.applyAddon(fit);
@@ -33,4 +33,37 @@ const createNewTerminalInstance = (terminalData) => {
   };
 };
 
-export { createNewTerminalInstance };
+const exportTermninalsToObject = terminalInstances => ({
+  terminals: terminalInstances.map(singleTerminal => ({
+    terminalType: singleTerminal.terminalType,
+    name: singleTerminal.terminalName || 'Terminal',
+    terminalStartupDir: singleTerminal.terminalStartupDir,
+    terminalStartupCommands: singleTerminal.terminalStartupCommands || [],
+  })),
+});
+
+const importTerminalsToObject = (jsonFile) => {
+  if (!jsonFile || !jsonFile.terminals) {
+    throw new Error('Selected file is not valid for terminals import');
+  }
+  return {
+    terminals: jsonFile.terminals.map(singleTerminal => ({
+      uuid: uuid.v4(),
+      terminalType: singleTerminal.terminalType,
+      terminalName: singleTerminal.name || 'Terminal',
+      terminalStartupDir: singleTerminal.terminalStartupDir || '',
+      terminalStartupCommands: singleTerminal.terminalStartupCommands || [],
+    })),
+  };
+};
+
+const killTerminalInstance = (terminalInstance) => {
+  if (terminalInstance.xTermInstance) {
+    terminalInstance.xTermInstance.destroy();
+  }
+  if (terminalInstance.virtualTerminalInstance) {
+    terminalInstance.virtualTerminalInstance.kill();
+  }
+};
+
+export { createNewTerminalInstance, exportTermninalsToObject, importTerminalsToObject, killTerminalInstance };

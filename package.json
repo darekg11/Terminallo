@@ -2,7 +2,7 @@
   "author": "Dariusz Górak",
   "description": "Terminallo - app to handle multiple console windows in single app",
   "name": "terminallo",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "main": "./src/index.js",
   "devDependencies": {
     "babel": "^6.23.0",
@@ -16,6 +16,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
     "cross-env": "^5.1.3",
     "css-loader": "^0.28.9",
     "electron": "^1.7.11",
