@@ -10,6 +10,7 @@ import ReorderIcon from 'material-ui-icons/Reorder';
 import IconButton from 'material-ui/IconButton';
 import SaveIcon from 'material-ui-icons/Save';
 import SaveAsIcon from 'material-ui-icons/ContentCopy';
+import ImportIcon from 'material-ui-icons/SystemUpdateAlt';
 import Tooltip from 'material-ui/Tooltip';
 import ApplicationActions from '../../actions/ApplicationActions';
 import './AppBarMain.css';
@@ -26,6 +27,11 @@ const AppBarMain = props => (
         <Tooltip id="tooltip-add-new" title="Add terminal">
           <IconButton aria-label="Add terminal" onClick={props.openAddNewTerminalWindow}>
             <AddIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip id="tooltip-import" title="Import terminals">
+          <IconButton aria-label="Import terminals" onClick={props.importTerminals}>
+            <ImportIcon />
           </IconButton>
         </Tooltip>
         <Tooltip id="tooltip-save" title="Save terminals">
@@ -51,6 +57,7 @@ const AppBarMain = props => (
 AppBarMain.propTypes = {
   openAddNewTerminalWindow: PropTypes.func.isRequired,
   exportTerminals: PropTypes.func.isRequired,
+  importTerminals: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -67,6 +74,18 @@ const mapDispatchToProps = dispatch => ({
       ],
     });
     dispatch(ApplicationActions.exportTerminals(path));
+  },
+  importTerminals: () => {
+    const filePath = electron.remote.dialog.showOpenDialog({
+      title: 'Select file from which to import terminals',
+      filters: [
+        {
+          name: 'JSON File',
+          extensions: ['json'],
+        },
+      ],
+      properties: ['openFile'],
+    });
   },
 });
 
