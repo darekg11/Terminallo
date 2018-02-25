@@ -161,4 +161,114 @@ describe('Terminal reducer', () => {
     expect(typeof finalState.terminals[1].virtualTerminalInstance.on).to.be.equal('function');
     expect(typeof finalState.terminals[1].virtualTerminalInstance.write).to.be.equal('function');
   });
+
+  it('should handle IMPORT_TERMINALS - importing non zero terminals', () => {
+    sinonSandbox.spy(TerminalService, 'killTerminalInstance');
+    sinonSandbox.stub(TerminalService, 'createNewTerminalInstance').returns({
+      xTermInstance: {},
+      virtualTerminalInstance: {},
+    });
+
+    const importingTerminals = [
+      {
+        uuid: '1234abcd',
+        terminalType: 'terminalType1',
+        terminalName: 'Terminal1234',
+        terminalStartupDir: 'somePath',
+        terminalStartupCommands: ['firstCmd', 'secondCmd'],
+      },
+      {
+        uuid: '5678efgh',
+        terminalType: 'terminalType2',
+        terminalName: 'Terminal5678',
+        terminalStartupDir: 'somePath2',
+        terminalStartupCommands: ['firstCmd2', 'secondCmd2'],
+      },
+    ];
+
+    const initialState = {
+      terminals: [
+        {
+          terminalName: 'First terminal',
+        },
+        {
+          terminalName: 'Second terminal',
+        },
+        {
+          terminalName: 'Third terminal',
+        },
+      ],
+      selectedTerminal: 'someTestUUID',
+    };
+
+    const expectedState = {
+      terminals: [
+        {
+          uuid: '1234abcd',
+          terminalType: 'terminalType1',
+          terminalName: 'Terminal1234',
+          terminalStartupDir: 'somePath',
+          terminalStartupCommands: ['firstCmd', 'secondCmd'],
+          xTermInstance: {},
+          virtualTerminalInstance: {},
+        },
+        {
+          uuid: '5678efgh',
+          terminalType: 'terminalType2',
+          terminalName: 'Terminal5678',
+          terminalStartupDir: 'somePath2',
+          terminalStartupCommands: ['firstCmd2', 'secondCmd2'],
+          xTermInstance: {},
+          virtualTerminalInstance: {},
+        },
+      ],
+      selectedTerminal: '1234abcd',
+    };
+
+    const finalState = TerminalReducer(initialState, {
+      type: TerminalActionTypes.IMPORT_TERMINALS,
+      terminals: importingTerminals,
+    });
+
+    expect(finalState).to.deep.equal(expectedState);
+    expect(TerminalService.killTerminalInstance.callCount).to.be.equal(3);
+  });
+
+  it('should handle IMPORT_TERMINALS - importing zero terminals', () => {
+    sinonSandbox.spy(TerminalService, 'killTerminalInstance');
+    sinonSandbox.stub(TerminalService, 'createNewTerminalInstance').returns({
+      xTermInstance: {},
+      virtualTerminalInstance: {},
+    });
+
+    const importingTerminals = [];
+
+    const initialState = {
+      terminals: [
+        {
+          terminalName: 'First terminal',
+        },
+        {
+          terminalName: 'Second terminal',
+        },
+        {
+          terminalName: 'Third terminal',
+        },
+      ],
+      selectedTerminal: 'someTestUUID',
+    };
+
+    const expectedState = {
+      terminals: [],
+      selectedTerminal: '',
+    };
+
+    const finalState = TerminalReducer(initialState, {
+      type: TerminalActionTypes.IMPORT_TERMINALS,
+      terminals: importingTerminals,
+    });
+
+    expect(finalState).to.deep.equal(expectedState);
+    expect(TerminalService.killTerminalInstance.callCount).to.be.equal(3);
+  });
 });
