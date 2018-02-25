@@ -44,4 +44,14 @@ const exportTermninalsToObject = terminalInstances => ({
   })),
 });
 
-export { createNewTerminalInstance, exportTermninalsToObject };
+const importTerminalsToObject = jsonFile => ({
+  terminals: jsonFile.terminal.map(singleTerminal => ({
+    uuid: singleTerminal.uuid || uuid.v4(),
+    terminalType: singleTerminal.terminalType,
+    terminalName: singleTerminal.terminalName || 'Terminal',
+    terminalStartupDir: singleTerminal.terminalStartupDir || '',
+    terminalStartupCommands: singleTerminal.terminalStartupCommands || [],
+  })),
+});
+
+export { createNewTerminalInstance, exportTermninalsToObject, importTerminalsToObject };
