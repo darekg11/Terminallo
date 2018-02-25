@@ -7,6 +7,7 @@ import * as FileService from '../../app/services/FileService';
 import ApplicationActionTypes from '../../app/actions/ApplicationActionTypes';
 import ApplicationActions from '../../app/actions/ApplicationActions';
 import SpinnerActionTypes from '../../app/actions/SpinnerActionTypes';
+import TerminalActionTypes from '../../app/actions/TerminalActionTypes';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -101,6 +102,131 @@ describe('actions', () => {
       },
     });
     return store.dispatch(ApplicationActions.exportTerminals('')).then(() => {
+      expect(store.getActions()).to.deep.equal(expectedActions);
+      done();
+    });
+  });
+
+  it('should create action to show spinner loading and spinner error when no path to import was passed', (done) => {
+    sinonSandbox.stub(FileService, 'loadJsonFromFile').returns({ terminals: [] });
+    sinonSandbox.stub(TerminalService, 'importTerminalsToObject').returns({ terminals: [] });
+    const expectedActions = [
+      {
+        type: SpinnerActionTypes.SPINNER_SHOW,
+        loadingMessage: 'Importing terminals... Please wait',
+      },
+      {
+        type: SpinnerActionTypes.SPINNER_LOADING_ERROR,
+        errorMessage: 'Missing import file path',
+      },
+    ];
+    const store = mockStore({
+      terminals: [],
+    });
+    return store.dispatch(ApplicationActions.importTerminals('')).then(() => {
+      expect(store.getActions()).to.deep.equal(expectedActions);
+      done();
+    });
+  });
+
+  it('should create action to show spinner loading and spinner success when import was success', (done) => {
+    const sampleTerminalInstances = {
+      terminals: [
+        {
+          name: 'test1',
+          uuid: '1234',
+        },
+        {
+          name: 'test2',
+          uuid: '45678',
+        },
+      ],
+    };
+    sinonSandbox.stub(FileService, 'loadJsonFromFile').returns({ terminals: [] });
+    sinonSandbox.stub(TerminalService, 'importTerminalsToObject').returns(sampleTerminalInstances);
+    const expectedActions = [
+      {
+        type: SpinnerActionTypes.SPINNER_SHOW,
+        loadingMessage: 'Importing terminals... Please wait',
+      },
+      {
+        type: 'BATCHING_REDUCER.BATCH',
+        meta: { batch: true },
+        payload: [
+          {
+            type: TerminalActionTypes.IMPORT_TERMINALS,
+            terminals: [
+              {
+                name: 'test1',
+                uuid: '1234',
+              },
+              {
+                name: 'test2',
+                uuid: '45678',
+              },
+            ],
+          },
+          {
+            type: SpinnerActionTypes.SPINNER_LOADING_SUCCESS,
+            successMessage: 'Terminals imported successfully.',
+          },
+        ],
+      },
+    ];
+    const store = mockStore({
+      TerminalsReducer: {
+        terminals: [],
+      },
+    });
+    return store.dispatch(ApplicationActions.importTerminals('D:TestPath')).then(() => {
+      expect(store.getActions()).to.deep.equal(expectedActions);
+      done();
+    });
+  });
+
+  it('should create action to show spinner loading and spinner error when import failed because of FileService', (done) => {
+    sinonSandbox.stub(FileService, 'loadJsonFromFile').throws({
+      message: 'Mocked error!',
+    });
+    sinonSandbox.stub(TerminalService, 'importTerminalsToObject').returns({ terminals: [] });
+    const expectedActions = [
+      {
+        type: SpinnerActionTypes.SPINNER_SHOW,
+        loadingMessage: 'Importing terminals... Please wait',
+      },
+      {
+        type: SpinnerActionTypes.SPINNER_LOADING_ERROR,
+        errorMessage: 'Could not import terminals :( Error: Mocked error!',
+      },
+    ];
+    const store = mockStore({
+      terminals: [],
+    });
+    return store.dispatch(ApplicationActions.importTerminals('SomePath')).then(() => {
+      expect(store.getActions()).to.deep.equal(expectedActions);
+      done();
+    });
+  });
+
+  it('should create action to show spinner loading and spinner error when import failed because of TerminalService', (done) => {
+    sinonSandbox.stub(FileService, 'loadJsonFromFile').returns({ terminal: [] });
+    sinonSandbox.stub(TerminalService, 'importTerminalsToObject').throws({
+      message: 'Mocked error!',
+    });
+    const expectedActions = [
+      {
+        type: SpinnerActionTypes.SPINNER_SHOW,
+        loadingMessage: 'Importing terminals... Please wait',
+      },
+      {
+        type: SpinnerActionTypes.SPINNER_LOADING_ERROR,
+        errorMessage: 'Could not import terminals :( Error: Mocked error!',
+      },
+    ];
+    const store = mockStore({
+      terminals: [],
+    });
+    return store.dispatch(ApplicationActions.importTerminals('SomePath')).then(() => {
       expect(store.getActions()).to.deep.equal(expectedActions);
       done();
     });
