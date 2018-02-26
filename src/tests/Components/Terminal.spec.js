@@ -13,6 +13,13 @@ describe('Terminal component tests', () => {
       xTermInstance: {
         open: () => {},
         fit: () => {},
+        proposeGeometry: () => ({
+          cols: 20,
+          rows: 20,
+        }),
+      },
+      virtualTerminalInstance: {
+        resize: () => {},
       },
     };
     const wrapper = shallow(<Terminal terminal={terminalInstance} />);

@@ -38,6 +38,7 @@ TerminalView.propTypes = {
     xTermInstance: PropTypes.shape({
       open: PropTypes.func.isRequired,
       fit: PropTypes.func.isRequired,
+      proposeGeometry: PropTypes.func.isRequired,
     }).isRequired,
     virtualTerminalInstance: PropTypes.shape({
       resize: PropTypes.func.isRequired,
