@@ -6,8 +6,20 @@ class TerminalView extends Component {
   componentDidMount() {
     const { xTermInstance } = this.props.terminal;
     xTermInstance.open(this.terminalInstanceDiv);
-    xTermInstance.fit();
+    this.resizeTerminalView();
+    window.addEventListener('resize', this.resizeTerminalView);
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.resizeTerminalView);
+  }
+
+  resizeTerminalView = () => {
+    const { xTermInstance, virtualTerminalInstance } = this.props.terminal;
+    const resizedDimensions = xTermInstance.proposeGeometry();
+    xTermInstance.fit();
+    virtualTerminalInstance.resize(resizedDimensions.cols, resizedDimensions.rows);
+  };
 
   render() {
     return (
@@ -27,6 +39,9 @@ TerminalView.propTypes = {
       open: PropTypes.func.isRequired,
       fit: PropTypes.func.isRequired,
     }).isRequired,
+    virtualTerminalInstance: PropTypes.shape({
+      resize: PropTypes.func.isRequired,
+    }),
   }).isRequired,
 };
 
