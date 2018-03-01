@@ -25,6 +25,7 @@ class TerminalView extends Component {
     return (
       <div
         id="xterm_dynamic_id_uuid"
+        className="terminal-container"
         ref={(c) => {
           this.terminalInstanceDiv = c;
         }}
