@@ -122,3 +122,7 @@
 .xterm:not(.enable-mouse-events) {
   cursor: text;
 }
+
+.terminal-container {
+  height: 82vh;
+}
