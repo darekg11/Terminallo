@@ -3,6 +3,13 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Paper from 'material-ui/Paper';
 import Tabs, { Tab } from 'material-ui/Tabs';
+import ReloadIcon from 'material-ui-icons/Refresh';
+import EditIcon from 'material-ui-icons/Edit';
+import DeleteIcon from 'material-ui-icons/Delete';
+import RightArrowIcon from 'material-ui-icons/ArrowForward';
+import LeftArrowIcon from 'material-ui-icons/ArrowBack';
+import IconButton from 'material-ui/IconButton';
+import Tooltip from 'material-ui/Tooltip';
 import TerminalActions from '../../actions/TerminalActions';
 import Terminal from '../Terminal/Terminal';
 import './TerminalTabs.css';
@@ -21,9 +28,42 @@ const TerminalTabs = props => (
         <Tab key={singleTerminal.uuid} label={singleTerminal.terminalName} value={singleTerminal.uuid} />
       ))}
     </Tabs>
-    {props.terminals
-      .filter(singleTerminal => singleTerminal.uuid === props.selectedTerminal)
-      .map(singleTerminal => <Terminal key={singleTerminal.uuid} terminal={singleTerminal} />)}
+    <div className="terminal-area">
+      <div className="terminal">
+        {props.terminals
+          .filter(singleTerminal => singleTerminal.uuid === props.selectedTerminal)
+          .map(singleTerminal => <Terminal key={singleTerminal.uuid} terminal={singleTerminal} />)}
+      </div>
+      {props.selectedTerminal !== '' && (
+        <div className="panel">
+          <Tooltip id="tooltip-reload-terminal" title="Reload" placement="left">
+            <IconButton aria-label="Reload">
+              <ReloadIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip id="tooltip-edit-terminal" title="Edit" placement="left">
+            <IconButton aria-label="Edit">
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip id="tooltip-delete-terminal" title="Delete" placement="left">
+            <IconButton aria-label="Delete">
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip id="tooltip-move-right-terminal" title="Move right" placement="left">
+            <IconButton aria-label="Move right">
+              <RightArrowIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip id="tooltip-move-left-terminal" title="Move left" placement="left">
+            <IconButton aria-label="Move left">
+              <LeftArrowIcon />
+            </IconButton>
+          </Tooltip>
+        </div>
+      )}
+    </div>
   </Paper>
 );
 
