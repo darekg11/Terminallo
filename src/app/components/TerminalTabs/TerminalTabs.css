@@ -1,3 +1,20 @@
 .Terminal-Tabs {
   flex: 1;
 }
+
+.Terminal-Tabs .terminal-area {
+  display: flex;
+  flex-direction: row;
+}
+
+.Terminal-Tabs .terminal-area .terminal {
+  flex: 1;
+}
+
+.Terminal-Tabs .terminal-area .panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 56px;
+  color: rgba(0, 0, 0, 0.87);
+  background-color: #f5f5f5;
+}
