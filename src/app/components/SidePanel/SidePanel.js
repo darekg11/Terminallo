@@ -10,7 +10,6 @@ import Collapse from 'material-ui/transitions/Collapse';
 import KeyboardIcon from 'material-ui-icons/Keyboard';
 import ExpandLess from 'material-ui-icons/ExpandLess';
 import ExpandMore from 'material-ui-icons/ExpandMore';
-import Star from 'material-ui-icons/Star';
 
 const drawerWidth = 200;
 
@@ -80,13 +79,6 @@ class SidePanel extends React.Component {
               ))}
             </List>
           </Collapse>
-          <ListItem button>
-            <ListItemIcon>
-              <Star />
-            </ListItemIcon>
-            <ListItemText inset primary="Favourites terminals" />
-            {this.state.open ? <ExpandLess /> : <ExpandMore />}
-          </ListItem>
         </List>
       </Drawer>
     );
