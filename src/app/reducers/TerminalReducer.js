@@ -51,7 +51,7 @@ export default function terminalReducer(state = initialState, action) {
         selectedTerminal: createdTerminalInstances.length > 0 ? createdTerminalInstances[0].uuid : '',
       };
     }
-    case TerminalActionTypes.RELOAD_TERMINAL: {
+    case TerminalActionTypes.RELOAD_TERMINAL_INSTANCE: {
       const { terminalUUID } = action;
       const copiedTerminalsArray = [...state.terminals];
       const terminalInstanceToReloadIndex = copiedTerminalsArray.findIndex(singleTermianl => singleTermianl.uuid === terminalUUID);
@@ -72,6 +72,34 @@ export default function terminalReducer(state = initialState, action) {
         ...state,
         terminals: copiedTerminalsArray,
         selectedTerminal: mergedReloadedInstance.uuid,
+      };
+    }
+    case TerminalActionTypes.DELETE_TERMINAL_INSTANCE: {
+      const { terminalUUID } = action;
+      const copiedTerminalsArray = [...state.terminals];
+      const terminalInstanceToDeleteIndex = copiedTerminalsArray.findIndex(singleTermianl => singleTermianl.uuid === terminalUUID);
+      if (terminalInstanceToDeleteIndex === -1) {
+        return state;
+      }
+      let uuidOfNextTerminalToSelectAfterDelete = '';
+      if (copiedTerminalsArray.length === 1) {
+        uuidOfNextTerminalToSelectAfterDelete = '';
+      } else if (terminalInstanceToDeleteIndex === copiedTerminalsArray.length - 1) {
+        const previousToLastTerminal = copiedTerminalsArray[copiedTerminalsArray.length - 2];
+        uuidOfNextTerminalToSelectAfterDelete = previousToLastTerminal.uuid;
+      } else {
+        const nextTerminal = copiedTerminalsArray[terminalInstanceToDeleteIndex + 1];
+        uuidOfNextTerminalToSelectAfterDelete = nextTerminal.uuid;
+      }
+      const terminalInstanceToDelete = copiedTerminalsArray[terminalInstanceToDeleteIndex];
+      TerminalService.killTerminalInstance(terminalInstanceToDelete);
+      terminalInstanceToDelete.xTermInstance = null;
+      terminalInstanceToDelete.virtualTerminalInstance = null;
+      const terminalInstancesAfterDelete = copiedTerminalsArray.filter(singleTermianl => singleTermianl.uuid !== terminalUUID);
+      return {
+        ...state,
+        terminals: terminalInstancesAfterDelete,
+        selectedTerminal: uuidOfNextTerminalToSelectAfterDelete,
       };
     }
     default:

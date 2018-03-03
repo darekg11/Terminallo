@@ -16,7 +16,12 @@ const importTerminalInstances = terminalInstances => ({
 });
 
 const reloadTerminalInstance = terminalUUID => ({
-  type: TerminalActionTypes.RELOAD_TERMINAL,
+  type: TerminalActionTypes.RELOAD_TERMINAL_INSTANCE,
+  terminalUUID,
+});
+
+const deleteTerminalInstance = terminalUUID => ({
+  type: TerminalActionTypes.DELETE_TERMINAL_INSTANCE,
   terminalUUID,
 });
 
@@ -24,3 +29,4 @@ exports.addNewTerminalInstance = addNewTerminalInstance;
 exports.selectTerminalInstance = selectTerminalInstance;
 exports.importTerminalInstances = importTerminalInstances;
 exports.reloadTerminalInstance = reloadTerminalInstance;
+exports.deleteTerminalInstance = deleteTerminalInstance;

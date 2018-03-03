@@ -272,7 +272,7 @@ describe('Terminal reducer', () => {
     expect(TerminalService.killTerminalInstance.callCount).to.be.equal(3);
   });
 
-  it('should handle RELOAD_TERMINAL - reloading terminal that does not exist', () => {
+  it('should handle RELOAD_TERMINAL_INSTANCE - reloading terminal that does not exist', () => {
     const initialState = {
       terminals: [
         {
@@ -304,14 +304,14 @@ describe('Terminal reducer', () => {
     };
 
     const finalState = TerminalReducer(initialState, {
-      type: TerminalActionTypes.RELOAD_TERMINAL,
+      type: TerminalActionTypes.RELOAD_TERMINAL_INSTANCE,
       terminalUUID: 'not-existing-uuid',
     });
 
     expect(finalState).to.deep.equal(expectedState);
   });
 
-  it('should handle RELOAD_TERMINAL - reloading terminal that does exist', () => {
+  it('should handle RELOAD_TERMINAL_INSTANCE - reloading terminal that does exist', () => {
     sinonSandbox.spy(TerminalService, 'killTerminalInstance');
     sinonSandbox.stub(TerminalService, 'createNewTerminalInstance').returns({
       xTermInstance: {
@@ -363,7 +363,7 @@ describe('Terminal reducer', () => {
     };
 
     const finalState = TerminalReducer(initialState, {
-      type: TerminalActionTypes.RELOAD_TERMINAL,
+      type: TerminalActionTypes.RELOAD_TERMINAL_INSTANCE,
       terminalUUID: '2',
     });
 

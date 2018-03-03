@@ -47,7 +47,7 @@ const TerminalTabs = props => (
             </IconButton>
           </Tooltip>
           <Tooltip id="tooltip-delete-terminal" title="Delete" placement="left">
-            <IconButton aria-label="Delete">
+            <IconButton aria-label="Delete" onClick={() => props.deleteTerminal(props.selectedTerminal)}>
               <DeleteIcon />
             </IconButton>
           </Tooltip>
@@ -86,6 +86,7 @@ TerminalTabs.propTypes = {
   selectedTerminal: PropTypes.string,
   selectTerminal: PropTypes.func.isRequired,
   reloadTerminal: PropTypes.func.isRequired,
+  deleteTerminal: PropTypes.func.isRequired,
 };
 
 TerminalTabs.defaultProps = {
@@ -101,6 +102,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   selectTerminal: destinationTerminalUUID => dispatch(TerminalActions.selectTerminalInstance(destinationTerminalUUID)),
   reloadTerminal: destinationTerminalUUID => dispatch(TerminalActions.reloadTerminalInstance(destinationTerminalUUID)),
+  deleteTerminal: destinationTerminalUUID => dispatch(TerminalActions.deleteTerminalInstance(destinationTerminalUUID)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TerminalTabs);
