@@ -383,4 +383,165 @@ describe('Terminal reducer', () => {
     expect(typeof finalState.terminals[1].virtualTerminalInstance.write).to.be.equal('function');
     expect(TerminalService.killTerminalInstance.callCount).to.be.equal(1);
   });
+
+  it('should handle DELETE_TERMINAL_INSTANCE - delete terminal that does not exist', () => {
+    const initialState = {
+      terminals: [
+        {
+          terminalName: 'First terminal',
+        },
+        {
+          terminalName: 'Second terminal',
+        },
+        {
+          terminalName: 'Third terminal',
+        },
+      ],
+      selectedTerminal: 'someTestUUID',
+    };
+
+    const expectedState = {
+      terminals: [
+        {
+          terminalName: 'First terminal',
+        },
+        {
+          terminalName: 'Second terminal',
+        },
+        {
+          terminalName: 'Third terminal',
+        },
+      ],
+      selectedTerminal: 'someTestUUID',
+    };
+
+    const finalState = TerminalReducer(initialState, {
+      type: TerminalActionTypes.DELETE_TERMINAL_INSTANCE,
+      terminalUUID: 'not-existing-uuid',
+    });
+
+    expect(finalState).to.deep.equal(expectedState);
+  });
+
+  it('should handle DELETE_TERMINAL_INSTANCE - deleting one and only terminal instance', () => {
+    const initialState = {
+      terminals: [
+        {
+          uuid: '1',
+          terminalName: 'First terminal',
+        },
+      ],
+      selectedTerminal: '1',
+    };
+
+    const expectedState = {
+      selectedTerminal: '',
+      terminals: [],
+    };
+
+    const finalState = TerminalReducer(initialState, {
+      type: TerminalActionTypes.DELETE_TERMINAL_INSTANCE,
+      terminalUUID: '1',
+    });
+
+    expect(finalState).to.deep.equal(expectedState);
+  });
+
+  it('should handle DELETE_TERMINAL_INSTANCE - deleting last terminal instance of multiple instances', () => {
+    const initialState = {
+      terminals: [
+        {
+          uuid: '1',
+          terminalName: 'First terminal',
+        },
+        {
+          uuid: '2',
+          terminalName: 'Second terminal',
+        },
+        {
+          uuid: '3',
+          terminalName: 'Third terminal',
+        },
+      ],
+      selectedTerminal: '3',
+    };
+
+    const expectedState = {
+      selectedTerminal: '2',
+      terminals: [
+        {
+          uuid: '1',
+          terminalName: 'First terminal',
+        },
+        {
+          uuid: '2',
+          terminalName: 'Second terminal',
+        },
+      ],
+    };
+
+    const finalState = TerminalReducer(initialState, {
+      type: TerminalActionTypes.DELETE_TERMINAL_INSTANCE,
+      terminalUUID: '3',
+    });
+
+    expect(finalState).to.deep.equal(expectedState);
+  });
+
+  it('should handle DELETE_TERMINAL_INSTANCE - deleting middle terminal instance of multiple instances', () => {
+    const initialState = {
+      terminals: [
+        {
+          uuid: '1',
+          terminalName: 'First terminal',
+        },
+        {
+          uuid: '2',
+          terminalName: 'Second terminal',
+        },
+        {
+          uuid: '3',
+          terminalName: 'Third terminal',
+        },
+        {
+          uuid: '4',
+          terminalName: 'Fourth terminal',
+        },
+        {
+          uuid: '5',
+          terminalName: 'Fifth terminal',
+        },
+      ],
+      selectedTerminal: '3',
+    };
+
+    const expectedState = {
+      selectedTerminal: '4',
+      terminals: [
+        {
+          uuid: '1',
+          terminalName: 'First terminal',
+        },
+        {
+          uuid: '2',
+          terminalName: 'Second terminal',
+        },
+        {
+          uuid: '4',
+          terminalName: 'Fourth terminal',
+        },
+        {
+          uuid: '5',
+          terminalName: 'Fifth terminal',
+        },
+      ],
+    };
+
+    const finalState = TerminalReducer(initialState, {
+      type: TerminalActionTypes.DELETE_TERMINAL_INSTANCE,
+      terminalUUID: '3',
+    });
+
+    expect(finalState).to.deep.equal(expectedState);
+  });
 });
