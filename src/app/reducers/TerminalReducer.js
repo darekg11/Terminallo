@@ -102,6 +102,23 @@ export default function terminalReducer(state = initialState, action) {
         selectedTerminal: uuidOfNextTerminalToSelectAfterDelete,
       };
     }
+    case TerminalActionTypes.MOVE_RIGHT_TERMINAL_INSTANCE: {
+      const { terminalUUID } = action;
+      const copiedTerminalsArray = [...state.terminals];
+      const terminalInstanceToMoveIndex = copiedTerminalsArray.findIndex(singleTermianl => singleTermianl.uuid === terminalUUID);
+      if (terminalInstanceToMoveIndex === -1 || terminalInstanceToMoveIndex === copiedTerminalsArray.length - 1) {
+        return state;
+      }
+      const nextInOrderTerminalInstanceIndex = terminalInstanceToMoveIndex + 1;
+      const terminalInstanceToMove = copiedTerminalsArray[terminalInstanceToMoveIndex];
+      const terminalIntanceToBeReplaced = copiedTerminalsArray[nextInOrderTerminalInstanceIndex];
+      copiedTerminalsArray[nextInOrderTerminalInstanceIndex] = terminalInstanceToMove;
+      copiedTerminalsArray[terminalInstanceToMoveIndex] = terminalIntanceToBeReplaced;
+      return {
+        ...state,
+        terminals: copiedTerminalsArray,
+      };
+    }
     default:
       return state;
   }

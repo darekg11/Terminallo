@@ -54,6 +54,7 @@ const TerminalTabs = props => (
           <Tooltip id="tooltip-move-right-terminal" title="Move right" placement="left">
             <IconButton
               aria-label="Move right"
+              onClick={() => props.moveTerminalRight(props.selectedTerminal)}
               disabled={props.terminals[props.terminals.length - 1].uuid === props.selectedTerminal}
             >
               <RightArrowIcon />
@@ -90,6 +91,7 @@ TerminalTabs.propTypes = {
   selectTerminal: PropTypes.func.isRequired,
   reloadTerminal: PropTypes.func.isRequired,
   deleteTerminal: PropTypes.func.isRequired,
+  moveTerminalRight: PropTypes.func.isRequired,
 };
 
 TerminalTabs.defaultProps = {
@@ -106,6 +108,8 @@ const mapDispatchToProps = dispatch => ({
   selectTerminal: destinationTerminalUUID => dispatch(TerminalActions.selectTerminalInstance(destinationTerminalUUID)),
   reloadTerminal: destinationTerminalUUID => dispatch(TerminalActions.reloadTerminalInstance(destinationTerminalUUID)),
   deleteTerminal: destinationTerminalUUID => dispatch(TerminalActions.deleteTerminalInstance(destinationTerminalUUID)),
+  moveTerminalRight: destinationTerminalUUID =>
+    dispatch(TerminalActions.moveRightTerminalInstance(destinationTerminalUUID)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TerminalTabs);
