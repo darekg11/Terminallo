@@ -51,6 +51,28 @@ export default function terminalReducer(state = initialState, action) {
         selectedTerminal: createdTerminalInstances.length > 0 ? createdTerminalInstances[0].uuid : '',
       };
     }
+    case TerminalActionTypes.RELOAD_TERMINAL: {
+      const { terminalUUID } = action;
+      const copiedTerminalsArray = [...state.terminals];
+      const terminalInstanceToReloadIndex = copiedTerminalsArray.findIndex(singleTermianl => singleTermianl.uuid === terminalUUID);
+      if (terminalInstanceToReloadIndex === -1) {
+        return state;
+      }
+      const terminalInstanceToReload = copiedTerminalsArray[terminalInstanceToReloadIndex];
+      const reloadedInstance = TerminalService.reloadTerminalInstance(terminalInstanceToReload);
+      const mergedReloadedInstance = {
+        ...terminalInstanceToReload,
+        uuid: uuid.v4(),
+        xTermInstance: reloadedInstance.xTermInstance,
+        virtualTerminalInstance: reloadedInstance.virtualTerminalInstance,
+      };
+      copiedTerminalsArray[terminalInstanceToReloadIndex] = mergedReloadedInstance;
+      return {
+        ...state,
+        terminals: copiedTerminalsArray,
+        selectedTerminal: mergedReloadedInstance.uuid,
+      };
+    }
     default:
       return state;
   }
