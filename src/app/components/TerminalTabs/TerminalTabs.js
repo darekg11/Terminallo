@@ -61,7 +61,7 @@ const TerminalTabs = props => (
             </IconButton>
           </Tooltip>
           <Tooltip id="tooltip-move-left-terminal" title="Move left" placement="left">
-            <IconButton aria-label="Move left">
+            <IconButton aria-label="Move left" disabled={props.terminals[0].uuid === props.selectedTerminal}>
               <LeftArrowIcon />
             </IconButton>
           </Tooltip>
