@@ -61,7 +61,11 @@ const TerminalTabs = props => (
             </IconButton>
           </Tooltip>
           <Tooltip id="tooltip-move-left-terminal" title="Move left" placement="left">
-            <IconButton aria-label="Move left" disabled={props.terminals[0].uuid === props.selectedTerminal}>
+            <IconButton
+              aria-label="Move left"
+              onClick={() => props.moveTerminalLeft(props.selectedTerminal)}
+              disabled={props.terminals[0].uuid === props.selectedTerminal}
+            >
               <LeftArrowIcon />
             </IconButton>
           </Tooltip>
@@ -92,6 +96,7 @@ TerminalTabs.propTypes = {
   reloadTerminal: PropTypes.func.isRequired,
   deleteTerminal: PropTypes.func.isRequired,
   moveTerminalRight: PropTypes.func.isRequired,
+  moveTerminalLeft: PropTypes.func.isRequired,
 };
 
 TerminalTabs.defaultProps = {
@@ -105,11 +110,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  selectTerminal: destinationTerminalUUID => dispatch(TerminalActions.selectTerminalInstance(destinationTerminalUUID)),
-  reloadTerminal: destinationTerminalUUID => dispatch(TerminalActions.reloadTerminalInstance(destinationTerminalUUID)),
-  deleteTerminal: destinationTerminalUUID => dispatch(TerminalActions.deleteTerminalInstance(destinationTerminalUUID)),
-  moveTerminalRight: destinationTerminalUUID =>
-    dispatch(TerminalActions.moveRightTerminalInstance(destinationTerminalUUID)),
+  selectTerminal: terminalUUID => dispatch(TerminalActions.selectTerminalInstance(terminalUUID)),
+  reloadTerminal: terminalUUID => dispatch(TerminalActions.reloadTerminalInstance(terminalUUID)),
+  deleteTerminal: terminalUUID => dispatch(TerminalActions.deleteTerminalInstance(terminalUUID)),
+  moveTerminalRight: terminalUUID => dispatch(TerminalActions.moveRightTerminalInstance(terminalUUID)),
+  moveTerminalLeft: terminalUUID => dispatch(TerminalActions.moveLeftTerminalInstance(terminalUUID)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TerminalTabs);

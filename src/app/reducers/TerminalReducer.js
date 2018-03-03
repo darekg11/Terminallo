@@ -119,6 +119,23 @@ export default function terminalReducer(state = initialState, action) {
         terminals: copiedTerminalsArray,
       };
     }
+    case TerminalActionTypes.MOVE_LEFT_TERMINAL_INSTANCE: {
+      const { terminalUUID } = action;
+      const copiedTerminalsArray = [...state.terminals];
+      const terminalInstanceToMoveIndex = copiedTerminalsArray.findIndex(singleTermianl => singleTermianl.uuid === terminalUUID);
+      if (terminalInstanceToMoveIndex === -1 || terminalInstanceToMoveIndex === 0) {
+        return state;
+      }
+      const previousInOrderTerminalInstanceIndex = terminalInstanceToMoveIndex - 1;
+      const terminalInstanceToMove = copiedTerminalsArray[terminalInstanceToMoveIndex];
+      const terminalIntanceToBeReplaced = copiedTerminalsArray[previousInOrderTerminalInstanceIndex];
+      copiedTerminalsArray[previousInOrderTerminalInstanceIndex] = terminalInstanceToMove;
+      copiedTerminalsArray[terminalInstanceToMoveIndex] = terminalIntanceToBeReplaced;
+      return {
+        ...state,
+        terminals: copiedTerminalsArray,
+      };
+    }
     default:
       return state;
   }
