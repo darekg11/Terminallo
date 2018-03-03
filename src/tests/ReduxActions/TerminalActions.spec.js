@@ -78,4 +78,12 @@ describe('actions', () => {
     };
     expect(TerminalActions.moveRightTerminalInstance('123456789')).to.deep.equal(expectedAction);
   });
+
+  it('should create an action to move terminal instance to left', () => {
+    const expectedAction = {
+      type: TerminalActionTypes.MOVE_LEFT_TERMINAL_INSTANCE,
+      terminalUUID: '123456789',
+    };
+    expect(TerminalActions.moveLeftTerminalInstance('123456789')).to.deep.equal(expectedAction);
+  });
 });
