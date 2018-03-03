@@ -54,4 +54,12 @@ describe('actions', () => {
     ];
     expect(TerminalActions.importTerminalInstances(testTerminalInstances)).to.deep.equal(expectedAction);
   });
+
+  it('should create an action to reload terminal instance', () => {
+    const expectedAction = {
+      type: TerminalActionTypes.RELOAD_TERMINAL,
+      terminalUUID: '123456789',
+    };
+    expect(TerminalActions.reloadTerminalInstance('123456789')).to.deep.equal(expectedAction);
+  });
 });
