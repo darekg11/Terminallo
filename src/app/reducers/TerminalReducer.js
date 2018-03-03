@@ -59,12 +59,13 @@ export default function terminalReducer(state = initialState, action) {
         return state;
       }
       const terminalInstanceToReload = copiedTerminalsArray[terminalInstanceToReloadIndex];
-      const reloadedInstance = TerminalService.reloadTerminalInstance(terminalInstanceToReload);
+      TerminalService.killTerminalInstance(terminalInstanceToReload);
+      const terminalInstanceRecreated = TerminalService.createNewTerminalInstance(terminalInstanceToReload);
       const mergedReloadedInstance = {
         ...terminalInstanceToReload,
         uuid: uuid.v4(),
-        xTermInstance: reloadedInstance.xTermInstance,
-        virtualTerminalInstance: reloadedInstance.virtualTerminalInstance,
+        xTermInstance: terminalInstanceRecreated.xTermInstance,
+        virtualTerminalInstance: terminalInstanceRecreated.virtualTerminalInstance,
       };
       copiedTerminalsArray[terminalInstanceToReloadIndex] = mergedReloadedInstance;
       return {

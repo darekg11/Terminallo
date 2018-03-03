@@ -66,15 +66,4 @@ const killTerminalInstance = (terminalInstance) => {
   }
 };
 
-const reloadTerminalInstance = (terminalInstance) => {
-  killTerminalInstance(terminalInstance);
-  return createNewTerminalInstance(terminalInstance);
-};
-
-export {
-  createNewTerminalInstance,
-  exportTermninalsToObject,
-  importTerminalsToObject,
-  killTerminalInstance,
-  reloadTerminalInstance,
-};
+export { createNewTerminalInstance, exportTermninalsToObject, importTerminalsToObject, killTerminalInstance };
