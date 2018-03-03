@@ -15,6 +15,12 @@ const importTerminalInstances = terminalInstances => ({
   terminals: terminalInstances,
 });
 
+const reloadTerminalInstance = terminalUUID => ({
+  type: TerminalActionTypes.RELOAD_TERMINAL,
+  terminalUUID,
+});
+
 exports.addNewTerminalInstance = addNewTerminalInstance;
 exports.selectTerminalInstance = selectTerminalInstance;
 exports.importTerminalInstances = importTerminalInstances;
+exports.reloadTerminalInstance = reloadTerminalInstance;

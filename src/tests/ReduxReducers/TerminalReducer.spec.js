@@ -271,4 +271,116 @@ describe('Terminal reducer', () => {
     expect(finalState).to.deep.equal(expectedState);
     expect(TerminalService.killTerminalInstance.callCount).to.be.equal(3);
   });
+
+  it('should handle RELOAD_TERMINAL - reloading terminal that does not exist', () => {
+    const initialState = {
+      terminals: [
+        {
+          terminalName: 'First terminal',
+        },
+        {
+          terminalName: 'Second terminal',
+        },
+        {
+          terminalName: 'Third terminal',
+        },
+      ],
+      selectedTerminal: 'someTestUUID',
+    };
+
+    const expectedState = {
+      terminals: [
+        {
+          terminalName: 'First terminal',
+        },
+        {
+          terminalName: 'Second terminal',
+        },
+        {
+          terminalName: 'Third terminal',
+        },
+      ],
+      selectedTerminal: 'someTestUUID',
+    };
+
+    const finalState = TerminalReducer(initialState, {
+      type: TerminalActionTypes.RELOAD_TERMINAL,
+      terminalUUID: 'not-existing-uuid',
+    });
+
+    expect(finalState).to.deep.equal(expectedState);
+  });
+
+  it('should handle RELOAD_TERMINAL - reloading terminal that does exist', () => {
+    sinonSandbox.spy(TerminalService, 'killTerminalInstance');
+    sinonSandbox.stub(TerminalService, 'createNewTerminalInstance').returns({
+      xTermInstance: {
+        fit: () => {},
+        on: () => {},
+        write: () => {},
+      },
+      virtualTerminalInstance: {
+        on: () => {},
+        write: () => {},
+      },
+    });
+
+    const initialState = {
+      terminals: [
+        {
+          uuid: '1',
+          terminalName: 'First terminal',
+        },
+        {
+          uuid: '2',
+          terminalName: 'Second terminal',
+          terminalType: 'CMD',
+          terminalStartupCommands: ['cmd1', 'cmd2'],
+          terminalStartupDir: 'somePath',
+          xTermInstance: {
+            destroy: sinon.spy(),
+          },
+          virtualTerminalInstance: {
+            kill: sinon.spy(),
+          },
+        },
+        {
+          uuid: '3',
+          terminalName: 'Third terminal',
+        },
+      ],
+      selectedTerminal: '2',
+    };
+
+    const firstTerminalExpected = {
+      uuid: '1',
+      terminalName: 'First terminal',
+    };
+
+    const thirdTerminalExpected = {
+      uuid: '3',
+      terminalName: 'Third terminal',
+    };
+
+    const finalState = TerminalReducer(initialState, {
+      type: TerminalActionTypes.RELOAD_TERMINAL,
+      terminalUUID: '2',
+    });
+
+    expect(finalState.selectedTerminal).to.not.equal('2');
+    expect(finalState.terminals.length).to.be.equal(3);
+    expect(finalState.terminals[0]).to.deep.equal(firstTerminalExpected);
+    expect(finalState.terminals[2]).to.deep.equal(thirdTerminalExpected);
+    expect(finalState.terminals[1].terminalName).to.be.equal('Second terminal');
+    expect(finalState.terminals[1].terminalType).to.be.equal('CMD');
+    expect(finalState.terminals[1].terminalStartupCommands).to.deep.equal(['cmd1', 'cmd2']);
+    expect(finalState.terminals[1].terminalStartupDir).to.deep.equal('somePath');
+    expect(finalState.terminals[1].uuid).to.be.equal(finalState.selectedTerminal);
+    expect(typeof finalState.terminals[1].xTermInstance.fit).to.be.equal('function');
+    expect(typeof finalState.terminals[1].xTermInstance.on).to.be.equal('function');
+    expect(typeof finalState.terminals[1].xTermInstance.write).to.be.equal('function');
+    expect(typeof finalState.terminals[1].virtualTerminalInstance.on).to.be.equal('function');
+    expect(typeof finalState.terminals[1].virtualTerminalInstance.write).to.be.equal('function');
+    expect(TerminalService.killTerminalInstance.callCount).to.be.equal(1);
+  });
 });

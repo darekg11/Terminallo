@@ -37,7 +37,7 @@ const TerminalTabs = props => (
       {props.selectedTerminal !== '' && (
         <div className="panel">
           <Tooltip id="tooltip-reload-terminal" title="Reload" placement="left">
-            <IconButton aria-label="Reload">
+            <IconButton aria-label="Reload" onClick={() => props.reloadTerminal(props.selectedTerminal)}>
               <ReloadIcon />
             </IconButton>
           </Tooltip>
@@ -85,6 +85,7 @@ TerminalTabs.propTypes = {
   })),
   selectedTerminal: PropTypes.string,
   selectTerminal: PropTypes.func.isRequired,
+  reloadTerminal: PropTypes.func.isRequired,
 };
 
 TerminalTabs.defaultProps = {
@@ -99,6 +100,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   selectTerminal: destinationTerminalUUID => dispatch(TerminalActions.selectTerminalInstance(destinationTerminalUUID)),
+  reloadTerminal: destinationTerminalUUID => dispatch(TerminalActions.reloadTerminalInstance(destinationTerminalUUID)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TerminalTabs);
