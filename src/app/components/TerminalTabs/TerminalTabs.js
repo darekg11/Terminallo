@@ -16,18 +16,20 @@ import './TerminalTabs.css';
 
 const TerminalTabs = props => (
   <Paper className="Terminal-Tabs">
-    <Tabs
-      value={props.selectedTerminal === '' ? false : props.selectedTerminal}
-      onChange={(event, value) => props.selectTerminal(value)}
-      indicatorColor="primary"
-      textColor="primary"
-      scrollable
-      scrollButtons="auto"
-    >
-      {props.terminals.map(singleTerminal => (
-        <Tab key={singleTerminal.uuid} label={singleTerminal.terminalName} value={singleTerminal.uuid} />
-      ))}
-    </Tabs>
+    {props.terminals.length > 0 && (
+      <Tabs
+        value={props.selectedTerminal === '' ? false : props.selectedTerminal}
+        onChange={(event, value) => props.selectTerminal(value)}
+        indicatorColor="primary"
+        textColor="primary"
+        scrollable
+        scrollButtons="auto"
+      >
+        {props.terminals.map(singleTerminal => (
+          <Tab key={singleTerminal.uuid} label={singleTerminal.terminalName} value={singleTerminal.uuid} />
+        ))}
+      </Tabs>
+    )}
     <div className="terminal-area">
       <div className="terminal">
         {props.terminals
