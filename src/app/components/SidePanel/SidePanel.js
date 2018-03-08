@@ -10,6 +10,7 @@ import Collapse from 'material-ui/transitions/Collapse';
 import KeyboardIcon from 'material-ui-icons/Keyboard';
 import ExpandLess from 'material-ui-icons/ExpandLess';
 import ExpandMore from 'material-ui-icons/ExpandMore';
+import TerminalActions from '../../actions/TerminalActions';
 
 const drawerWidth = 200;
 
@@ -73,7 +74,12 @@ class SidePanel extends React.Component {
           <Collapse component="li" in={this.state.open} timeout="auto" unmountOnExit>
             <List disablePadding>
               {this.props.terminals.map(singleTerminal => (
-                <ListItem key={singleTerminal.uuid} button className={classes.nested}>
+                <ListItem
+                  key={singleTerminal.uuid}
+                  button
+                  className={classes.nested}
+                  onClick={() => this.props.selectTerminal(singleTerminal.uuid)}
+                >
                   <ListItemText inset primary={singleTerminal.terminalName} />
                 </ListItem>
               ))}
@@ -100,6 +106,7 @@ SidePanel.propTypes = {
   terminals: PropTypes.arrayOf(PropTypes.shape({
     terminalName: PropTypes.string.isRequired,
   })),
+  selectTerminal: PropTypes.func.isRequired,
 };
 
 SidePanel.defaultProps = {
@@ -110,5 +117,9 @@ const mapStateToProps = state => ({
   terminals: state.TerminalsReducer.terminals,
 });
 
+const mapDispatchToProps = dispatch => ({
+  selectTerminal: terminalUUID => dispatch(TerminalActions.selectTerminalInstance(terminalUUID)),
+});
+
 const styledComponent = withStyles(styles)(SidePanel);
-export default connect(mapStateToProps, null)(styledComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(styledComponent);
