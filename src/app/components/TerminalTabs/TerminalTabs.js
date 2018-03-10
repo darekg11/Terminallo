@@ -54,7 +54,7 @@ const TerminalTabs = props => (
               <EditIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip id="tooltip-delete-terminal" title="Delete" placement="left">
+          <Tooltip id="tooltip-delete-terminal" title="Delete (CTRL + D)" placement="left">
             <IconButton aria-label="Delete" onClick={() => props.deleteTerminal(props.selectedTerminal)}>
               <DeleteIcon />
             </IconButton>
