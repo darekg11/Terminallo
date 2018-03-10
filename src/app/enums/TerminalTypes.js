@@ -5,6 +5,11 @@ const TerminalTypes = {
       label: 'CMD',
       start: 'cmd.exe',
     },
+    POWERSHELL: {
+      name: 'POWERSHELL',
+      label: 'PowerShell',
+      start: 'powershell.exe',
+    },
   },
   unix: {},
 };
