@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Paper from 'material-ui/Paper';
 import Tabs, { Tab } from 'material-ui/Tabs';
+import PauseIcon from 'material-ui-icons/Pause';
 import ReloadIcon from 'material-ui-icons/Refresh';
 import EditIcon from 'material-ui-icons/Edit';
 import DeleteIcon from 'material-ui-icons/Delete';
@@ -38,6 +39,11 @@ const TerminalTabs = props => (
       </div>
       {props.selectedTerminal !== '' && (
         <div className="panel">
+          <Tooltip id="tooltip-stop-terminal" title="Stop" placement="left">
+            <IconButton aria-label="Stop" onClick={() => props.stopTerminal(props.selectedTerminal)}>
+              <PauseIcon />
+            </IconButton>
+          </Tooltip>
           <Tooltip id="tooltip-reload-terminal" title="Reload" placement="left">
             <IconButton aria-label="Reload" onClick={() => props.reloadTerminal(props.selectedTerminal)}>
               <ReloadIcon />
@@ -99,6 +105,7 @@ TerminalTabs.propTypes = {
   deleteTerminal: PropTypes.func.isRequired,
   moveTerminalRight: PropTypes.func.isRequired,
   moveTerminalLeft: PropTypes.func.isRequired,
+  stopTerminal: PropTypes.func.isRequired,
 };
 
 TerminalTabs.defaultProps = {
@@ -117,6 +124,7 @@ const mapDispatchToProps = dispatch => ({
   deleteTerminal: terminalUUID => dispatch(TerminalActions.deleteTerminalInstance(terminalUUID)),
   moveTerminalRight: terminalUUID => dispatch(TerminalActions.moveRightTerminalInstance(terminalUUID)),
   moveTerminalLeft: terminalUUID => dispatch(TerminalActions.moveLeftTerminalInstance(terminalUUID)),
+  stopTerminal: terminalUUID => dispatch(TerminalActions.stopTerminalInstance(terminalUUID)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TerminalTabs);
