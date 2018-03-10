@@ -44,7 +44,7 @@ const TerminalTabs = props => (
               <PauseIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip id="tooltip-reload-terminal" title="Reload" placement="left">
+          <Tooltip id="tooltip-reload-terminal" title="Reload (CTRL + R)" placement="left">
             <IconButton aria-label="Reload" onClick={() => props.reloadTerminal(props.selectedTerminal)}>
               <ReloadIcon />
             </IconButton>
