@@ -33,6 +33,14 @@ const initializeDefaults = (reduxStore) => {
     }
     return false;
   });
+
+  Mousetrap.bind(['command+left', 'ctrl+left'], () => {
+    const { selectedTerminal } = reduxStore.getState().TerminalsReducer;
+    if (selectedTerminal !== '') {
+      reduxStore.dispatch(TerminalActions.moveLeftTerminalInstance(selectedTerminal));
+    }
+    return false;
+  });
 };
 
 exports.initializeDefaults = initializeDefaults;
