@@ -35,6 +35,11 @@ const moveLeftTerminalInstance = terminalUUID => ({
   terminalUUID,
 });
 
+const stopTerminalInstance = terminalUUID => ({
+  type: TerminalActionTypes.STOP_TERMINAL_INSTANCE,
+  terminalUUID,
+});
+
 exports.addNewTerminalInstance = addNewTerminalInstance;
 exports.selectTerminalInstance = selectTerminalInstance;
 exports.importTerminalInstances = importTerminalInstances;
@@ -42,3 +47,4 @@ exports.reloadTerminalInstance = reloadTerminalInstance;
 exports.deleteTerminalInstance = deleteTerminalInstance;
 exports.moveRightTerminalInstance = moveRightTerminalInstance;
 exports.moveLeftTerminalInstance = moveLeftTerminalInstance;
+exports.stopTerminalInstance = stopTerminalInstance;

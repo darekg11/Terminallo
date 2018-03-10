@@ -136,6 +136,15 @@ export default function terminalReducer(state = initialState, action) {
         terminals: copiedTerminalsArray,
       };
     }
+    case TerminalActionTypes.STOP_TERMINAL_INSTANCE: {
+      const { terminalUUID } = action;
+      const terminalInstanceToStopIndex = state.terminals.findIndex(singleTermianl => singleTermianl.uuid === terminalUUID);
+      if (terminalInstanceToStopIndex !== -1) {
+        const terminalInstanceToStop = state.terminals[terminalInstanceToStopIndex];
+        terminalInstanceToStop.virtualTerminalInstance.write('\x03');
+      }
+      return state;
+    }
     default:
       return state;
   }
