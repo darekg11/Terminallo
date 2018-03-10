@@ -86,4 +86,12 @@ describe('actions', () => {
     };
     expect(TerminalActions.moveLeftTerminalInstance('123456789')).to.deep.equal(expectedAction);
   });
+
+  it('should create an action to stop terminal instance', () => {
+    const expectedAction = {
+      type: TerminalActionTypes.STOP_TERMINAL_INSTANCE,
+      terminalUUID: '123456789',
+    };
+    expect(TerminalActions.stopTerminalInstance('123456789')).to.deep.equal(expectedAction);
+  });
 });

@@ -798,4 +798,96 @@ describe('Terminal reducer', () => {
 
     expect(finalState).to.deep.equal(expectedState);
   });
+
+  it('should handle STOP_TERMINAL_INSTANCE - stoping terminal that does not exist', () => {
+    const initialState = {
+      terminals: [
+        {
+          terminalName: 'First terminal',
+        },
+        {
+          terminalName: 'Second terminal',
+        },
+        {
+          terminalName: 'Third terminal',
+        },
+      ],
+      selectedTerminal: 'someTestUUID',
+    };
+
+    const expectedState = {
+      terminals: [
+        {
+          terminalName: 'First terminal',
+        },
+        {
+          terminalName: 'Second terminal',
+        },
+        {
+          terminalName: 'Third terminal',
+        },
+      ],
+      selectedTerminal: 'someTestUUID',
+    };
+
+    const finalState = TerminalReducer(initialState, {
+      type: TerminalActionTypes.STOP_TERMINAL_INSTANCE,
+      terminalUUID: 'not-existing-uuid',
+    });
+
+    expect(finalState).to.deep.equal(expectedState);
+  });
+
+  it('should handle STOP_TERMINAL_INSTANCE - stop terminal that does exist', () => {
+    const initialState = {
+      terminals: [
+        {
+          uuid: '1',
+          terminalName: 'First terminal',
+        },
+        {
+          uuid: '2',
+          terminalName: 'Second terminal',
+          terminalType: 'CMD',
+          terminalStartupCommands: ['cmd1', 'cmd2'],
+          terminalStartupDir: 'somePath',
+          virtualTerminalInstance: {
+            write: sinon.spy(),
+          },
+        },
+        {
+          uuid: '3',
+          terminalName: 'Third terminal',
+        },
+      ],
+      selectedTerminal: '2',
+    };
+
+    const finalState = TerminalReducer(initialState, {
+      type: TerminalActionTypes.STOP_TERMINAL_INSTANCE,
+      terminalUUID: '2',
+    });
+
+    const firstTerminalExpected = {
+      uuid: '1',
+      terminalName: 'First terminal',
+    };
+
+    const thirdTerminalExpected = {
+      uuid: '3',
+      terminalName: 'Third terminal',
+    };
+
+    expect(finalState.selectedTerminal).to.equal('2');
+    expect(finalState.terminals.length).to.be.equal(3);
+    expect(finalState.terminals[0]).to.deep.equal(firstTerminalExpected);
+    expect(finalState.terminals[2]).to.deep.equal(thirdTerminalExpected);
+    expect(finalState.terminals[1].terminalName).to.be.equal('Second terminal');
+    expect(finalState.terminals[1].terminalType).to.be.equal('CMD');
+    expect(finalState.terminals[1].terminalStartupCommands).to.deep.equal(['cmd1', 'cmd2']);
+    expect(finalState.terminals[1].terminalStartupDir).to.deep.equal('somePath');
+    expect(finalState.terminals[1].uuid).to.be.equal(finalState.selectedTerminal);
+    expect(finalState.terminals[1].virtualTerminalInstance.write.callCount).to.be.equal(1);
+    expect(finalState.terminals[1].virtualTerminalInstance.write.getCall(0).args[0]);
+  });
 });
