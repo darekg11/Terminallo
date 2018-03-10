@@ -39,7 +39,7 @@ const TerminalTabs = props => (
       </div>
       {props.selectedTerminal !== '' && (
         <div className="panel">
-          <Tooltip id="tooltip-stop-terminal" title="Stop" placement="left">
+          <Tooltip id="tooltip-stop-terminal" title="Stop (CTRL + P)" placement="left">
             <IconButton aria-label="Stop" onClick={() => props.stopTerminal(props.selectedTerminal)}>
               <PauseIcon />
             </IconButton>
