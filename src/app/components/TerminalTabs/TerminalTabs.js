@@ -59,7 +59,7 @@ const TerminalTabs = props => (
               <DeleteIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip id="tooltip-move-right-terminal" title="Move right" placement="left">
+          <Tooltip id="tooltip-move-right-terminal" title="Move right (CTRL + ->)" placement="left">
             <IconButton
               aria-label="Move right"
               onClick={() => props.moveTerminalRight(props.selectedTerminal)}
