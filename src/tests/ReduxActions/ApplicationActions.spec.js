@@ -35,6 +35,14 @@ describe('actions', () => {
     expect(ApplicationActions.closeAddNewTerminalModalWindow()).to.deep.equal(expectedAction);
   });
 
+  it('should create an action to change terminals source file path', () => {
+    const expectedAction = {
+      type: ApplicationActionTypes.SET_TERMINALS_SOURCE_FILE_PATH,
+      path: 'SomeMockPath',
+    };
+    expect(ApplicationActions.setTerminalsSourcePath('SomeMockPath')).to.deep.equal(expectedAction);
+  });
+
   it('should create action to show spinner loading and spinner success when export was success', (done) => {
     sinonSandbox.stub(TerminalService, 'exportTermninalsToObject').returns({ terminals: [] });
     sinonSandbox.stub(FileService, 'saveJsonToFile').returns({});

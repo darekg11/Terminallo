@@ -7,6 +7,7 @@ describe('Application reducer', () => {
     const state = ApplicationReducer(undefined, {});
     const expectedInitialState = {
       addNewTerminalWindowOpened: false,
+      terminalsFilePath: '',
     };
 
     expect(state).to.deep.equal(expectedInitialState);
@@ -18,6 +19,7 @@ describe('Application reducer', () => {
     });
     const expectedState = {
       addNewTerminalWindowOpened: true,
+      terminalsFilePath: '',
     };
 
     expect(state).to.deep.equal(expectedState);
@@ -34,6 +36,7 @@ describe('Application reducer', () => {
 
     const expectedState = {
       addNewTerminalWindowOpened: false,
+      terminalsFilePath: '',
     };
 
     expect(state).to.deep.equal(expectedState);
