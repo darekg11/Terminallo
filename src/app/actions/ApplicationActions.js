@@ -5,6 +5,11 @@ import ApplicationActionTypes from './ApplicationActionTypes';
 import TerminalActions from './TerminalActions';
 import SpinnerActions from './SpinnerActions';
 
+const setTerminalsSourcePath = path => ({
+  type: ApplicationActionTypes.SET_TERMINALS_SOURCE_FILE_PATH,
+  path,
+});
+
 const importTerminals = path => async (dispatch) => {
   dispatch(SpinnerActions.showSpinner('Importing terminals... Please wait'));
   if (path) {
@@ -14,6 +19,7 @@ const importTerminals = path => async (dispatch) => {
       dispatch(batchActions([
         TerminalActions.importTerminalInstances(mappedTerminalInstances.terminals),
         SpinnerActions.showSpinnerSuccess('Terminals imported successfully.'),
+        setTerminalsSourcePath(path),
       ]));
     } catch (err) {
       dispatch(SpinnerActions.showSpinnerError(`Could not import terminals :( Error: ${err.message}`));
@@ -30,7 +36,10 @@ const exportTerminals = path => async (dispatch, getState) => {
       const { terminals } = getState().TerminalsReducer;
       const terminalExportObject = TerminalService.exportTermninalsToObject(terminals);
       await FileService.saveJsonToFile(path, terminalExportObject);
-      dispatch(SpinnerActions.showSpinnerSuccess('Terminals exported successfully.'));
+      dispatch(batchActions([
+        SpinnerActions.showSpinnerSuccess('Terminals exported successfully.'),
+        setTerminalsSourcePath(path),
+      ]));
     } catch (err) {
       dispatch(SpinnerActions.showSpinnerError(`Could not export terminals :( Error: ${err.message}`));
     }
@@ -51,3 +60,4 @@ exports.openAddNewTerminalModalWindow = openAddNewTerminalModalWindow;
 exports.closeAddNewTerminalModalWindow = closeAddNewTerminalModalWindow;
 exports.exportTerminals = exportTerminals;
 exports.importTerminals = importTerminals;
+exports.setTerminalsSourcePath = setTerminalsSourcePath;
