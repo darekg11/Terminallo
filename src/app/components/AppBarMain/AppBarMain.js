@@ -28,7 +28,12 @@ const AppBarMain = props => (
           </IconButton>
         </Tooltip>
         <Tooltip id="tooltip-save" title="Save terminals">
-          <IconButton aria-label="Save terminals" onClick={() => props.saveTerminals(props.terminalsSavePath)}>
+          <IconButton
+            aria-label="Save terminals"
+            onClick={() =>
+              props.terminalsSavePath === '' ? props.exportTerminals() : props.saveTerminals(props.terminalsSavePath)
+            }
+          >
             <SaveIcon />
           </IconButton>
         </Tooltip>

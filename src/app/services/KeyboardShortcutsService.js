@@ -1,3 +1,4 @@
+import electron from 'electron';
 import Mousetrap from 'mousetrap';
 import TerminalActions from '../actions/TerminalActions';
 import ApplicationActions from '../actions/ApplicationActions';
@@ -57,6 +58,20 @@ const initializeDefaults = (reduxStore) => {
     const exportFilePath = reduxStore.getState().ApplicationStateReducer.terminalsFilePath;
     if (exportFilePath !== '') {
       reduxStore.dispatch(ApplicationActions.exportTerminals(exportFilePath));
+    } else {
+      const path = electron.remote.dialog.showSaveDialog({
+        title: 'Enter file name for your export',
+        defaultPath: 'terminals',
+        filters: [
+          {
+            name: 'JSON File',
+            extensions: ['json'],
+          },
+        ],
+      });
+      if (path) {
+        reduxStore.dispatch(ApplicationActions.exportTerminals(path));
+      }
     }
     return false;
   });
