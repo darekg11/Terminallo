@@ -10,7 +10,12 @@ Enzyme.configure({ adapter: new Adapter() });
 
 describe('AppBarMain component tests', () => {
   it('should render', () => {
-    const initialState = {};
+    const initialState = {
+      ApplicationStateReducer: {
+        addNewTerminalWindowOpened: false,
+        terminalsFilePath: '',
+      },
+    };
     const mockStore = configureStore();
     const store = mockStore(initialState);
     const wrapper = shallow(<AppBarMain store={store} />);

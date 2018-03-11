@@ -28,7 +28,7 @@ const AppBarMain = props => (
           </IconButton>
         </Tooltip>
         <Tooltip id="tooltip-save" title="Save terminals">
-          <IconButton aria-label="Save terminals">
+          <IconButton aria-label="Save terminals" onClick={() => props.saveTerminals(props.terminalsSavePath)}>
             <SaveIcon />
           </IconButton>
         </Tooltip>
@@ -46,6 +46,8 @@ AppBarMain.propTypes = {
   openAddNewTerminalWindow: PropTypes.func.isRequired,
   exportTerminals: PropTypes.func.isRequired,
   importTerminals: PropTypes.func.isRequired,
+  saveTerminals: PropTypes.func.isRequired,
+  terminalsSavePath: PropTypes.string.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -80,6 +82,15 @@ const mapDispatchToProps = dispatch => ({
       dispatch(ApplicationActions.importTerminals(filePath[0]));
     }
   },
+  saveTerminals: (path) => {
+    if (path) {
+      dispatch(ApplicationActions.exportTerminals(path));
+    }
+  },
 });
 
-export default connect(null, mapDispatchToProps)(AppBarMain);
+const mapStateToProps = state => ({
+  terminalsSavePath: state.ApplicationStateReducer.terminalsFilePath,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppBarMain);
