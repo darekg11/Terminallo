@@ -2,6 +2,7 @@ import ApplicationActionsTypes from '../actions/ApplicationActionTypes';
 
 const initialState = {
   addNewTerminalWindowOpened: false,
+  terminalsFilePath: '',
 };
 
 export default function applicationState(state = initialState, action) {
