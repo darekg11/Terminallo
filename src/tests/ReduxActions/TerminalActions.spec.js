@@ -94,4 +94,11 @@ describe('actions', () => {
     };
     expect(TerminalActions.stopTerminalInstance('123456789')).to.deep.equal(expectedAction);
   });
+
+  it('should create an action to go to next terminal instance', () => {
+    const expectedAction = {
+      type: TerminalActionTypes.GO_TO_NEXT_TERMINAL_INSTANCE,
+    };
+    expect(TerminalActions.goToNextTerminalInstance()).to.deep.equal(expectedAction);
+  });
 });
