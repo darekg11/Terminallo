@@ -41,6 +41,11 @@ const initializeDefaults = (reduxStore) => {
     }
     return false;
   });
+
+  Mousetrap.bind(['alt+right'], () => {
+    reduxStore.dispatch(TerminalActions.goToNextTerminalInstance());
+    return false;
+  });
 };
 
 exports.initializeDefaults = initializeDefaults;

@@ -158,7 +158,7 @@ export default function terminalReducer(state = initialState, action) {
       const terminalInstanceToSelect = state.terminals[nextInOrderTerminalInstanceIndex];
       return {
         ...state,
-        selectedTerminal: terminalInstanceToSelect.uud,
+        selectedTerminal: terminalInstanceToSelect.uuid,
       };
     }
     default:
