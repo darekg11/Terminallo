@@ -52,13 +52,24 @@ describe('actions', () => {
         loadingMessage: 'Exporting terminals... Please wait',
       },
       {
-        type: SpinnerActionTypes.SPINNER_LOADING_SUCCESS,
-        successMessage: 'Terminals exported successfully.',
+        type: 'BATCHING_REDUCER.BATCH',
+        meta: { batch: true },
+        payload: [
+          {
+            type: SpinnerActionTypes.SPINNER_LOADING_SUCCESS,
+            successMessage: 'Terminals exported successfully.',
+          },
+          {
+            type: ApplicationActionTypes.SET_TERMINALS_SOURCE_FILE_PATH,
+            path: 'D:TestPath',
+          },
+        ],
       },
     ];
     const store = mockStore({
       TerminalsReducer: {
         terminals: [],
+        terminalsFilePath: '',
       },
     });
     return store.dispatch(ApplicationActions.exportTerminals('D:TestPath')).then(() => {
@@ -84,6 +95,7 @@ describe('actions', () => {
     const store = mockStore({
       TerminalsReducer: {
         terminals: [],
+        terminalsFilePath: '',
       },
     });
     return store.dispatch(ApplicationActions.exportTerminals('D:TestPath')).then(() => {
@@ -107,6 +119,7 @@ describe('actions', () => {
     const store = mockStore({
       TerminalsReducer: {
         terminals: [],
+        terminalsFilePath: '',
       },
     });
     return store.dispatch(ApplicationActions.exportTerminals('')).then(() => {
@@ -130,6 +143,7 @@ describe('actions', () => {
     ];
     const store = mockStore({
       terminals: [],
+      terminalsFilePath: '',
     });
     return store.dispatch(ApplicationActions.importTerminals('')).then(() => {
       expect(store.getActions()).to.deep.equal(expectedActions);
@@ -178,12 +192,17 @@ describe('actions', () => {
             type: SpinnerActionTypes.SPINNER_LOADING_SUCCESS,
             successMessage: 'Terminals imported successfully.',
           },
+          {
+            type: ApplicationActionTypes.SET_TERMINALS_SOURCE_FILE_PATH,
+            path: 'D:TestPath',
+          },
         ],
       },
     ];
     const store = mockStore({
       TerminalsReducer: {
         terminals: [],
+        terminalsFilePath: '',
       },
     });
     return store.dispatch(ApplicationActions.importTerminals('D:TestPath')).then(() => {
@@ -209,6 +228,7 @@ describe('actions', () => {
     ];
     const store = mockStore({
       terminals: [],
+      terminalsFilePath: '',
     });
     return store.dispatch(ApplicationActions.importTerminals('SomePath')).then(() => {
       expect(store.getActions()).to.deep.equal(expectedActions);
@@ -233,6 +253,7 @@ describe('actions', () => {
     ];
     const store = mockStore({
       terminals: [],
+      terminalsFilePath: '',
     });
     return store.dispatch(ApplicationActions.importTerminals('SomePath')).then(() => {
       expect(store.getActions()).to.deep.equal(expectedActions);

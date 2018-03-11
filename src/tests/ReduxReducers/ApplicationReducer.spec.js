@@ -41,4 +41,29 @@ describe('Application reducer', () => {
 
     expect(state).to.deep.equal(expectedState);
   });
+
+  it('should handle SET_TERMINALS_SOURCE_FILE_PATH - set path when path is provided in created action', () => {
+    const state = ApplicationReducer(undefined, {
+      type: ApplicationActionTypes.SET_TERMINALS_SOURCE_FILE_PATH,
+      path: 'SomeMockPathValue',
+    });
+    const expectedState = {
+      addNewTerminalWindowOpened: false,
+      terminalsFilePath: 'SomeMockPathValue',
+    };
+
+    expect(state).to.deep.equal(expectedState);
+  });
+
+  it('should handle SET_TERMINALS_SOURCE_FILE_PATH - do not set path when path is missing in created action', () => {
+    const state = ApplicationReducer(undefined, {
+      type: ApplicationActionTypes.SET_TERMINALS_SOURCE_FILE_PATH,
+    });
+    const expectedState = {
+      addNewTerminalWindowOpened: false,
+      terminalsFilePath: '',
+    };
+
+    expect(state).to.deep.equal(expectedState);
+  });
 });
