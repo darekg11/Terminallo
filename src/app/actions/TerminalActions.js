@@ -40,6 +40,14 @@ const stopTerminalInstance = terminalUUID => ({
   terminalUUID,
 });
 
+const goToNextTerminalInstance = () => ({
+  type: TerminalActionTypes.GO_TO_NEXT_TERMINAL_INSTANCE,
+});
+
+const goToPreviousTerminalInstance = () => ({
+  type: TerminalActionTypes.GO_TO_PREVIOUS_TERMINAL_INSTANCE,
+});
+
 exports.addNewTerminalInstance = addNewTerminalInstance;
 exports.selectTerminalInstance = selectTerminalInstance;
 exports.importTerminalInstances = importTerminalInstances;
@@ -48,3 +56,5 @@ exports.deleteTerminalInstance = deleteTerminalInstance;
 exports.moveRightTerminalInstance = moveRightTerminalInstance;
 exports.moveLeftTerminalInstance = moveLeftTerminalInstance;
 exports.stopTerminalInstance = stopTerminalInstance;
+exports.goToNextTerminalInstance = goToNextTerminalInstance;
+exports.goToPreviousTerminalInstance = goToPreviousTerminalInstance;
