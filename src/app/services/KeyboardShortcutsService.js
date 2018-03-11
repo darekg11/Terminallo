@@ -1,5 +1,6 @@
 import Mousetrap from 'mousetrap';
 import TerminalActions from '../actions/TerminalActions';
+import ApplicationActions from '../actions/ApplicationActions';
 
 const initializeDefaults = (reduxStore) => {
   Mousetrap.bind(['command+p', 'ctrl+p'], () => {
@@ -49,6 +50,14 @@ const initializeDefaults = (reduxStore) => {
 
   Mousetrap.bind(['alt+left'], () => {
     reduxStore.dispatch(TerminalActions.goToPreviousTerminalInstance());
+    return false;
+  });
+
+  Mousetrap.bind(['command+s', 'ctrl+s'], () => {
+    const exportFilePath = reduxStore.getState().ApplicationStateReducer.terminalsFilePath;
+    if (exportFilePath !== '') {
+      reduxStore.dispatch(ApplicationActions.exportTerminals(exportFilePath));
+    }
     return false;
   });
 };
