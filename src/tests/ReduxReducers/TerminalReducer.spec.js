@@ -1014,4 +1014,128 @@ describe('Terminal reducer', () => {
 
     expect(finalState).to.deep.equal(expectedState);
   });
+
+  it('should handle GO_TO_PREVIOUS_TERMINAL_INSTANCE - should not change state when terminal instance does not exist', () => {
+    const initialState = {
+      terminals: [
+        {
+          uuid: '1',
+          terminalName: 'First terminal',
+        },
+      ],
+      selectedTerminal: '1234abcd',
+    };
+
+    const expectedState = {
+      terminals: [
+        {
+          uuid: '1',
+          terminalName: 'First terminal',
+        },
+      ],
+      selectedTerminal: '1234abcd',
+    };
+
+    const finalState = TerminalReducer(initialState, {
+      type: TerminalActionTypes.GO_TO_PREVIOUS_TERMINAL_INSTANCE,
+    });
+
+    expect(finalState).to.deep.equal(expectedState);
+  });
+
+  it('should handle GO_TO_PREVIOUS_TERMINAL_INSTANCE - should not change state when selected terminal is the first one', () => {
+    const initialState = {
+      terminals: [
+        {
+          uuid: '1',
+          terminalName: 'First terminal',
+        },
+        {
+          uuid: '2',
+          terminalName: 'Second terminal',
+        },
+      ],
+      selectedTerminal: '1',
+    };
+
+    const expectedState = {
+      terminals: [
+        {
+          uuid: '1',
+          terminalName: 'First terminal',
+        },
+        {
+          uuid: '2',
+          terminalName: 'Second terminal',
+        },
+      ],
+      selectedTerminal: '1',
+    };
+
+    const finalState = TerminalReducer(initialState, {
+      type: TerminalActionTypes.GO_TO_PREVIOUS_TERMINAL_INSTANCE,
+    });
+
+    expect(finalState).to.deep.equal(expectedState);
+  });
+
+  it('should handle GO_TO_PREVIOUS_TERMINAL_INSTANCE - should change terminal when selected terminal is in the middle', () => {
+    const initialState = {
+      terminals: [
+        {
+          uuid: '1',
+          terminalName: 'First terminal',
+        },
+        {
+          uuid: '2',
+          terminalName: 'Second terminal',
+        },
+        {
+          uuid: '3',
+          terminalName: 'Third terminal',
+        },
+        {
+          uuid: '4',
+          terminalName: 'Fourth terminal',
+        },
+        {
+          uuid: '5',
+          terminalName: 'Fifth terminal',
+        },
+      ],
+      selectedTerminal: '3',
+    };
+
+    const expectedState = {
+      terminals: [
+        {
+          uuid: '1',
+          terminalName: 'First terminal',
+        },
+        {
+          uuid: '2',
+          terminalName: 'Second terminal',
+        },
+        {
+          uuid: '3',
+          terminalName: 'Third terminal',
+        },
+        {
+          uuid: '4',
+          terminalName: 'Fourth terminal',
+        },
+        {
+          uuid: '5',
+          terminalName: 'Fifth terminal',
+        },
+      ],
+      selectedTerminal: '2',
+    };
+
+    const finalState = TerminalReducer(initialState, {
+      type: TerminalActionTypes.GO_TO_PREVIOUS_TERMINAL_INSTANCE,
+    });
+
+    expect(finalState).to.deep.equal(expectedState);
+  });
 });

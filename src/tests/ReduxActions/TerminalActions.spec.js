@@ -101,4 +101,11 @@ describe('actions', () => {
     };
     expect(TerminalActions.goToNextTerminalInstance()).to.deep.equal(expectedAction);
   });
+
+  it('should create an action to go to previous terminal instance', () => {
+    const expectedAction = {
+      type: TerminalActionTypes.GO_TO_PREVIOUS_TERMINAL_INSTANCE,
+    };
+    expect(TerminalActions.goToPreviousTerminalInstance()).to.deep.equal(expectedAction);
+  });
 });
