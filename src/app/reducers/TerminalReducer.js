@@ -161,6 +161,19 @@ export default function terminalReducer(state = initialState, action) {
         selectedTerminal: terminalInstanceToSelect.uuid,
       };
     }
+    case TerminalActionTypes.GO_TO_PREVIOUS_TERMINAL_INSTANCE: {
+      const currentlySelectedTerminalInstance = state.selectedTerminal;
+      const currentlySelectedTerminalInstanceIndex = state.terminals.findIndex(singleTerminal => singleTerminal.uuid === currentlySelectedTerminalInstance);
+      if (currentlySelectedTerminalInstanceIndex === -1 || currentlySelectedTerminalInstanceIndex === 0) {
+        return state;
+      }
+      const previousInOrderTerminalInstanceIndex = currentlySelectedTerminalInstanceIndex - 1;
+      const terminalInstanceToSelect = state.terminals[previousInOrderTerminalInstanceIndex];
+      return {
+        ...state,
+        selectedTerminal: terminalInstanceToSelect.uuid,
+      };
+    }
     default:
       return state;
   }
