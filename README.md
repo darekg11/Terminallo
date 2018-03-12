@@ -57,9 +57,9 @@ Go ahead and create Pull Requests, contribution is welcome**
 
 # Roadmap for version 1.1.0
 
-* [ ] Bump `Electron` version to more recent version
-* [ ] Bump code coverage to ~80%
-* [ ] Get rid of nasty `82vh` hack for terminal dynamic height
-* [ ] Unify `Electron` modal dialog window mechanism in order to remove multiple code copy-pastas
-* [ ] Allow for simultaneously stream of console output to file and console window
-* [ ] Automatic terminal reload after detection of changes in selected directories (`watch on multiple directories`)
+- [ ] Bump `Electron` version to more recent version
+- [ ] Bump code coverage to ~80%
+- [ ] Get rid of nasty `82vh` [hack for terminal dynamic height](https://github.com/darekg11/Terminallo/blob/master/src/app/components/Terminal/Terminal.css#L127)
+- [ ] Unify `Electron` modal dialog window mechanism in order to remove multiple code copy-pastas
+- [ ] Allow for simultaneously stream of console output to file and console window
+- [ ] Automatic terminal reload after detection of changes in selected directories (`watch on multiple directories`)
