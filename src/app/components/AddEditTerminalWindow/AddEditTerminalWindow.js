@@ -18,7 +18,7 @@ import FolderOpenIcon from 'material-ui-icons/FolderOpen';
 import AddIcon from 'material-ui-icons/Add';
 import IconButton from 'material-ui/IconButton';
 import Tooltip from 'material-ui/Tooltip';
-import ApplicationActions from '../../actions/ApplicationActions';
+import TerminalAddEditWindowActions from '../../actions/TerminalAddEditWindowActions';
 import TerminalActions from '../../actions/TerminalActions';
 import TerminalTypes from '../../enums/TerminalTypes';
 import './AddEditTerminalWindow.css';
@@ -58,10 +58,10 @@ class AddEditTerminalWindow extends Component {
     super(props);
     this.props = props;
     this.state = {
-      terminalType: '',
-      terminalName: '',
-      terminalStartupDir: '',
-      terminalStartupCommands: '',
+      terminalType: props.terminalType,
+      terminalName: props.terminalName,
+      terminalStartupDir: props.terminalStartupDir,
+      terminalStartupCommands: props.terminalStartupCommands,
     };
   }
 
@@ -124,9 +124,16 @@ class AddEditTerminalWindow extends Component {
       >
         <div style={getModalStyle()} className={classes.paper}>
           <form className="Add-Terminal" autoComplete="off" onSubmit={this.handleFormSubmit}>
-            <Typography type="title" align="center" id="modal-title">
-              Add new Terminal
-            </Typography>
+            {!this.props.editMode && (
+              <Typography type="title" align="center" id="modal-title">
+                Add new Terminal
+              </Typography>
+            )}
+            {this.props.editMode && (
+              <Typography type="title" align="center" id="modal-title">
+                Edit Terminal
+              </Typography>
+            )}
             <FormControl className={classes.formControl} required>
               <InputLabel htmlFor="terminal-type">Type</InputLabel>
               <Select
@@ -140,7 +147,12 @@ class AddEditTerminalWindow extends Component {
             </FormControl>
             <FormControl className={classes.formControl} required>
               <InputLabel htmlFor="terminal-name">Name</InputLabel>
-              <Input name="terminalName" id="terminal-name" onChange={this.handleChange} />
+              <Input
+                name="terminalName"
+                id="terminal-name"
+                onChange={this.handleChange}
+                value={this.state.terminalName}
+              />
               <FormHelperText>Enter terminal custom name</FormHelperText>
             </FormControl>
             <FormControl className={classes.formControl} required disabled>
@@ -186,6 +198,12 @@ class AddEditTerminalWindow extends Component {
 
 AddEditTerminalWindow.propTypes = {
   opened: PropTypes.bool.isRequired,
+  editMode: PropTypes.bool.isRequired,
+  uuid: PropTypes.string.isRequired,
+  terminalType: PropTypes.string.isRequired,
+  terminalName: PropTypes.string.isRequired,
+  terminalStartupDir: PropTypes.string.isRequired,
+  terminalStartupCommands: PropTypes.string.isRequired,
   close: PropTypes.func.isRequired,
   addNewTerminal: PropTypes.func.isRequired,
   classes: PropTypes.shape({
@@ -197,15 +215,21 @@ AddEditTerminalWindow.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  opened: state.ApplicationStateReducer.addNewTerminalWindowOpened,
+  opened: state.TerminalAddEditWindowReducer.windowOpened,
+  editMode: state.TerminalAddEditWindowReducer.editMode,
+  uuid: state.TerminalAddEditWindowReducer.uuid,
+  terminalType: state.TerminalAddEditWindowReducer.terminalType,
+  terminalName: state.TerminalAddEditWindowReducer.terminalName,
+  terminalStartupDir: state.TerminalAddEditWindowReducer.terminalStartupDir,
+  terminalStartupCommands: state.TerminalAddEditWindowReducer.terminalStartupCommands,
 });
 
 const mapDispatchToProps = dispatch => ({
-  close: () => dispatch(ApplicationActions.closeAddNewTerminalModalWindow()),
+  close: () => dispatch(TerminalAddEditWindowActions.closeAddEditTerminalWindow()),
   addNewTerminal: terminalData =>
     dispatch(batchActions([
       TerminalActions.addNewTerminalInstance(terminalData),
-      ApplicationActions.closeAddNewTerminalModalWindow(),
+      TerminalAddEditWindowActions.closeAddEditTerminalWindow(),
     ])),
 });
 

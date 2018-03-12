@@ -21,20 +21,6 @@ describe('actions', () => {
     sinonSandbox.restore();
   });
 
-  it('should create an action to open new terminal modal window', () => {
-    const expectedAction = {
-      type: ApplicationActionTypes.ADD_TERMINAL_MODAL_WINDOW_OPEN,
-    };
-    expect(ApplicationActions.openAddNewTerminalModalWindow()).to.deep.equal(expectedAction);
-  });
-
-  it('should create an action to close new terminal modal window', () => {
-    const expectedAction = {
-      type: ApplicationActionTypes.ADD_TERMINAL_MODAL_WINDOW_CLOSE,
-    };
-    expect(ApplicationActions.closeAddNewTerminalModalWindow()).to.deep.equal(expectedAction);
-  });
-
   it('should create an action to change terminals source file path', () => {
     const expectedAction = {
       type: ApplicationActionTypes.SET_TERMINALS_SOURCE_FILE_PATH,

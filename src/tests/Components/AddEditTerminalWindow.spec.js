@@ -14,6 +14,10 @@ describe('AddTerminalWindow component tests', () => {
       ApplicationStateReducer: {
         addNewTerminalWindowOpened: true,
       },
+      TerminalAddEditWindowReducer: {
+        windowOpened: true,
+        editMode: false,
+      },
     };
     const mockStore = configureStore();
     const store = mockStore(initialState);

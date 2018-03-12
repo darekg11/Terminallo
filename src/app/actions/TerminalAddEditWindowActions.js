@@ -9,5 +9,10 @@ const showEditExistingTerminalWindow = terminal => ({
   terminal,
 });
 
+const closeAddEditTerminalWindow = () => ({
+  type: TerminalAddEditWindowActionTypes.ADD_EDIT_TERMINAL_MODAL_WINDOW_CLOSE,
+});
+
 exports.showAddNewTerminalWindow = showAddNewTerminalWindow;
 exports.showEditExistingTerminalWindow = showEditExistingTerminalWindow;
+exports.closeAddEditTerminalWindow = closeAddEditTerminalWindow;

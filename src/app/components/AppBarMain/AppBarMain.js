@@ -10,6 +10,7 @@ import SaveIcon from 'material-ui-icons/Save';
 import SaveAsIcon from 'material-ui-icons/ContentCopy';
 import ImportIcon from 'material-ui-icons/SystemUpdateAlt';
 import Tooltip from 'material-ui/Tooltip';
+import AddEditTerminalWindowActions from '../../actions/TerminalAddEditWindowActions';
 import ApplicationActions from '../../actions/ApplicationActions';
 import './AppBarMain.css';
 
@@ -56,7 +57,7 @@ AppBarMain.propTypes = {
 };
 
 const mapDispatchToProps = dispatch => ({
-  openAddNewTerminalWindow: () => dispatch(ApplicationActions.openAddNewTerminalModalWindow()),
+  openAddNewTerminalWindow: () => dispatch(AddEditTerminalWindowActions.showAddNewTerminalWindow()),
   exportTerminals: () => {
     const path = electron.remote.dialog.showSaveDialog({
       title: 'Enter file name for your export',
