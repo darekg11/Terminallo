@@ -6,7 +6,7 @@ import MainPanel from '../MainPanel/MainPanel';
 import SidePanel from '../SidePanel/SidePanel';
 import AppBarMain from '../AppBarMain/AppBarMain';
 import TerminalTabs from '../TerminalTabs/TerminalTabs';
-import AddNewTerminalModalWindow from '../AddTerminalWindow/AddTerminalWindow';
+import AddEditTerminalModalWindow from '../AddEditTerminalWindow/AddEditTerminalWindow';
 import Spinner from '../Spinner/Spinner';
 import './MainWindow.css';
 
@@ -23,7 +23,7 @@ export default () => (
           <AppBarMain />
           <TerminalTabs />
         </MainPanel>
-        <AddNewTerminalModalWindow />
+        <AddEditTerminalModalWindow />
         <Spinner />
       </div>
     </Reboot>

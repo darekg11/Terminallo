@@ -21,7 +21,7 @@ import Tooltip from 'material-ui/Tooltip';
 import ApplicationActions from '../../actions/ApplicationActions';
 import TerminalActions from '../../actions/TerminalActions';
 import TerminalTypes from '../../enums/TerminalTypes';
-import './AddTerminalWindow.css';
+import './AddEditTerminalWindow.css';
 
 const osType = os.platform() === 'win32' ? 'windows' : 'unix';
 
@@ -53,7 +53,7 @@ const styles = theme => ({
   },
 });
 
-class AddNewTerminalWindow extends Component {
+class AddEditTerminalWindow extends Component {
   constructor(props) {
     super(props);
     this.props = props;
@@ -184,7 +184,7 @@ class AddNewTerminalWindow extends Component {
   }
 }
 
-AddNewTerminalWindow.propTypes = {
+AddEditTerminalWindow.propTypes = {
   opened: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
   addNewTerminal: PropTypes.func.isRequired,
@@ -209,5 +209,5 @@ const mapDispatchToProps = dispatch => ({
     ])),
 });
 
-const styledComponent = withStyles(styles)(AddNewTerminalWindow);
+const styledComponent = withStyles(styles)(AddEditTerminalWindow);
 export default connect(mapStateToProps, mapDispatchToProps)(styledComponent);
