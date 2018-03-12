@@ -11,6 +11,7 @@ import RightArrowIcon from 'material-ui-icons/ArrowForward';
 import LeftArrowIcon from 'material-ui-icons/ArrowBack';
 import IconButton from 'material-ui/IconButton';
 import Tooltip from 'material-ui/Tooltip';
+import AddEditTerminalWindowActions from '../../actions/TerminalAddEditWindowActions';
 import TerminalActions from '../../actions/TerminalActions';
 import Terminal from '../Terminal/Terminal';
 import './TerminalTabs.css';
@@ -49,8 +50,13 @@ const TerminalTabs = props => (
               <ReloadIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip id="tooltip-edit-terminal" title="Edit" placement="left">
-            <IconButton aria-label="Edit">
+          <Tooltip id="tooltip-edit-terminal" title="Edit (CTRL + E)" placement="left">
+            <IconButton
+              aria-label="Edit"
+              onClick={() =>
+                props.editTerminal(props.terminals.find(singleTerminal => singleTerminal.uuid === props.selectedTerminal))
+              }
+            >
               <EditIcon />
             </IconButton>
           </Tooltip>
@@ -106,6 +112,7 @@ TerminalTabs.propTypes = {
   moveTerminalRight: PropTypes.func.isRequired,
   moveTerminalLeft: PropTypes.func.isRequired,
   stopTerminal: PropTypes.func.isRequired,
+  editTerminal: PropTypes.func.isRequired,
 };
 
 TerminalTabs.defaultProps = {
@@ -125,6 +132,8 @@ const mapDispatchToProps = dispatch => ({
   moveTerminalRight: terminalUUID => dispatch(TerminalActions.moveRightTerminalInstance(terminalUUID)),
   moveTerminalLeft: terminalUUID => dispatch(TerminalActions.moveLeftTerminalInstance(terminalUUID)),
   stopTerminal: terminalUUID => dispatch(TerminalActions.stopTerminalInstance(terminalUUID)),
+  editTerminal: terminalInstance =>
+    dispatch(AddEditTerminalWindowActions.showEditExistingTerminalWindow(terminalInstance)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TerminalTabs);

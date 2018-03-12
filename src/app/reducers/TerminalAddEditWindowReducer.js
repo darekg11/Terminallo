@@ -7,7 +7,7 @@ const initialState = {
   terminalType: '',
   terminalName: '',
   terminalStartupDir: '',
-  terminalStartupCommands: '',
+  terminalStartupCommands: [],
 };
 
 export default function addEditTerminalWindowState(state = initialState, action) {
@@ -21,7 +21,7 @@ export default function addEditTerminalWindowState(state = initialState, action)
         editMode: true,
         uuid: action.terminal.uuid,
         terminalType: action.terminal.terminalType,
-        terminalName: action.terminal.name,
+        terminalName: action.terminal.terminalName,
         terminalStartupDir: action.terminal.terminalStartupDir,
         terminalStartupCommands: action.terminal.terminalStartupCommands,
       };

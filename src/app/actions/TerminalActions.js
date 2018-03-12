@@ -5,6 +5,11 @@ const addNewTerminalInstance = terminalNewInstanceInfo => ({
   terminal: terminalNewInstanceInfo,
 });
 
+const editTerminalInstance = terminal => ({
+  type: TerminalActionTypes.EDIT_TERMINAL_INSTANCE,
+  terminal,
+});
+
 const selectTerminalInstance = terminalUuid => ({
   type: TerminalActionTypes.SELECT_TERMINAL_INSTANCE,
   terminalUUID: terminalUuid,
@@ -49,6 +54,7 @@ const goToPreviousTerminalInstance = () => ({
 });
 
 exports.addNewTerminalInstance = addNewTerminalInstance;
+exports.editTerminalInstance = editTerminalInstance;
 exports.selectTerminalInstance = selectTerminalInstance;
 exports.importTerminalInstances = importTerminalInstances;
 exports.reloadTerminalInstance = reloadTerminalInstance;

@@ -16,6 +16,7 @@ import { FormControl, FormHelperText } from 'material-ui/Form';
 import Select from 'material-ui/Select';
 import FolderOpenIcon from 'material-ui-icons/FolderOpen';
 import AddIcon from 'material-ui-icons/Add';
+import SaveIcon from 'material-ui-icons/Save';
 import IconButton from 'material-ui/IconButton';
 import Tooltip from 'material-ui/Tooltip';
 import TerminalAddEditWindowActions from '../../actions/TerminalAddEditWindowActions';
@@ -61,8 +62,22 @@ class AddEditTerminalWindow extends Component {
       terminalType: props.terminalType,
       terminalName: props.terminalName,
       terminalStartupDir: props.terminalStartupDir,
-      terminalStartupCommands: props.terminalStartupCommands,
+      terminalStartupCommands: props.terminalStartupCommands.join('\n'),
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.uuid !== nextProps.uuid) {
+      const { terminalType, terminalName, terminalStartupDir } = nextProps;
+      let { terminalStartupCommands } = nextProps;
+      terminalStartupCommands = terminalStartupCommands.join('\n');
+      this.setState({
+        terminalType,
+        terminalName,
+        terminalStartupDir,
+        terminalStartupCommands,
+      });
+    }
   }
 
   getRenderedTerminalTypesList = () => {
@@ -90,6 +105,10 @@ class AddEditTerminalWindow extends Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
+  handleChangeCheckbox = name => (event) => {
+    this.setState({ [name]: event.target.checked });
+  };
+
   handleFormSubmit = (event) => {
     event.preventDefault();
     const terminalCommandsStartup = this.state.terminalStartupCommands
@@ -101,7 +120,12 @@ class AddEditTerminalWindow extends Component {
       terminalStartupDir: this.state.terminalStartupDir,
       terminalStartupCommands: terminalCommandsStartup,
     };
-    this.props.addNewTerminal(terminalDataObject);
+    if (!this.props.editMode) {
+      this.props.addNewTerminal(terminalDataObject);
+    } else {
+      terminalDataObject.uuid = this.props.uuid;
+      this.props.editTerminal(terminalDataObject);
+    }
   };
 
   renderAvailableTerminalList = () => {
@@ -117,8 +141,12 @@ class AddEditTerminalWindow extends Component {
     const { classes } = this.props;
     return (
       <Modal
-        aria-labelledby="Add new Terminal instance"
-        aria-describedby="Add new Terminal instance to your list of terminals and start hacking : )"
+        aria-labelledby={!this.props.editMode ? 'Add new Terminal Instance' : 'Edit terminal instance'}
+        aria-describedby={
+          !this.props.editMode
+            ? 'Add new Terminal instance to your list of terminals and start hacking : )'
+            : 'Edit your terminal instance and hack even more : )'
+        }
         open={this.props.opened}
         onClose={this.props.close}
       >
@@ -179,16 +207,24 @@ class AddEditTerminalWindow extends Component {
                 label="Terminal startup commands"
                 multiline
                 rowsMax="5"
-                defaultValue="Each line is separate command that is run when terminal is launched"
                 margin="normal"
                 name="terminalStartupCommands"
+                value={this.state.terminalStartupCommands}
                 onChange={this.handleChange}
               />
             </FormControl>
-            <Button className={classes.button} raised color="primary" type="submit">
-              <AddIcon className={classes.leftIcon} />
-              Add
-            </Button>
+            {!this.props.editMode && (
+              <Button className={classes.button} raised color="primary" type="submit">
+                <AddIcon className={classes.leftIcon} />
+                Add
+              </Button>
+            )}
+            {this.props.editMode && (
+              <Button className={classes.button} raised color="primary" type="submit">
+                <SaveIcon className={classes.leftIcon} />
+                Save
+              </Button>
+            )}
           </form>
         </div>
       </Modal>
@@ -203,9 +239,10 @@ AddEditTerminalWindow.propTypes = {
   terminalType: PropTypes.string.isRequired,
   terminalName: PropTypes.string.isRequired,
   terminalStartupDir: PropTypes.string.isRequired,
-  terminalStartupCommands: PropTypes.string.isRequired,
+  terminalStartupCommands: PropTypes.arrayOf(PropTypes.string).isRequired,
   close: PropTypes.func.isRequired,
   addNewTerminal: PropTypes.func.isRequired,
+  editTerminal: PropTypes.func.isRequired,
   classes: PropTypes.shape({
     paper: PropTypes.string,
     button: PropTypes.string,
@@ -229,6 +266,12 @@ const mapDispatchToProps = dispatch => ({
   addNewTerminal: terminalData =>
     dispatch(batchActions([
       TerminalActions.addNewTerminalInstance(terminalData),
+      TerminalAddEditWindowActions.closeAddEditTerminalWindow(),
+    ])),
+  editTerminal: terminalData =>
+    dispatch(batchActions([
+      TerminalActions.editTerminalInstance(terminalData),
+      TerminalActions.reloadTerminalInstance(terminalData.uuid),
       TerminalAddEditWindowActions.closeAddEditTerminalWindow(),
     ])),
 });

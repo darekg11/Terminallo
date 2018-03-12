@@ -22,6 +22,16 @@ export default function terminalReducer(state = initialState, action) {
         selectedTerminal: newTerminalInstance.uuid,
       };
     }
+    case TerminalActionTypes.EDIT_TERMINAL_INSTANCE: {
+      const destinationUUID = action.terminal.uuid;
+      const copiedTerminalsArray = [...state.terminals];
+      const terminalInstanceIndex = copiedTerminalsArray.findIndex(singleTerminal => singleTerminal.uuid === destinationUUID);
+      if (terminalInstanceIndex === -1) {
+        return state;
+      }
+      copiedTerminalsArray[terminalInstanceIndex] = action.terminal;
+      return { ...state, terminals: copiedTerminalsArray };
+    }
     case TerminalActionTypes.SELECT_TERMINAL_INSTANCE: {
       const destinationUUID = action.terminalUUID;
       const terminalInstance = state.terminals.find(singleTerminal => singleTerminal.uuid === destinationUUID);
