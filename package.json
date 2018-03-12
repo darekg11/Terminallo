@@ -2,7 +2,7 @@
   "author": "Dariusz Górak",
   "description": "Terminallo - app to handle multiple console windows in single app",
   "name": "terminallo",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "main": "./src/index.js",
   "devDependencies": {
     "babel": "^6.23.0",
@@ -83,9 +83,7 @@
       "!**/public/**"
     ],
     "coverageDirectory": "coverage",
-    "coverageReporters": [
-      "html"
-    ],
+    "coverageReporters": ["html"],
     "moduleNameMapper": {
       "\\.(css|less)$": "<rootDir>/src/tests/__mocks__/CSSMocksForJest.js"
     }
@@ -93,18 +91,12 @@
   "build": {
     "appId": "Terminallo",
     "productName": "Terminallo",
-    "files": [
-      "**/*",
-      "!src/app/**/*"
-    ],
+    "files": ["**/*", "!src/app/**/*"],
     "win": {
       "target": [
         {
           "target": "nsis",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
+          "arch": ["x64", "ia32"]
         }
       ],
       "artifactName": "${productName}-${version}-setup.${ext}"
