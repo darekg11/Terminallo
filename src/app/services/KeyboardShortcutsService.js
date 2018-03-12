@@ -2,6 +2,7 @@ import electron from 'electron';
 import Mousetrap from 'mousetrap';
 import TerminalActions from '../actions/TerminalActions';
 import ApplicationActions from '../actions/ApplicationActions';
+import TerminalAddEditWindowActions from '../actions/TerminalAddEditWindowActions';
 
 const initializeDefaults = (reduxStore) => {
   Mousetrap.bind(['command+p', 'ctrl+p'], () => {
@@ -72,6 +73,15 @@ const initializeDefaults = (reduxStore) => {
       if (path) {
         reduxStore.dispatch(ApplicationActions.exportTerminals(path));
       }
+    }
+    return false;
+  });
+
+  Mousetrap.bind(['command+e', 'ctrl+e'], () => {
+    const { selectedTerminal, terminals } = reduxStore.getState().TerminalsReducer;
+    if (selectedTerminal !== '') {
+      const selectedTerminalInstnace = terminals.find(singleTerminal => singleTerminal.uuid === selectedTerminal);
+      reduxStore.dispatch(TerminalAddEditWindowActions.showEditExistingTerminalWindow(selectedTerminalInstnace));
     }
     return false;
   });
