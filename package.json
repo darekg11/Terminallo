@@ -91,7 +91,7 @@
   "build": {
     "appId": "Terminallo",
     "productName": "Terminallo",
-    "files": ["**/*", "!src/app/**/*"],
+    "files": ["**/*", "!src/app/**/*", "!dist/**/*", "!coverage/**/*"],
     "win": {
       "target": [
         {
