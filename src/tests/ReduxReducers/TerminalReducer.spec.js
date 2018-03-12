@@ -1138,4 +1138,86 @@ describe('Terminal reducer', () => {
 
     expect(finalState).to.deep.equal(expectedState);
   });
+
+  it('should handle EDIT_TERMINAL_INSTANCE - should not change state when terminal instance does not exist', () => {
+    const initialState = {
+      terminals: [
+        {
+          uuid: '1',
+          terminalName: 'First terminal',
+          terminalType: 'CMD',
+          terminalStartupDir: 'somePath',
+          terminalStartupCommands: ['cmd1', 'cmd2'],
+        },
+      ],
+      selectedTerminal: '1234abcd',
+    };
+
+    const expectedState = {
+      terminals: [
+        {
+          uuid: '1',
+          terminalName: 'First terminal',
+          terminalType: 'CMD',
+          terminalStartupDir: 'somePath',
+          terminalStartupCommands: ['cmd1', 'cmd2'],
+        },
+      ],
+      selectedTerminal: '1234abcd',
+    };
+
+    const finalState = TerminalReducer(initialState, {
+      type: TerminalActionTypes.EDIT_TERMINAL_INSTANCE,
+      terminal: {
+        uuid: 'randomBlabla',
+        terminalName: 'First Edited Name',
+        terminalType: 'CMD Edited',
+        terminalStartupDir: 'somePath Edited',
+        terminalStartupCommands: ['cmd1 Edited', 'cmd2 Edited'],
+      },
+    });
+
+    expect(finalState).to.deep.equal(expectedState);
+  });
+
+  it('should handle EDIT_TERMINAL_INSTANCE - should change state when terminal instance exists', () => {
+    const initialState = {
+      terminals: [
+        {
+          uuid: '1',
+          terminalName: 'First terminal',
+          terminalType: 'CMD',
+          terminalStartupDir: 'somePath',
+          terminalStartupCommands: ['cmd1', 'cmd2'],
+        },
+      ],
+      selectedTerminal: '1234abcd',
+    };
+
+    const expectedState = {
+      terminals: [
+        {
+          uuid: '1',
+          terminalName: 'First Edited Name',
+          terminalType: 'CMD Edited',
+          terminalStartupDir: 'somePath Edited',
+          terminalStartupCommands: ['cmd1 Edited', 'cmd2 Edited'],
+        },
+      ],
+      selectedTerminal: '1234abcd',
+    };
+
+    const finalState = TerminalReducer(initialState, {
+      type: TerminalActionTypes.EDIT_TERMINAL_INSTANCE,
+      terminal: {
+        uuid: '1',
+        terminalName: 'First Edited Name',
+        terminalType: 'CMD Edited',
+        terminalStartupDir: 'somePath Edited',
+        terminalStartupCommands: ['cmd1 Edited', 'cmd2 Edited'],
+      },
+    });
+
+    expect(finalState).to.deep.equal(expectedState);
+  });
 });
