@@ -1,3 +1,4 @@
+import electron from 'electron';
 import * as fsEtra from 'fs-extra';
 
 const saveJsonToFile = async (filePath, jsonObject) => {
@@ -22,4 +23,11 @@ const loadJsonFromFile = async (filePath) => {
   }
 };
 
-export { saveJsonToFile, loadJsonFromFile };
+const openDirectoryChooserDialog = () => {
+  const selectedPath = electron.remote.dialog.showOpenDialog({
+    properties: ['openDirectory'],
+  });
+  return selectedPath;
+};
+
+export { saveJsonToFile, loadJsonFromFile, openDirectoryChooserDialog };

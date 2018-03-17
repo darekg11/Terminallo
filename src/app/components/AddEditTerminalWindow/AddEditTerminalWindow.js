@@ -1,4 +1,3 @@
-import electron from 'electron';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
@@ -22,6 +21,7 @@ import Tooltip from 'material-ui/Tooltip';
 import TerminalAddEditWindowActions from '../../actions/TerminalAddEditWindowActions';
 import TerminalActions from '../../actions/TerminalActions';
 import TerminalTypes from '../../enums/TerminalTypes';
+import * as FileService from '../../services/FileService';
 import './AddEditTerminalWindow.css';
 
 const osType = os.platform() === 'win32' ? 'windows' : 'unix';
@@ -92,10 +92,8 @@ class AddEditTerminalWindow extends Component {
     return availableTerminals;
   };
 
-  openDirectoryChooserDialog = () => {
-    const path = electron.remote.dialog.showOpenDialog({
-      properties: ['openDirectory'],
-    });
+  chooseDirectory = () => {
+    const path = FileService.openDirectoryChooserDialog();
     if (path && path.length) {
       this.setState({ terminalStartupDir: path[0] });
     }
@@ -192,7 +190,7 @@ class AddEditTerminalWindow extends Component {
                 endAdornment={
                   <InputAdornment position="end">
                     <Tooltip id="tooltip-add-new" title="Select directory">
-                      <IconButton aria-label="Select directory" onClick={this.openDirectoryChooserDialog}>
+                      <IconButton aria-label="Select directory" onClick={this.chooseDirectory}>
                         <FolderOpenIcon />
                       </IconButton>
                     </Tooltip>
