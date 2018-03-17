@@ -83,7 +83,9 @@
       "!**/public/**"
     ],
     "coverageDirectory": "coverage",
-    "coverageReporters": ["html"],
+    "coverageReporters": [
+      "html"
+    ],
     "moduleNameMapper": {
       "\\.(css|less)$": "<rootDir>/src/tests/__mocks__/CSSMocksForJest.js"
     }
@@ -91,12 +93,19 @@
   "build": {
     "appId": "Terminallo",
     "productName": "Terminallo",
-    "files": ["**/*", "!src/app/**/*", "!coverage/**/*"],
+    "files": [
+      "**/*",
+      "!src/app/**/*",
+      "!coverage/**/*"
+    ],
     "win": {
       "target": [
         {
           "target": "nsis",
-          "arch": ["x64", "ia32"]
+          "arch": [
+            "x64",
+            "ia32"
+          ]
         }
       ],
       "artifactName": "${productName}-${version}-setup.${ext}"

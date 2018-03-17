@@ -1,4 +1,3 @@
-import electron from 'electron';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -12,6 +11,7 @@ import ImportIcon from 'material-ui-icons/SystemUpdateAlt';
 import Tooltip from 'material-ui/Tooltip';
 import AddEditTerminalWindowActions from '../../actions/TerminalAddEditWindowActions';
 import ApplicationActions from '../../actions/ApplicationActions';
+import * as FileService from '../../services/FileService';
 import './AppBarMain.css';
 
 const AppBarMain = props => (
@@ -59,31 +59,25 @@ AppBarMain.propTypes = {
 const mapDispatchToProps = dispatch => ({
   openAddNewTerminalWindow: () => dispatch(AddEditTerminalWindowActions.showAddNewTerminalWindow()),
   exportTerminals: () => {
-    const path = electron.remote.dialog.showSaveDialog({
-      title: 'Enter file name for your export',
-      defaultPath: 'terminals',
-      filters: [
-        {
-          name: 'JSON File',
-          extensions: ['json'],
-        },
-      ],
-    });
+    const windowFilters = [
+      {
+        name: 'JSON File',
+        extensions: ['json'],
+      },
+    ];
+    const path = FileService.showSaveFileDialog('Enter file name for your export', 'terminals', windowFilters);
     if (path) {
       dispatch(ApplicationActions.exportTerminals(path));
     }
   },
   importTerminals: () => {
-    const filePath = electron.remote.dialog.showOpenDialog({
-      title: 'Select file from which to import terminals',
-      filters: [
-        {
-          name: 'JSON File',
-          extensions: ['json'],
-        },
-      ],
-      properties: ['openFile'],
-    });
+    const windowFilters = [
+      {
+        name: 'JSON File',
+        extensions: ['json'],
+      },
+    ];
+    const filePath = FileService.showOpenFileDialog('Select file from which to import terminals', windowFilters);
     if (filePath && filePath[0]) {
       dispatch(ApplicationActions.importTerminals(filePath[0]));
     }

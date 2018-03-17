@@ -1,8 +1,8 @@
-import electron from 'electron';
 import Mousetrap from 'mousetrap';
 import TerminalActions from '../actions/TerminalActions';
 import ApplicationActions from '../actions/ApplicationActions';
 import TerminalAddEditWindowActions from '../actions/TerminalAddEditWindowActions';
+import * as FileService from '../services/FileService';
 
 const initializeDefaults = (reduxStore) => {
   Mousetrap.bind(['command+p', 'ctrl+p'], () => {
@@ -60,16 +60,13 @@ const initializeDefaults = (reduxStore) => {
     if (exportFilePath !== '') {
       reduxStore.dispatch(ApplicationActions.exportTerminals(exportFilePath));
     } else {
-      const path = electron.remote.dialog.showSaveDialog({
-        title: 'Enter file name for your export',
-        defaultPath: 'terminals',
-        filters: [
-          {
-            name: 'JSON File',
-            extensions: ['json'],
-          },
-        ],
-      });
+      const windowFilters = [
+        {
+          name: 'JSON File',
+          extensions: ['json'],
+        },
+      ];
+      const path = FileService.showSaveFileDialog('Enter file name for your export', 'terminals', windowFilters);
       if (path) {
         reduxStore.dispatch(ApplicationActions.exportTerminals(path));
       }

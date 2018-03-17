@@ -30,4 +30,22 @@ const openDirectoryChooserDialog = () => {
   return selectedPath;
 };
 
-export { saveJsonToFile, loadJsonFromFile, openDirectoryChooserDialog };
+const showSaveFileDialog = (windowTitle, windowDefaultPath, windowFilters) => {
+  const path = electron.remote.dialog.showSaveDialog({
+    title: windowTitle,
+    defaultPath: windowDefaultPath,
+    filters: windowFilters,
+  });
+  return path;
+};
+
+const showOpenFileDialog = (windowTitle, windowFilters) => {
+  const filePath = electron.remote.dialog.showOpenDialog({
+    title: windowTitle,
+    filters: windowFilters,
+    properties: ['openFile'],
+  });
+  return filePath;
+};
+
+export { saveJsonToFile, loadJsonFromFile, openDirectoryChooserDialog, showOpenFileDialog, showSaveFileDialog };
