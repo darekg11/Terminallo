@@ -124,5 +124,5 @@
 }
 
 .terminal-container {
-  height: 82vh;
+  height: calc(100vh - 112px);
 }
