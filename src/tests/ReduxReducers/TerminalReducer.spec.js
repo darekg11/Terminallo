@@ -35,6 +35,10 @@ describe('Terminal reducer', () => {
         on: () => {},
         write: () => {},
       },
+      watcherInstance: {
+        on: () => {},
+        close: () => {},
+      },
     });
     const state = TerminalReducer(undefined, {
       type: TerminalActionTypes.ADD_TERMINAL_INSTANCE,
@@ -42,6 +46,7 @@ describe('Terminal reducer', () => {
         terminalType: 'CMD',
         terminalName: 'Some Test',
         terminalStartupDir: '../some',
+        terminalWatchers: ['somePath'],
       },
     });
 
@@ -54,6 +59,8 @@ describe('Terminal reducer', () => {
     expect(typeof state.terminals[0].xTermInstance.write).to.be.equal('function');
     expect(typeof state.terminals[0].virtualTerminalInstance.on).to.be.equal('function');
     expect(typeof state.terminals[0].virtualTerminalInstance.write).to.be.equal('function');
+    expect(typeof state.terminals[0].watcherInstance.on).to.be.equal('function');
+    expect(typeof state.terminals[0].watcherInstance.close).to.be.equal('function');
   });
 
   it('should handle SELECT_TERMINAL_INSTANCE - select new terminal instance when it can be found', () => {
@@ -67,6 +74,10 @@ describe('Terminal reducer', () => {
         on: () => {},
         write: () => {},
       },
+      watcherInstance: {
+        on: () => {},
+        close: () => {},
+      },
     });
     const state = TerminalReducer(undefined, {
       type: TerminalActionTypes.ADD_TERMINAL_INSTANCE,
@@ -74,6 +85,7 @@ describe('Terminal reducer', () => {
         terminalType: 'CMD',
         terminalName: 'Some Test',
         terminalStartupDir: '../some',
+        terminalWatchers: ['somePath1'],
       },
     });
 
@@ -83,6 +95,7 @@ describe('Terminal reducer', () => {
         terminalType: 'CMD',
         terminalName: 'Some Test 2',
         terminalStartupDir: '../some',
+        terminalWatchers: ['somePath2'],
       },
     });
 
@@ -100,6 +113,8 @@ describe('Terminal reducer', () => {
     expect(typeof finalState.terminals[0].xTermInstance.write).to.be.equal('function');
     expect(typeof finalState.terminals[0].virtualTerminalInstance.on).to.be.equal('function');
     expect(typeof finalState.terminals[0].virtualTerminalInstance.write).to.be.equal('function');
+    expect(typeof finalState.terminals[0].watcherInstance.on).to.be.equal('function');
+    expect(typeof finalState.terminals[0].watcherInstance.close).to.be.equal('function');
     expect(finalState.terminals[1].terminalName).to.be.equal('Some Test 2');
     expect(finalState.terminals[1].uuid).to.not.equal('');
     expect(typeof finalState.terminals[1].xTermInstance.fit).to.be.equal('function');
@@ -107,6 +122,8 @@ describe('Terminal reducer', () => {
     expect(typeof finalState.terminals[1].xTermInstance.write).to.be.equal('function');
     expect(typeof finalState.terminals[1].virtualTerminalInstance.on).to.be.equal('function');
     expect(typeof finalState.terminals[1].virtualTerminalInstance.write).to.be.equal('function');
+    expect(typeof finalState.terminals[1].watcherInstance.on).to.be.equal('function');
+    expect(typeof finalState.terminals[1].watcherInstance.close).to.be.equal('function');
   });
 
   it('should handle SELECT_TERMINAL_INSTANCE - do not select new terminal instance when it can not be found', () => {
@@ -120,6 +137,10 @@ describe('Terminal reducer', () => {
         on: () => {},
         write: () => {},
       },
+      watcherInstance: {
+        on: () => {},
+        close: () => {},
+      },
     });
     const state = TerminalReducer(undefined, {
       type: TerminalActionTypes.ADD_TERMINAL_INSTANCE,
@@ -127,6 +148,7 @@ describe('Terminal reducer', () => {
         terminalType: 'CMD',
         terminalName: 'Some Test',
         terminalStartupDir: '../some',
+        terminalWatchers: ['somePath1'],
       },
     });
 
@@ -136,6 +158,7 @@ describe('Terminal reducer', () => {
         terminalType: 'CMD',
         terminalName: 'Some Test 2',
         terminalStartupDir: '../some',
+        terminalWatchers: ['somePath2'],
       },
     });
 
@@ -153,6 +176,8 @@ describe('Terminal reducer', () => {
     expect(typeof finalState.terminals[0].xTermInstance.write).to.be.equal('function');
     expect(typeof finalState.terminals[0].virtualTerminalInstance.on).to.be.equal('function');
     expect(typeof finalState.terminals[0].virtualTerminalInstance.write).to.be.equal('function');
+    expect(typeof finalState.terminals[0].watcherInstance.on).to.be.equal('function');
+    expect(typeof finalState.terminals[0].watcherInstance.close).to.be.equal('function');
     expect(finalState.terminals[1].terminalName).to.be.equal('Some Test 2');
     expect(finalState.terminals[1].uuid).to.not.equal('');
     expect(typeof finalState.terminals[1].xTermInstance.fit).to.be.equal('function');
@@ -160,6 +185,8 @@ describe('Terminal reducer', () => {
     expect(typeof finalState.terminals[1].xTermInstance.write).to.be.equal('function');
     expect(typeof finalState.terminals[1].virtualTerminalInstance.on).to.be.equal('function');
     expect(typeof finalState.terminals[1].virtualTerminalInstance.write).to.be.equal('function');
+    expect(typeof finalState.terminals[1].watcherInstance.on).to.be.equal('function');
+    expect(typeof finalState.terminals[1].watcherInstance.close).to.be.equal('function');
   });
 
   it('should handle IMPORT_TERMINALS - importing non zero terminals', () => {

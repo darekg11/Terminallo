@@ -159,10 +159,14 @@ describe('Terminal service', () => {
         virtualTerminalInstance: {
           kill: sinon.spy(),
         },
+        watcherInstance: {
+          close: sinon.spy(),
+        },
       };
       TerminalService.killTerminalInstance(terminalInstance);
       expect(terminalInstance.xTermInstance.destroy.calledOnce).to.be.equal(true);
       expect(terminalInstance.virtualTerminalInstance.kill.calledOnce).to.be.equal(true);
+      expect(terminalInstance.watcherInstance.close.calledOnce).to.be.equal(true);
     });
   });
 });
