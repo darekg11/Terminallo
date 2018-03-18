@@ -13,6 +13,7 @@ describe('TerminalAddEditWindow reducer', () => {
       terminalName: '',
       terminalStartupDir: '',
       terminalStartupCommands: [],
+      terminalWatchers: [],
     };
 
     expect(state).to.deep.equal(expectedInitialState);
@@ -27,6 +28,7 @@ describe('TerminalAddEditWindow reducer', () => {
       terminalName: 'Test Terminal',
       terminalStartupDir: 'SomePath',
       terminalStartupCommands: ['cmd1', 'cmd2'],
+      terminalWatchers: ['SomePath', 'Some Other  Path'],
     };
 
     const state = TerminalAddEditWindowReducer(initialState, {
@@ -41,6 +43,7 @@ describe('TerminalAddEditWindow reducer', () => {
       terminalName: '',
       terminalStartupDir: '',
       terminalStartupCommands: [],
+      terminalWatchers: [],
     };
 
     expect(state).to.deep.equal(expectedState);
@@ -55,6 +58,7 @@ describe('TerminalAddEditWindow reducer', () => {
         terminalName: 'Test Terminal',
         terminalStartupDir: 'SomePath',
         terminalStartupCommands: ['cmd1', 'cmd2'],
+        terminalWatchers: ['SomePath', 'SomePath2'],
       },
     });
 
@@ -66,6 +70,7 @@ describe('TerminalAddEditWindow reducer', () => {
       terminalName: 'Test Terminal',
       terminalStartupDir: 'SomePath',
       terminalStartupCommands: ['cmd1', 'cmd2'],
+      terminalWatchers: ['SomePath', 'SomePath2'],
     };
 
     expect(state).to.deep.equal(expectedState);
@@ -80,6 +85,7 @@ describe('TerminalAddEditWindow reducer', () => {
       terminalName: 'Test Terminal',
       terminalStartupDir: 'SomePath',
       terminalStartupCommands: ['cmd1', 'cmd2'],
+      terminalWatchers: ['SomePath', 'SomePath2'],
     };
 
     const state = TerminalAddEditWindowReducer(initialState, {
@@ -94,6 +100,7 @@ describe('TerminalAddEditWindow reducer', () => {
       terminalName: '',
       terminalStartupDir: '',
       terminalStartupCommands: [],
+      terminalWatchers: [],
     };
 
     expect(state).to.deep.equal(expectedState);

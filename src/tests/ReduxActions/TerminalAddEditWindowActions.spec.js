@@ -20,6 +20,7 @@ describe('actions', () => {
         terminalName: 'TEST TERMINAL',
         terminalStartupDir: 'C:TestPath',
         terminalStartupCommands: ['command1', 'command2'],
+        terminalWatchers: ['C:TestPath', 'OtherPath'],
       },
     };
 
@@ -29,6 +30,7 @@ describe('actions', () => {
       terminalName: 'TEST TERMINAL',
       terminalStartupDir: 'C:TestPath',
       terminalStartupCommands: ['command1', 'command2'],
+      terminalWatchers: ['C:TestPath', 'OtherPath'],
     };
 
     expect(AddEditTerminalWindowAction.showEditExistingTerminalWindow(terminalData)).to.deep.equal(expectedAction);

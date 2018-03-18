@@ -8,6 +8,7 @@ const initialState = {
   terminalName: '',
   terminalStartupDir: '',
   terminalStartupCommands: [],
+  terminalWatchers: [],
 };
 
 export default function addEditTerminalWindowState(state = initialState, action) {
@@ -24,6 +25,7 @@ export default function addEditTerminalWindowState(state = initialState, action)
         terminalName: action.terminal.terminalName,
         terminalStartupDir: action.terminal.terminalStartupDir,
         terminalStartupCommands: action.terminal.terminalStartupCommands,
+        terminalWatchers: action.terminal.terminalWatchers,
       };
     }
     case AddEditTerminalWindowActionTypes.ADD_EDIT_TERMINAL_MODAL_WINDOW_CLOSE: {
