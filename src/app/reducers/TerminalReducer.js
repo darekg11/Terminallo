@@ -16,6 +16,12 @@ export default function terminalReducer(state = initialState, action) {
       newTerminalInstance.uuid = uuid.v4();
       newTerminalInstance.xTermInstance = createdTerminalInstance.xTermInstance;
       newTerminalInstance.virtualTerminalInstance = createdTerminalInstance.virtualTerminalInstance;
+      newTerminalInstance.watcherInstance = createdTerminalInstance.watcherInstance;
+      newTerminalInstance.watcherInstance.on('ready', () => {
+        newTerminalInstance.watcherInstance.on('all', (event, path) => {
+          console.log(event, path);
+        });
+      });
       return {
         ...state,
         terminals: [...state.terminals, newTerminalInstance],
@@ -46,6 +52,7 @@ export default function terminalReducer(state = initialState, action) {
         TerminalService.killTerminalInstance(singleTerminalInstance);
         singleTerminalInstance.xTermInstance = null;
         singleTerminalInstance.virtualTerminalInstance = null;
+        singleTerminalInstance.watcherInstance = null;
       });
       const createdTerminalInstances = terminalInstances.map((singleInstance) => {
         const createdTerminalInstance = TerminalService.createNewTerminalInstance(singleInstance);
@@ -105,6 +112,7 @@ export default function terminalReducer(state = initialState, action) {
       TerminalService.killTerminalInstance(terminalInstanceToDelete);
       terminalInstanceToDelete.xTermInstance = null;
       terminalInstanceToDelete.virtualTerminalInstance = null;
+      terminalInstanceToDelete.watcherInstance = null;
       const terminalInstancesAfterDelete = copiedTerminalsArray.filter(singleTermianl => singleTermianl.uuid !== terminalUUID);
       return {
         ...state,

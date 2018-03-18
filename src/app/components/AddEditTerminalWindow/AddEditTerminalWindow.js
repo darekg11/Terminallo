@@ -133,11 +133,17 @@ class AddEditTerminalWindow extends Component {
     const terminalCommandsStartup = this.state.terminalStartupCommands
       .split(/\r?\n/)
       .filter(singleLine => singleLine !== '');
+    let terminalWatchers = [];
+    if (this.state.addStartUpDirToWatchers) {
+      terminalWatchers.push(this.state.terminalStartupDir);
+    }
+    terminalWatchers = [...terminalWatchers, ...this.state.terminalWatchers];
     const terminalDataObject = {
       terminalType: this.state.terminalType,
       terminalName: this.state.terminalName,
       terminalStartupDir: this.state.terminalStartupDir,
       terminalStartupCommands: terminalCommandsStartup,
+      terminalWatchers,
     };
     if (!this.props.editMode) {
       this.props.addNewTerminal(terminalDataObject);

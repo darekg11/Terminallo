@@ -6,6 +6,7 @@ import TerminalTypes from '../enums/TerminalTypes';
 
 const createNewTerminalInstance = (terminalData) => {
   const pty = require('node-pty');
+  const chokidar = require('chokidar');
 
   const osType = os.platform() === 'win32' ? 'windows' : 'unix';
   const terminalsForGivenOs = TerminalTypes[osType];
@@ -27,9 +28,13 @@ const createNewTerminalInstance = (terminalData) => {
   terminalData.terminalStartupCommands.forEach((singleCommand) => {
     virtualTerminalInstance.write(`${singleCommand}\r`);
   });
+  const watcherInstance = chokidar.watch(terminalData.terminalWatchers, {
+    persistent: true,
+  });
   return {
     xTermInstance,
     virtualTerminalInstance,
+    watcherInstance,
   };
 };
 
@@ -63,6 +68,9 @@ const killTerminalInstance = (terminalInstance) => {
   }
   if (terminalInstance.virtualTerminalInstance) {
     terminalInstance.virtualTerminalInstance.kill();
+  }
+  if (terminalInstance.watcherInstance) {
+    terminalInstance.watcherInstance.close();
   }
 };
 

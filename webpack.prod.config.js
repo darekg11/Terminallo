@@ -23,7 +23,7 @@ module.exports = {
 
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.ExternalsPlugin('commonjs', ['node-pty']),
+    new webpack.ExternalsPlugin('commonjs', ['node-pty', 'chokidar']),
     new UglifyJs(),
   ],
 };

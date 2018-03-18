@@ -26,5 +26,8 @@ module.exports = {
       { test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' },
     ],
   },
-  plugins: [new webpack.HotModuleReplacementPlugin(), new webpack.ExternalsPlugin('commonjs', ['node-pty'])],
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.ExternalsPlugin('commonjs', ['node-pty', 'chokidar']),
+  ],
 };
