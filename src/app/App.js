@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import 'typeface-roboto';
 import configureStore from './configureReduxStore';
 import KeyboardShourtcutsService from './services/KeyboardShortcutsService';
+import * as WatcherService from './services/WatcherService';
 import MainWindow from './components/MainWindow/MainWindow';
 import './App.css';
 
@@ -17,3 +18,4 @@ ReactDOM.render(
 );
 
 KeyboardShourtcutsService.initializeDefaults(store);
+WatcherService.initialize(store);

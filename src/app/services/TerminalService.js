@@ -3,10 +3,10 @@ import * as uuid from 'uuid';
 import { Terminal } from 'xterm';
 import * as fit from 'xterm/lib/addons/fit/fit';
 import TerminalTypes from '../enums/TerminalTypes';
+import * as WatcherService from './WatcherService';
 
 const createNewTerminalInstance = (terminalData) => {
   const pty = require('node-pty');
-  const chokidar = require('chokidar');
 
   const osType = os.platform() === 'win32' ? 'windows' : 'unix';
   const terminalsForGivenOs = TerminalTypes[osType];
@@ -28,18 +28,18 @@ const createNewTerminalInstance = (terminalData) => {
   terminalData.terminalStartupCommands.forEach((singleCommand) => {
     virtualTerminalInstance.write(`${singleCommand}\r`);
   });
-  const watcherInstance = chokidar.watch(terminalData.terminalWatchers, {
-    persistent: true,
-  });
+  const terminalUuid = uuid.v4();
+  WatcherService.addNewWatcher(terminalUuid, terminalData.terminalWatchers);
   return {
+    uuid: terminalUuid,
     xTermInstance,
     virtualTerminalInstance,
-    watcherInstance,
   };
 };
 
 const exportTermninalsToObject = terminalInstances => ({
   terminals: terminalInstances.map(singleTerminal => ({
+    terminalWatchers: singleTerminal.terminalWatchers || [],
     terminalType: singleTerminal.terminalType,
     name: singleTerminal.terminalName || 'Terminal',
     terminalStartupDir: singleTerminal.terminalStartupDir,
@@ -54,6 +54,7 @@ const importTerminalsToObject = (jsonFile) => {
   return {
     terminals: jsonFile.terminals.map(singleTerminal => ({
       uuid: uuid.v4(),
+      terminalWatchers: singleTerminal.terminalWatchers || [],
       terminalType: singleTerminal.terminalType,
       terminalName: singleTerminal.name || 'Terminal',
       terminalStartupDir: singleTerminal.terminalStartupDir || '',
@@ -69,9 +70,7 @@ const killTerminalInstance = (terminalInstance) => {
   if (terminalInstance.virtualTerminalInstance) {
     terminalInstance.virtualTerminalInstance.kill();
   }
-  if (terminalInstance.watcherInstance) {
-    terminalInstance.watcherInstance.close();
-  }
+  WatcherService.removeWatcher(terminalInstance.uuid);
 };
 
 export { createNewTerminalInstance, exportTermninalsToObject, importTerminalsToObject, killTerminalInstance };

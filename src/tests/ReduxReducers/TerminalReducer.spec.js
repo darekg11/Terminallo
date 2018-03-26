@@ -915,7 +915,7 @@ describe('Terminal reducer', () => {
     expect(finalState.terminals[1].terminalStartupDir).to.deep.equal('somePath');
     expect(finalState.terminals[1].uuid).to.be.equal(finalState.selectedTerminal);
     expect(finalState.terminals[1].virtualTerminalInstance.write.callCount).to.be.equal(1);
-    expect(finalState.terminals[1].virtualTerminalInstance.write.getCall(0).args[0]);
+    expect(finalState.terminals[1].virtualTerminalInstance.write.getCall(0).args[0]).to.be.equal('\x03');
   });
 
   it('should handle GO_TO_NEXT_TERMINAL_INSTANCE - should not change state when terminal instance does not exist', () => {

@@ -1,4 +1,3 @@
-import * as uuid from 'uuid';
 import { isUndefined } from 'lodash';
 import TerminalActionTypes from '../actions/TerminalActionTypes';
 import * as TerminalService from '../services/TerminalService';
@@ -13,15 +12,9 @@ export default function terminalReducer(state = initialState, action) {
     case TerminalActionTypes.ADD_TERMINAL_INSTANCE: {
       const createdTerminalInstance = TerminalService.createNewTerminalInstance(action.terminal);
       const newTerminalInstance = action.terminal;
-      newTerminalInstance.uuid = uuid.v4();
+      newTerminalInstance.uuid = createdTerminalInstance.uuid;
       newTerminalInstance.xTermInstance = createdTerminalInstance.xTermInstance;
       newTerminalInstance.virtualTerminalInstance = createdTerminalInstance.virtualTerminalInstance;
-      newTerminalInstance.watcherInstance = createdTerminalInstance.watcherInstance;
-      newTerminalInstance.watcherInstance.on('ready', () => {
-        newTerminalInstance.watcherInstance.on('all', (event, path) => {
-          console.log(event, path);
-        });
-      });
       return {
         ...state,
         terminals: [...state.terminals, newTerminalInstance],
@@ -58,6 +51,7 @@ export default function terminalReducer(state = initialState, action) {
         const createdTerminalInstance = TerminalService.createNewTerminalInstance(singleInstance);
         return {
           ...singleInstance,
+          uuid: createdTerminalInstance.uuid,
           xTermInstance: createdTerminalInstance.xTermInstance,
           virtualTerminalInstance: createdTerminalInstance.virtualTerminalInstance,
         };
@@ -80,7 +74,7 @@ export default function terminalReducer(state = initialState, action) {
       const terminalInstanceRecreated = TerminalService.createNewTerminalInstance(terminalInstanceToReload);
       const mergedReloadedInstance = {
         ...terminalInstanceToReload,
-        uuid: uuid.v4(),
+        uuid: terminalInstanceRecreated.uuid,
         xTermInstance: terminalInstanceRecreated.xTermInstance,
         virtualTerminalInstance: terminalInstanceRecreated.virtualTerminalInstance,
       };
