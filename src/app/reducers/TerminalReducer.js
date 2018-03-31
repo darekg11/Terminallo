@@ -70,6 +70,7 @@ export default function terminalReducer(state = initialState, action) {
         return state;
       }
       const terminalInstanceToReload = copiedTerminalsArray[terminalInstanceToReloadIndex];
+      const terminalUuidBeforeReloading = terminalInstanceToReload.uuid;
       TerminalService.killTerminalInstance(terminalInstanceToReload);
       const terminalInstanceRecreated = TerminalService.createNewTerminalInstance(terminalInstanceToReload);
       const mergedReloadedInstance = {
@@ -82,7 +83,7 @@ export default function terminalReducer(state = initialState, action) {
       return {
         ...state,
         terminals: copiedTerminalsArray,
-        selectedTerminal: mergedReloadedInstance.uuid,
+        selectedTerminal: terminalUuidBeforeReloading === state.selectedTerminal ? mergedReloadedInstance.uuid : state.selectedTerminal,
       };
     }
     case TerminalActionTypes.DELETE_TERMINAL_INSTANCE: {
