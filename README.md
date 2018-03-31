@@ -57,7 +57,7 @@ Go ahead and create Pull Requests, contribution is welcome**
 
 # Roadmap for version 1.1.0
 
-- [ ] Bump `Electron` version to more recent version
+- [x] Bump `Electron` version to more recent version [Bumped to 1.8.4](https://github.com/darekg11/Terminallo/pull/29)
 - [ ] Bump code coverage to ~80%
 - [x] Get rid of nasty `82vh` [hack for terminal dynamic height](https://github.com/darekg11/Terminallo/blob/master/src/app/components/Terminal/Terminal.css#L127) [Done as part of this PR](https://github.com/darekg11/Terminallo/pull/27)
 - [x] Unify `Electron` modal dialog window mechanism in order to remove multiple code copy-pastas [Done as part of this PR](https://github.com/darekg11/Terminallo/pull/26)
