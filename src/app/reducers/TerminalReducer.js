@@ -1,4 +1,4 @@
-import { isUndefined } from 'lodash';
+import { assign, isUndefined } from 'lodash';
 import TerminalActionTypes from '../actions/TerminalActionTypes';
 import * as TerminalService from '../services/TerminalService';
 
@@ -28,7 +28,7 @@ export default function terminalReducer(state = initialState, action) {
       if (terminalInstanceIndex === -1) {
         return state;
       }
-      copiedTerminalsArray[terminalInstanceIndex] = action.terminal;
+      assign(copiedTerminalsArray[terminalInstanceIndex], action.terminal);
       return { ...state, terminals: copiedTerminalsArray };
     }
     case TerminalActionTypes.SELECT_TERMINAL_INSTANCE: {
@@ -83,7 +83,8 @@ export default function terminalReducer(state = initialState, action) {
       return {
         ...state,
         terminals: copiedTerminalsArray,
-        selectedTerminal: terminalUuidBeforeReloading === state.selectedTerminal ? mergedReloadedInstance.uuid : state.selectedTerminal,
+        selectedTerminal:
+          terminalUuidBeforeReloading === state.selectedTerminal ? mergedReloadedInstance.uuid : state.selectedTerminal,
       };
     }
     case TerminalActionTypes.DELETE_TERMINAL_INSTANCE: {
