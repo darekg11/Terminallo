@@ -62,4 +62,4 @@ Go ahead and create Pull Requests, contribution is welcome**
 - [x] Get rid of nasty `82vh` [hack for terminal dynamic height](https://github.com/darekg11/Terminallo/blob/master/src/app/components/Terminal/Terminal.css#L127) [Done as part of this PR](https://github.com/darekg11/Terminallo/pull/27)
 - [x] Unify `Electron` modal dialog window mechanism in order to remove multiple code copy-pastas [Done as part of this PR](https://github.com/darekg11/Terminallo/pull/26)
 - [ ] Allow for simultaneously stream of console output to file and console window
-- [ ] Automatic terminal reload after detection of changes in selected directories (`watch on multiple directories`)
+- [x] Automatic terminal reload after detection of changes in selected directories (`watch on multiple directories`) [For now only watch on terminal startup dir is supported](https://github.com/darekg11/Terminallo/pull/28)
