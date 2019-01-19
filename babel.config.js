@@ -1,10 +1,14 @@
-function config() {
-  const presets = ['@babel/preset-env', '@babel/preset-react', '@babel/preset-stage-0'];
-  const plugins = ['@babel/plugin-transform-async-to-generator'];
+function config(api) {
+  const presets = ["@babel/preset-env", "@babel/preset-react"];
+  const plugins = [
+    "@babel/plugin-transform-async-to-generator",
+    "@babel/plugin-proposal-function-bind"
+  ];
 
+  api.cache(true);
   return {
     presets,
-    plugins,
+    plugins
   };
 }
 
