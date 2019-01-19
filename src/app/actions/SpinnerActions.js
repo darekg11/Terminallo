@@ -1,25 +1,27 @@
-import SpinnerActionTypes from './SpinnerActionTypes';
+import SpinnerActionTypes from "./SpinnerActionTypes";
 
 const showSpinner = loadingMessage => ({
   type: SpinnerActionTypes.SPINNER_SHOW,
-  loadingMessage,
+  loadingMessage
 });
 
 const showSpinnerSuccess = successMessage => ({
   type: SpinnerActionTypes.SPINNER_LOADING_SUCCESS,
-  successMessage,
+  successMessage
 });
 
 const showSpinnerError = errorMessage => ({
   type: SpinnerActionTypes.SPINNER_LOADING_ERROR,
-  errorMessage,
+  errorMessage
 });
 
 const hideSpinner = () => ({
-  type: SpinnerActionTypes.SPINNER_HIDE,
+  type: SpinnerActionTypes.SPINNER_HIDE
 });
 
-exports.hideSpinner = hideSpinner;
-exports.showSpinner = showSpinner;
-exports.showSpinnerSuccess = showSpinnerSuccess;
-exports.showSpinnerError = showSpinnerError;
+export default {
+  hideSpinner,
+  showSpinner,
+  showSpinnerSuccess,
+  showSpinnerError
+};

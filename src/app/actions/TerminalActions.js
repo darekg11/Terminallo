@@ -1,66 +1,68 @@
-import TerminalActionTypes from './TerminalActionTypes';
+import TerminalActionTypes from "./TerminalActionTypes";
 
 const addNewTerminalInstance = terminalNewInstanceInfo => ({
   type: TerminalActionTypes.ADD_TERMINAL_INSTANCE,
-  terminal: terminalNewInstanceInfo,
+  terminal: terminalNewInstanceInfo
 });
 
 const editTerminalInstance = terminal => ({
   type: TerminalActionTypes.EDIT_TERMINAL_INSTANCE,
-  terminal,
+  terminal
 });
 
 const selectTerminalInstance = terminalUuid => ({
   type: TerminalActionTypes.SELECT_TERMINAL_INSTANCE,
-  terminalUUID: terminalUuid,
+  terminalUUID: terminalUuid
 });
 
 const importTerminalInstances = terminalInstances => ({
   type: TerminalActionTypes.IMPORT_TERMINALS,
-  terminals: terminalInstances,
+  terminals: terminalInstances
 });
 
 const reloadTerminalInstance = terminalUUID => ({
   type: TerminalActionTypes.RELOAD_TERMINAL_INSTANCE,
-  terminalUUID,
+  terminalUUID
 });
 
 const deleteTerminalInstance = terminalUUID => ({
   type: TerminalActionTypes.DELETE_TERMINAL_INSTANCE,
-  terminalUUID,
+  terminalUUID
 });
 
 const moveRightTerminalInstance = terminalUUID => ({
   type: TerminalActionTypes.MOVE_RIGHT_TERMINAL_INSTANCE,
-  terminalUUID,
+  terminalUUID
 });
 
 const moveLeftTerminalInstance = terminalUUID => ({
   type: TerminalActionTypes.MOVE_LEFT_TERMINAL_INSTANCE,
-  terminalUUID,
+  terminalUUID
 });
 
 const stopTerminalInstance = terminalUUID => ({
   type: TerminalActionTypes.STOP_TERMINAL_INSTANCE,
-  terminalUUID,
+  terminalUUID
 });
 
 const goToNextTerminalInstance = () => ({
-  type: TerminalActionTypes.GO_TO_NEXT_TERMINAL_INSTANCE,
+  type: TerminalActionTypes.GO_TO_NEXT_TERMINAL_INSTANCE
 });
 
 const goToPreviousTerminalInstance = () => ({
-  type: TerminalActionTypes.GO_TO_PREVIOUS_TERMINAL_INSTANCE,
+  type: TerminalActionTypes.GO_TO_PREVIOUS_TERMINAL_INSTANCE
 });
 
-exports.addNewTerminalInstance = addNewTerminalInstance;
-exports.editTerminalInstance = editTerminalInstance;
-exports.selectTerminalInstance = selectTerminalInstance;
-exports.importTerminalInstances = importTerminalInstances;
-exports.reloadTerminalInstance = reloadTerminalInstance;
-exports.deleteTerminalInstance = deleteTerminalInstance;
-exports.moveRightTerminalInstance = moveRightTerminalInstance;
-exports.moveLeftTerminalInstance = moveLeftTerminalInstance;
-exports.stopTerminalInstance = stopTerminalInstance;
-exports.goToNextTerminalInstance = goToNextTerminalInstance;
-exports.goToPreviousTerminalInstance = goToPreviousTerminalInstance;
+export default {
+  addNewTerminalInstance,
+  editTerminalInstance,
+  selectTerminalInstance,
+  importTerminalInstances,
+  reloadTerminalInstance,
+  deleteTerminalInstance,
+  moveRightTerminalInstance,
+  moveLeftTerminalInstance,
+  stopTerminalInstance,
+  goToNextTerminalInstance,
+  goToPreviousTerminalInstance
+};
