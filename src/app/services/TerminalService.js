@@ -73,4 +73,6 @@ const killTerminalInstance = (terminalInstance) => {
   WatcherService.removeWatcher(terminalInstance.uuid);
 };
 
-export { createNewTerminalInstance, exportTermninalsToObject, importTerminalsToObject, killTerminalInstance };
+export {
+  createNewTerminalInstance, exportTermninalsToObject, importTerminalsToObject, killTerminalInstance,
+};

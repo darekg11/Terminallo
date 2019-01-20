@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
-import Tabs, { Tab } from '@material-ui/core/Tabs';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import PauseIcon from '@material-ui/icons/Pause';
 import ReloadIcon from '@material-ui/icons/Refresh';
 import EditIcon from '@material-ui/icons/Edit';
@@ -16,63 +17,70 @@ import TerminalActions from '../../actions/TerminalActions';
 import Terminal from '../Terminal/Terminal';
 import './TerminalTabs.css';
 
-const TerminalTabs = props => (
+const TerminalTabs = ({
+  terminals,
+  selectedTerminal,
+  selectTerminal,
+  deleteTerminal,
+  editTerminal,
+  moveTerminalLeft,
+  moveTerminalRight,
+  reloadTerminal,
+  stopTerminal,
+}) => (
   <Paper className="Terminal-Tabs">
-    {props.terminals.length > 0 && (
+    {terminals.length > 0 && (
       <Tabs
-        value={props.selectedTerminal === '' ? false : props.selectedTerminal}
-        onChange={(event, value) => props.selectTerminal(value)}
+        value={selectedTerminal === '' ? false : selectedTerminal}
+        onChange={(event, value) => selectTerminal(value)}
         indicatorColor="primary"
         textColor="primary"
         scrollable
         scrollButtons="auto"
       >
-        {props.terminals.map(singleTerminal => (
+        {terminals.map(singleTerminal => (
           <Tab key={singleTerminal.uuid} label={singleTerminal.terminalName} value={singleTerminal.uuid} />
         ))}
       </Tabs>
     )}
     <div className="terminal-area">
       <div className="terminal">
-        {props.terminals
-          .filter(singleTerminal => singleTerminal.uuid === props.selectedTerminal)
+        {terminals
+          .filter(singleTerminal => singleTerminal.uuid === selectedTerminal)
           .map(singleTerminal => (
             <Terminal key={singleTerminal.uuid} terminal={singleTerminal} />
           ))}
       </div>
-      {props.selectedTerminal !== '' && (
+      {selectedTerminal !== '' && (
         <div className="panel">
           <Tooltip id="tooltip-stop-terminal" title="Stop (CTRL + P)" placement="left">
-            <IconButton aria-label="Stop" onClick={() => props.stopTerminal(props.selectedTerminal)}>
+            <IconButton aria-label="Stop" onClick={() => stopTerminal(selectedTerminal)}>
               <PauseIcon />
             </IconButton>
           </Tooltip>
           <Tooltip id="tooltip-reload-terminal" title="Reload (CTRL + R)" placement="left">
-            <IconButton aria-label="Reload" onClick={() => props.reloadTerminal(props.selectedTerminal)}>
+            <IconButton aria-label="Reload" onClick={() => reloadTerminal(selectedTerminal)}>
               <ReloadIcon />
             </IconButton>
           </Tooltip>
           <Tooltip id="tooltip-edit-terminal" title="Edit (CTRL + E)" placement="left">
             <IconButton
               aria-label="Edit"
-              onClick={() => props.editTerminal(
-                props.terminals.find(singleTerminal => singleTerminal.uuid === props.selectedTerminal),
-              )
-              }
+              onClick={() => editTerminal(terminals.find(singleTerminal => singleTerminal.uuid === selectedTerminal))}
             >
               <EditIcon />
             </IconButton>
           </Tooltip>
           <Tooltip id="tooltip-delete-terminal" title="Delete (CTRL + D)" placement="left">
-            <IconButton aria-label="Delete" onClick={() => props.deleteTerminal(props.selectedTerminal)}>
+            <IconButton aria-label="Delete" onClick={() => deleteTerminal(selectedTerminal)}>
               <DeleteIcon />
             </IconButton>
           </Tooltip>
           <Tooltip id="tooltip-move-right-terminal" title="Move right (CTRL + ->)" placement="left">
             <IconButton
               aria-label="Move right"
-              onClick={() => props.moveTerminalRight(props.selectedTerminal)}
-              disabled={props.terminals[props.terminals.length - 1].uuid === props.selectedTerminal}
+              onClick={() => moveTerminalRight(selectedTerminal)}
+              disabled={terminals[terminals.length - 1].uuid === selectedTerminal}
             >
               <RightArrowIcon />
             </IconButton>
@@ -80,8 +88,8 @@ const TerminalTabs = props => (
           <Tooltip id="tooltip-move-left-terminal" title="Move left (CTRL + <-)" placement="left">
             <IconButton
               aria-label="Move left"
-              onClick={() => props.moveTerminalLeft(props.selectedTerminal)}
-              disabled={props.terminals[0].uuid === props.selectedTerminal}
+              onClick={() => moveTerminalLeft(selectedTerminal)}
+              disabled={terminals[0].uuid === selectedTerminal}
             >
               <LeftArrowIcon />
             </IconButton>

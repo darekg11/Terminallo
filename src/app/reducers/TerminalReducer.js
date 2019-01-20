@@ -24,7 +24,9 @@ export default function terminalReducer(state = initialState, action) {
     case TerminalActionTypes.EDIT_TERMINAL_INSTANCE: {
       const destinationUUID = action.terminal.uuid;
       const copiedTerminalsArray = [...state.terminals];
-      const terminalInstanceIndex = copiedTerminalsArray.findIndex(singleTerminal => singleTerminal.uuid === destinationUUID);
+      const terminalInstanceIndex = copiedTerminalsArray.findIndex(
+        singleTerminal => singleTerminal.uuid === destinationUUID,
+      );
       if (terminalInstanceIndex === -1) {
         return state;
       }
@@ -65,7 +67,9 @@ export default function terminalReducer(state = initialState, action) {
     case TerminalActionTypes.RELOAD_TERMINAL_INSTANCE: {
       const { terminalUUID } = action;
       const copiedTerminalsArray = [...state.terminals];
-      const terminalInstanceToReloadIndex = copiedTerminalsArray.findIndex(singleTermianl => singleTermianl.uuid === terminalUUID);
+      const terminalInstanceToReloadIndex = copiedTerminalsArray.findIndex(
+        singleTermianl => singleTermianl.uuid === terminalUUID,
+      );
       if (terminalInstanceToReloadIndex === -1) {
         return state;
       }
@@ -90,7 +94,9 @@ export default function terminalReducer(state = initialState, action) {
     case TerminalActionTypes.DELETE_TERMINAL_INSTANCE: {
       const { terminalUUID } = action;
       const copiedTerminalsArray = [...state.terminals];
-      const terminalInstanceToDeleteIndex = copiedTerminalsArray.findIndex(singleTermianl => singleTermianl.uuid === terminalUUID);
+      const terminalInstanceToDeleteIndex = copiedTerminalsArray.findIndex(
+        singleTermianl => singleTermianl.uuid === terminalUUID,
+      );
       if (terminalInstanceToDeleteIndex === -1) {
         return state;
       }
@@ -109,7 +115,9 @@ export default function terminalReducer(state = initialState, action) {
       terminalInstanceToDelete.xTermInstance = null;
       terminalInstanceToDelete.virtualTerminalInstance = null;
       terminalInstanceToDelete.watcherInstance = null;
-      const terminalInstancesAfterDelete = copiedTerminalsArray.filter(singleTermianl => singleTermianl.uuid !== terminalUUID);
+      const terminalInstancesAfterDelete = copiedTerminalsArray.filter(
+        singleTermianl => singleTermianl.uuid !== terminalUUID,
+      );
       return {
         ...state,
         terminals: terminalInstancesAfterDelete,
@@ -119,7 +127,9 @@ export default function terminalReducer(state = initialState, action) {
     case TerminalActionTypes.MOVE_RIGHT_TERMINAL_INSTANCE: {
       const { terminalUUID } = action;
       const copiedTerminalsArray = [...state.terminals];
-      const terminalInstanceToMoveIndex = copiedTerminalsArray.findIndex(singleTermianl => singleTermianl.uuid === terminalUUID);
+      const terminalInstanceToMoveIndex = copiedTerminalsArray.findIndex(
+        singleTermianl => singleTermianl.uuid === terminalUUID,
+      );
       if (terminalInstanceToMoveIndex === -1 || terminalInstanceToMoveIndex === copiedTerminalsArray.length - 1) {
         return state;
       }
@@ -136,7 +146,9 @@ export default function terminalReducer(state = initialState, action) {
     case TerminalActionTypes.MOVE_LEFT_TERMINAL_INSTANCE: {
       const { terminalUUID } = action;
       const copiedTerminalsArray = [...state.terminals];
-      const terminalInstanceToMoveIndex = copiedTerminalsArray.findIndex(singleTermianl => singleTermianl.uuid === terminalUUID);
+      const terminalInstanceToMoveIndex = copiedTerminalsArray.findIndex(
+        singleTermianl => singleTermianl.uuid === terminalUUID,
+      );
       if (terminalInstanceToMoveIndex === -1 || terminalInstanceToMoveIndex === 0) {
         return state;
       }
@@ -152,7 +164,9 @@ export default function terminalReducer(state = initialState, action) {
     }
     case TerminalActionTypes.STOP_TERMINAL_INSTANCE: {
       const { terminalUUID } = action;
-      const terminalInstanceToStopIndex = state.terminals.findIndex(singleTermianl => singleTermianl.uuid === terminalUUID);
+      const terminalInstanceToStopIndex = state.terminals.findIndex(
+        singleTermianl => singleTermianl.uuid === terminalUUID,
+      );
       if (terminalInstanceToStopIndex !== -1) {
         const terminalInstanceToStop = state.terminals[terminalInstanceToStopIndex];
         terminalInstanceToStop.virtualTerminalInstance.write('\x03');
@@ -161,10 +175,12 @@ export default function terminalReducer(state = initialState, action) {
     }
     case TerminalActionTypes.GO_TO_NEXT_TERMINAL_INSTANCE: {
       const currentlySelectedTerminalInstance = state.selectedTerminal;
-      const currentlySelectedTerminalInstanceIndex = state.terminals.findIndex(singleTerminal => singleTerminal.uuid === currentlySelectedTerminalInstance);
+      const currentlySelectedTerminalInstanceIndex = state.terminals.findIndex(
+        singleTerminal => singleTerminal.uuid === currentlySelectedTerminalInstance,
+      );
       if (
-        currentlySelectedTerminalInstanceIndex === -1 ||
-        currentlySelectedTerminalInstanceIndex === state.terminals.length - 1
+        currentlySelectedTerminalInstanceIndex === -1
+        || currentlySelectedTerminalInstanceIndex === state.terminals.length - 1
       ) {
         return state;
       }
@@ -177,7 +193,9 @@ export default function terminalReducer(state = initialState, action) {
     }
     case TerminalActionTypes.GO_TO_PREVIOUS_TERMINAL_INSTANCE: {
       const currentlySelectedTerminalInstance = state.selectedTerminal;
-      const currentlySelectedTerminalInstanceIndex = state.terminals.findIndex(singleTerminal => singleTerminal.uuid === currentlySelectedTerminalInstance);
+      const currentlySelectedTerminalInstanceIndex = state.terminals.findIndex(
+        singleTerminal => singleTerminal.uuid === currentlySelectedTerminalInstance,
+      );
       if (currentlySelectedTerminalInstanceIndex === -1 || currentlySelectedTerminalInstanceIndex === 0) {
         return state;
       }

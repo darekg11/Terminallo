@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import electron from 'electron';
 import * as fsEtra from 'fs-extra';
 
@@ -48,4 +49,6 @@ const showOpenFileDialog = (windowTitle, windowFilters) => {
   return filePath;
 };
 
-export { saveJsonToFile, loadJsonFromFile, openDirectoryChooserDialog, showOpenFileDialog, showSaveFileDialog };
+export {
+  saveJsonToFile, loadJsonFromFile, openDirectoryChooserDialog, showOpenFileDialog, showSaveFileDialog,
+};
