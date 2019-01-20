@@ -54,7 +54,7 @@
     "prop-types": "15.6.2",
     "react": "16.7.0",
     "react-dom": "16.7.0",
-    "react-redux": "6.0.0",
+    "react-redux": "5.1.1",
     "redux": "4.0.1",
     "redux-batched-actions": "0.4.1",
     "redux-thunk": "2.3.0",
