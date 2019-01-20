@@ -217,12 +217,12 @@ class AddEditTerminalWindow extends Component {
             onSubmit={this.handleFormSubmit}
           >
             {!editMode && (
-              <Typography variant="title" align="center" id="modal-title">
+              <Typography variant="h6" align="center" id="modal-title">
                 Add new Terminal
               </Typography>
             )}
             {editMode && (
-              <Typography variant="title" align="center" id="modal-title">
+              <Typography variant="h6" align="center" id="modal-title">
                 Edit Terminal
               </Typography>
             )}
@@ -311,7 +311,7 @@ class AddEditTerminalWindow extends Component {
             {!editMode && (
               <Button
                 className={classes.button}
-                raised
+                variant="contained"
                 color="primary"
                 type="submit"
               >
@@ -322,7 +322,7 @@ class AddEditTerminalWindow extends Component {
             {editMode && (
               <Button
                 className={classes.button}
-                raised
+                variant="contained"
                 color="primary"
                 type="submit"
               >
