@@ -69,7 +69,7 @@ const Spinner = ({
         {!loading && showSuccessMessage && (
           <div className="content">
             <SuccessIcon className="success-icon" />
-            <Typography type="title" align="center" id="modal-title">
+            <Typography variant="h6" align="center" id="modal-title">
               {successMessage}
             </Typography>
           </div>
@@ -77,7 +77,7 @@ const Spinner = ({
         {!loading && (
           <div className="content">
             <Divider className="divider" />
-            <Button className={classes.button} raised color="primary" onClick={close}>
+            <Button className={classes.button} variant="contained" color="primary" onClick={close}>
               OK
             </Button>
           </div>

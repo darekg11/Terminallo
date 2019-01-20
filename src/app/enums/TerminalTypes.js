@@ -11,7 +11,13 @@ const TerminalTypes = {
       start: 'powershell.exe',
     },
   },
-  unix: {},
+  unix: {
+    BASH: {
+      name: 'BASH',
+      label: 'Bash',
+      start: 'bash',
+    },
+  },
 };
 
 export default TerminalTypes;

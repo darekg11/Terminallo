@@ -158,6 +158,7 @@ class AddEditTerminalWindow extends Component {
     const terminalCommandsStartup = terminalStartupCommands
       .split(/\r?\n/)
       .filter(singleLine => singleLine !== '');
+    console.log(terminalCommandsStartup);
     let terminalWatchersInstances = [];
     if (addStartUpDirToWatchers) {
       terminalWatchersInstances.push(terminalStartupDir);
