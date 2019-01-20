@@ -99,10 +99,35 @@
     ]
   },
   "build": {
-    "appId": "Terminallo",
+    "appId": "com.rapidcode.terminallo",
     "productName": "Terminallo",
     "files": [
       "**/*",
+      "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+      "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+      "!**/node_modules/*.d.ts",
+      "!**/node_modules/.bin",
+      "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
+      "!.editorconfig",
+      "!**/._*",
+      "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+      "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+      "!**/{appveyor.yml,.travis.yml,circle.yml}",
+      "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}",
+      "!.babelrc",
+      "!.git/**/*",
+      "!.eslintrc",
+      "!.gitignore",
+      "!babel.config.js",
+      "!jest.init.js",
+      "!LICENSE",
+      "!npm_install.sh",
+      "!package-lock.json",
+      "!package.json",
+      "!README.md",
+      "!webpack.dev.config.js",
+      "!webpack.prod.config.js",
+      "!src/tests/**/*",
       "!src/app/**/*",
       "!coverage/**/*"
     ],
@@ -118,6 +143,7 @@
       "artifactName": "${productName}-${version}-setup.${ext}"
     },
     "linux": {
+      "category": "Utility",
       "target": [
         {
           "target": "deb",
