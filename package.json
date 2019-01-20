@@ -1,5 +1,5 @@
 {
-  "author": "Dariusz Górak",
+  "author": "Dariusz Górak <darekg11@tlen.pl>",
   "description": "Terminallo - app to handle multiple console windows in single app",
   "name": "terminallo",
   "version": "2.0.0",
@@ -37,6 +37,7 @@
     "regenerator-runtime": "0.13.1",
     "sinon": "7.2.3",
     "style-loader": "0.23.1",
+    "terser-webpack-plugin": "1.2.1",
     "url-loader": "1.1.2",
     "webpack-cli": "3.2.1",
     "webpack-dev-server": "3.1.14"
@@ -59,7 +60,6 @@
     "redux-batched-actions": "0.4.1",
     "redux-thunk": "2.3.0",
     "typeface-roboto": "0.0.54",
-    "uglifyjs-webpack-plugin": "2.1.1",
     "uuid": "3.3.2",
     "webpack": "4.28.4",
     "xterm": "3.10.1"
@@ -111,8 +111,18 @@
         {
           "target": "nsis",
           "arch": [
-            "x64",
-            "ia32"
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "${productName}-${version}-setup.${ext}"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
           ]
         }
       ],
