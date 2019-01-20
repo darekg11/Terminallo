@@ -11,14 +11,11 @@ const styles = theme => ({
   },
 });
 
-function MainPanel(props) {
-  const { classes } = props;
-  return (
-    <div className="Main-Panel">
-      <div className={classes.content}>{props.children}</div>
-    </div>
-  );
-}
+const MainPanel = ({ children, classes }) => (
+  <div className="Main-Panel">
+    <div className={classes.content}>{children}</div>
+  </div>
+);
 
 MainPanel.propTypes = {
   classes: PropTypes.shape({
