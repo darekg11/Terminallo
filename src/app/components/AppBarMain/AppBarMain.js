@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar';
-import AddIcon from 'material-ui-icons/Add';
-import IconButton from 'material-ui/IconButton';
-import SaveIcon from 'material-ui-icons/Save';
-import SaveAsIcon from 'material-ui-icons/ContentCopy';
-import ImportIcon from 'material-ui-icons/SystemUpdateAlt';
-import Tooltip from 'material-ui/Tooltip';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import AddIcon from '@material-ui/icons/Add';
+import IconButton from '@material-ui/core/IconButton';
+import SaveIcon from '@material-ui/icons/Save';
+import SaveAsIcon from '@material-ui/icons/FileCopy';
+import ImportIcon from '@material-ui/icons/FolderOpen';
+import Tooltip from '@material-ui/core/Tooltip';
 import AddEditTerminalWindowActions from '../../actions/TerminalAddEditWindowActions';
 import ApplicationActions from '../../actions/ApplicationActions';
 import * as FileService from '../../services/FileService';
@@ -31,8 +31,7 @@ const AppBarMain = props => (
         <Tooltip id="tooltip-save" title="Save terminals (CTRL+S)">
           <IconButton
             aria-label="Save terminals"
-            onClick={() =>
-              props.terminalsSavePath === '' ? props.exportTerminals() : props.saveTerminals(props.terminalsSavePath)
+            onClick={() => props.terminalsSavePath === '' ? props.exportTerminals() : props.saveTerminals(props.terminalsSavePath)
             }
           >
             <SaveIcon />
@@ -93,4 +92,7 @@ const mapStateToProps = state => ({
   terminalsSavePath: state.ApplicationStateReducer.terminalsFilePath,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppBarMain);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AppBarMain);

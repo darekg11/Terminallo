@@ -1,15 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
-import Drawer from 'material-ui/Drawer';
-import Typography from 'material-ui/Typography';
-import Divider from 'material-ui/Divider';
-import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
-import Collapse from 'material-ui/transitions/Collapse';
-import KeyboardIcon from 'material-ui-icons/Keyboard';
-import ExpandLess from 'material-ui-icons/ExpandLess';
-import ExpandMore from 'material-ui-icons/ExpandMore';
+import { withStyles } from '@material-ui/core/styles';
+import Drawer from '@material-ui/core/Drawer';
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+import List, { ListItem, ListItemIcon, ListItemText } from '@material-ui/core/List';
+import Collapse from '@material-ui/core/Collapse';
+import KeyboardIcon from '@material-ui/icons/Keyboard';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
 import TerminalActions from '../../actions/TerminalActions';
 
 const drawerWidth = 200;
@@ -103,9 +103,11 @@ SidePanel.propTypes = {
     drawerHeader: PropTypes.string,
     nested: PropTypes.string,
   }).isRequired,
-  terminals: PropTypes.arrayOf(PropTypes.shape({
-    terminalName: PropTypes.string.isRequired,
-  })),
+  terminals: PropTypes.arrayOf(
+    PropTypes.shape({
+      terminalName: PropTypes.string.isRequired,
+    }),
+  ),
   selectTerminal: PropTypes.func.isRequired,
 };
 
@@ -122,4 +124,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const styledComponent = withStyles(styles)(SidePanel);
-export default connect(mapStateToProps, mapDispatchToProps)(styledComponent);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(styledComponent);

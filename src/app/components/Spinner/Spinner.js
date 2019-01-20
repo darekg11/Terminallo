@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import { CircularProgress } from 'material-ui/Progress';
-import Modal from 'material-ui/Modal';
-import Button from 'material-ui/Button';
-import SuccessIcon from 'material-ui-icons/SentimentVerySatisfied';
-import ErrorIcon from 'material-ui-icons/SentimentVeryDissatisfied';
-import Typography from 'material-ui/Typography';
-import Divider from 'material-ui/Divider';
+import { CircularProgress } from '@material-ui/core/CircularProgress';
+import Modal from '@material-ui/core/Modal';
+import Button from '@material-ui/core/Button';
+import SuccessIcon from '@material-ui/icons/SentimentVerySatisfied';
+import ErrorIcon from '@material-ui/icons/SentimentVeryDissatisfied';
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
 import SpinnerActions from '../../actions/SpinnerActions';
 
 import './Spinner.css';
@@ -53,24 +53,22 @@ const Spinner = props => (
             </Typography>
           </div>
         )}
-        {!props.loading &&
-          props.showErrorMessage && (
-            <div className="content">
-              <ErrorIcon className="error-icon" />
-              <Typography type="title" align="center" id="modal-title">
-                {props.errorMessage}
-              </Typography>
-            </div>
-          )}
-        {!props.loading &&
-          props.showSuccessMessage && (
-            <div className="content">
-              <SuccessIcon className="success-icon" />
-              <Typography type="title" align="center" id="modal-title">
-                {props.successMessage}
-              </Typography>
-            </div>
-          )}
+        {!props.loading && props.showErrorMessage && (
+          <div className="content">
+            <ErrorIcon className="error-icon" />
+            <Typography type="title" align="center" id="modal-title">
+              {props.errorMessage}
+            </Typography>
+          </div>
+        )}
+        {!props.loading && props.showSuccessMessage && (
+          <div className="content">
+            <SuccessIcon className="success-icon" />
+            <Typography type="title" align="center" id="modal-title">
+              {props.successMessage}
+            </Typography>
+          </div>
+        )}
         {!props.loading && (
           <div className="content">
             <Divider className="divider" />
@@ -114,4 +112,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const styledComponent = withStyles(styles)(Spinner);
-export default connect(mapStateToProps, mapDispatchToProps)(styledComponent);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(styledComponent);

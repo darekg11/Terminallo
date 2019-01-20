@@ -1,16 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Paper from 'material-ui/Paper';
-import Tabs, { Tab } from 'material-ui/Tabs';
-import PauseIcon from 'material-ui-icons/Pause';
-import ReloadIcon from 'material-ui-icons/Refresh';
-import EditIcon from 'material-ui-icons/Edit';
-import DeleteIcon from 'material-ui-icons/Delete';
-import RightArrowIcon from 'material-ui-icons/ArrowForward';
-import LeftArrowIcon from 'material-ui-icons/ArrowBack';
-import IconButton from 'material-ui/IconButton';
-import Tooltip from 'material-ui/Tooltip';
+import Paper from '@material-ui/core/Paper';
+import Tabs, { Tab } from '@material-ui/core/Tabs';
+import PauseIcon from '@material-ui/icons/Pause';
+import ReloadIcon from '@material-ui/icons/Refresh';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import RightArrowIcon from '@material-ui/icons/ArrowForward';
+import LeftArrowIcon from '@material-ui/icons/ArrowBack';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import AddEditTerminalWindowActions from '../../actions/TerminalAddEditWindowActions';
 import TerminalActions from '../../actions/TerminalActions';
 import Terminal from '../Terminal/Terminal';
@@ -36,7 +36,9 @@ const TerminalTabs = props => (
       <div className="terminal">
         {props.terminals
           .filter(singleTerminal => singleTerminal.uuid === props.selectedTerminal)
-          .map(singleTerminal => <Terminal key={singleTerminal.uuid} terminal={singleTerminal} />)}
+          .map(singleTerminal => (
+            <Terminal key={singleTerminal.uuid} terminal={singleTerminal} />
+          ))}
       </div>
       {props.selectedTerminal !== '' && (
         <div className="panel">
@@ -53,8 +55,9 @@ const TerminalTabs = props => (
           <Tooltip id="tooltip-edit-terminal" title="Edit (CTRL + E)" placement="left">
             <IconButton
               aria-label="Edit"
-              onClick={() =>
-                props.editTerminal(props.terminals.find(singleTerminal => singleTerminal.uuid === props.selectedTerminal))
+              onClick={() => props.editTerminal(
+                props.terminals.find(singleTerminal => singleTerminal.uuid === props.selectedTerminal),
+              )
               }
             >
               <EditIcon />
@@ -90,21 +93,23 @@ const TerminalTabs = props => (
 );
 
 TerminalTabs.propTypes = {
-  terminals: PropTypes.arrayOf(PropTypes.shape({
-    terminalName: PropTypes.string.isRequired,
-    uuid: PropTypes.string.isRequired,
-    xTermInstance: PropTypes.shape({
-      open: PropTypes.func.isRequired,
-      fit: PropTypes.func.isRequired,
-      on: PropTypes.func.isRequired,
-      write: PropTypes.func.isRequired,
-    }).isRequired,
-    virtualTerminalInstance: PropTypes.shape({
-      on: PropTypes.func.isRequired,
-      write: PropTypes.func.isRequired,
-    }).isRequired,
-    terminalStartupCommands: PropTypes.arrayOf(PropTypes.string),
-  })),
+  terminals: PropTypes.arrayOf(
+    PropTypes.shape({
+      terminalName: PropTypes.string.isRequired,
+      uuid: PropTypes.string.isRequired,
+      xTermInstance: PropTypes.shape({
+        open: PropTypes.func.isRequired,
+        fit: PropTypes.func.isRequired,
+        on: PropTypes.func.isRequired,
+        write: PropTypes.func.isRequired,
+      }).isRequired,
+      virtualTerminalInstance: PropTypes.shape({
+        on: PropTypes.func.isRequired,
+        write: PropTypes.func.isRequired,
+      }).isRequired,
+      terminalStartupCommands: PropTypes.arrayOf(PropTypes.string),
+    }),
+  ),
   selectedTerminal: PropTypes.string,
   selectTerminal: PropTypes.func.isRequired,
   reloadTerminal: PropTypes.func.isRequired,
@@ -132,8 +137,10 @@ const mapDispatchToProps = dispatch => ({
   moveTerminalRight: terminalUUID => dispatch(TerminalActions.moveRightTerminalInstance(terminalUUID)),
   moveTerminalLeft: terminalUUID => dispatch(TerminalActions.moveLeftTerminalInstance(terminalUUID)),
   stopTerminal: terminalUUID => dispatch(TerminalActions.stopTerminalInstance(terminalUUID)),
-  editTerminal: terminalInstance =>
-    dispatch(AddEditTerminalWindowActions.showEditExistingTerminalWindow(terminalInstance)),
+  editTerminal: terminalInstance => dispatch(AddEditTerminalWindowActions.showEditExistingTerminalWindow(terminalInstance)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TerminalTabs);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(TerminalTabs);

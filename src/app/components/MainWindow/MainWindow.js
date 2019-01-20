@@ -1,7 +1,7 @@
 import React from 'react';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { createMuiTheme, lightBaseTheme } from 'material-ui/styles';
-import Reboot from 'material-ui/Reboot';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import { createMuiTheme, lightBaseTheme } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import MainPanel from '../MainPanel/MainPanel';
 import SidePanel from '../SidePanel/SidePanel';
 import AppBarMain from '../AppBarMain/AppBarMain';
@@ -16,7 +16,7 @@ const theme = createMuiTheme({
 
 export default () => (
   <MuiThemeProvider theme={theme}>
-    <Reboot>
+    <CssBaseline>
       <div className="App">
         <SidePanel />
         <MainPanel>
@@ -26,6 +26,6 @@ export default () => (
         <AddEditTerminalModalWindow />
         <Spinner />
       </div>
-    </Reboot>
+    </CssBaseline>
   </MuiThemeProvider>
 );
