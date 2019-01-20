@@ -14,8 +14,13 @@ const TerminalTypes = {
   unix: {
     BASH: {
       name: 'BASH',
-      label: 'Bash',
+      label: 'bash',
       start: 'bash',
+    },
+    ZSH: {
+      name: 'ZSH',
+      label: 'zsh',
+      start: 'zsh',
     },
   },
 };
