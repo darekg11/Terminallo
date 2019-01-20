@@ -14,31 +14,36 @@ import ApplicationActions from '../../actions/ApplicationActions';
 import * as FileService from '../../services/FileService';
 import './AppBarMain.css';
 
-const AppBarMain = props => (
+const AppBarMain = ({
+  openAddNewTerminalWindow,
+  importTerminals,
+  exportTerminals,
+  saveTerminals,
+  terminalsSavePath,
+}) => (
   <div className="App-Bar-Main">
     <AppBar className="content" position="static" color="default">
       <Toolbar>
         <Tooltip id="tooltip-add-new" title="Add terminal">
-          <IconButton aria-label="Add terminal" onClick={props.openAddNewTerminalWindow}>
+          <IconButton aria-label="Add terminal" onClick={openAddNewTerminalWindow}>
             <AddIcon />
           </IconButton>
         </Tooltip>
         <Tooltip id="tooltip-import" title="Import terminals">
-          <IconButton aria-label="Import terminals" onClick={props.importTerminals}>
+          <IconButton aria-label="Import terminals" onClick={importTerminals}>
             <ImportIcon />
           </IconButton>
         </Tooltip>
         <Tooltip id="tooltip-save" title="Save terminals (CTRL+S)">
           <IconButton
             aria-label="Save terminals"
-            onClick={() => props.terminalsSavePath === '' ? props.exportTerminals() : props.saveTerminals(props.terminalsSavePath)
-            }
+            onClick={() => (terminalsSavePath === '' ? exportTerminals() : saveTerminals(terminalsSavePath))}
           >
             <SaveIcon />
           </IconButton>
         </Tooltip>
         <Tooltip id="tooltip-save-as" title="Save terminals as">
-          <IconButton aria-label="Save terminals as" onClick={props.exportTerminals}>
+          <IconButton aria-label="Save terminals as" onClick={exportTerminals}>
             <SaveAsIcon />
           </IconButton>
         </Tooltip>
