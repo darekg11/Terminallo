@@ -5,7 +5,10 @@ import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import List, { ListItem, ListItemIcon, ListItemText } from '@material-ui/core/List';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
 import KeyboardIcon from '@material-ui/icons/Keyboard';
 import ExpandLess from '@material-ui/icons/ExpandLess';
@@ -45,11 +48,12 @@ class SidePanel extends React.Component {
   }
 
   handleClick = () => {
-    this.setState({ open: !this.state.open });
+    this.setState(prevState => ({ open: !prevState.open }));
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, terminals, selectTerminal } = this.props;
+    const { open } = this.state;
 
     const drawer = (
       <Drawer
@@ -69,16 +73,16 @@ class SidePanel extends React.Component {
               <KeyboardIcon />
             </ListItemIcon>
             <ListItemText inset primary="Terminals" />
-            {this.state.open ? <ExpandLess /> : <ExpandMore />}
+            {open ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
-          <Collapse component="li" in={this.state.open} timeout="auto" unmountOnExit>
+          <Collapse component="li" in={open} timeout="auto" unmountOnExit>
             <List disablePadding>
-              {this.props.terminals.map(singleTerminal => (
+              {terminals.map(singleTerminal => (
                 <ListItem
                   key={singleTerminal.uuid}
                   button
                   className={classes.nested}
-                  onClick={() => this.props.selectTerminal(singleTerminal.uuid)}
+                  onClick={() => selectTerminal(singleTerminal.uuid)}
                 >
                   <ListItemText inset primary={singleTerminal.terminalName} />
                 </ListItem>
