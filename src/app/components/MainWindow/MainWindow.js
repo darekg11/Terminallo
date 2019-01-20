@@ -12,6 +12,9 @@ import './MainWindow.css';
 
 const theme = createMuiTheme({
   lightBaseTheme,
+  typography: {
+    useNextVariants: true,
+  },
 });
 
 export default () => (

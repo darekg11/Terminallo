@@ -1,73 +1,72 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { batchActions } from "redux-batched-actions";
-import os from "os";
-import { forIn } from "lodash";
-import { withStyles } from "@material-ui/core/styles";
-import PropTypes from "prop-types";
-import Modal from "@material-ui/core/Modal";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import ExpansionPanel, {
-  ExpansionPanelDetails,
-  ExpansionPanelSummary
-} from "@material-ui/core/ExpansionPanel";
-import Input, { InputLabel, InputAdornment } from "@material-ui/core/Input";
-import { MenuItem } from "@material-ui/core/Menu";
-import TextField from "@material-ui/core/TextField";
-import Checkbox from "@material-ui/core/Checkbox";
-import {
-  FormControl,
-  FormControlLabel,
-  FormHelperText
-} from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import FolderOpenIcon from "@material-ui/icons/FolderOpen";
-import AddIcon from "@material-ui/icons/Add";
-import SaveIcon from "@material-ui/icons/Save";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
-import TerminalAddEditWindowActions from "../../actions/TerminalAddEditWindowActions";
-import TerminalActions from "../../actions/TerminalActions";
-import TerminalTypes from "../../enums/TerminalTypes";
-import * as FileService from "../../services/FileService";
-import "./AddEditTerminalWindow.css";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { batchActions } from 'redux-batched-actions';
+import os from 'os';
+import { forIn } from 'lodash';
+import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+import Modal from '@material-ui/core/Modal';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Select from '@material-ui/core/Select';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import FolderOpenIcon from '@material-ui/icons/FolderOpen';
+import AddIcon from '@material-ui/icons/Add';
+import SaveIcon from '@material-ui/icons/Save';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import TerminalAddEditWindowActions from '../../actions/TerminalAddEditWindowActions';
+import TerminalActions from '../../actions/TerminalActions';
+import TerminalTypes from '../../enums/TerminalTypes';
+import * as FileService from '../../services/FileService';
+import './AddEditTerminalWindow.css';
 
-const osType = os.platform() === "win32" ? "windows" : "unix";
+const osType = os.platform() === 'win32' ? 'windows' : 'unix';
 
 function getModalStyle() {
   return {
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)"
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
   };
 }
 
 const styles = theme => ({
   paper: {
-    position: "absolute",
+    position: 'absolute',
     width: theme.spacing.unit * 60,
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
-    padding: theme.spacing.unit * 4
+    padding: theme.spacing.unit * 4,
   },
   button: {
     margin: theme.spacing.unit,
-    alignSelf: "flex-end"
+    alignSelf: 'flex-end',
   },
   leftIcon: {
-    marginRight: theme.spacing.unit
+    marginRight: theme.spacing.unit,
   },
   formControl: {
-    margin: theme.spacing.unit
+    margin: theme.spacing.unit,
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
     flex: 1,
-    textAlign: "center",
-    flexShrink: 0
-  }
+    textAlign: 'center',
+    flexShrink: 0,
+  },
 });
 
 class AddEditTerminalWindow extends Component {
@@ -78,27 +77,28 @@ class AddEditTerminalWindow extends Component {
       terminalType: props.terminalType,
       terminalName: props.terminalName,
       terminalStartupDir: props.terminalStartupDir,
-      terminalStartupCommands: props.terminalStartupCommands.join("\n"),
+      terminalStartupCommands: props.terminalStartupCommands.join('\n'),
       watchersMenuExpanded: false,
       terminalWatchers: props.terminalWatchers,
       addStartUpDirToWatchers: props.terminalWatchers.includes(
-        props.terminalStartupDir
-      )
+        props.terminalStartupDir,
+      ),
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.uuid !== nextProps.uuid) {
+    const { uuid } = this.props;
+    if (uuid !== nextProps.uuid) {
       const {
         terminalType,
         terminalName,
         terminalStartupDir,
-        terminalWatchers
+        terminalWatchers,
       } = nextProps;
       let { terminalStartupCommands } = nextProps;
-      terminalStartupCommands = terminalStartupCommands.join("\n");
+      terminalStartupCommands = terminalStartupCommands.join('\n');
       const addStartUpDirToWatchers = terminalWatchers.includes(
-        terminalStartupDir
+        terminalStartupDir,
       );
       this.setState({
         terminalType,
@@ -106,7 +106,7 @@ class AddEditTerminalWindow extends Component {
         terminalStartupDir,
         terminalStartupCommands,
         addStartUpDirToWatchers,
-        terminalWatchers
+        terminalWatchers,
       });
     }
   }
@@ -114,10 +114,10 @@ class AddEditTerminalWindow extends Component {
   getRenderedTerminalTypesList = () => {
     const availableTerminals = [];
     const terminalsForRunningOs = TerminalTypes[osType];
-    forIn(terminalsForRunningOs, value => {
+    forIn(terminalsForRunningOs, (value) => {
       availableTerminals.push({
         label: value.label,
-        name: value.name
+        name: value.name,
       });
     });
     return availableTerminals;
@@ -130,40 +130,51 @@ class AddEditTerminalWindow extends Component {
     }
   };
 
-  handleChange = event => {
+  handleChange = (event) => {
     this.setState({ [event.target.name]: event.target.value });
   };
 
-  handleChangeCheckbox = name => event => {
+  handleChangeCheckbox = name => (event) => {
     this.setState({ [name]: event.target.checked });
   };
 
   handleWatcherExpansionChange = () => {
-    this.setState({ watchersMenuExpanded: !this.state.watchersMenuExpanded });
+    this.setState(prevState => ({ watchersMenuExpanded: !prevState.watchersMenuExpanded }));
   };
 
-  handleFormSubmit = event => {
+  handleFormSubmit = (event) => {
+    const {
+      terminalStartupCommands,
+      addStartUpDirToWatchers,
+      terminalWatchers,
+      terminalStartupDir,
+      terminalType,
+      terminalName,
+    } = this.state;
+    const {
+      addNewTerminal, editTerminal, editMode, uuid,
+    } = this.props;
     event.preventDefault();
-    const terminalCommandsStartup = this.state.terminalStartupCommands
+    const terminalCommandsStartup = terminalStartupCommands
       .split(/\r?\n/)
-      .filter(singleLine => singleLine !== "");
-    let terminalWatchers = [];
-    if (this.state.addStartUpDirToWatchers) {
-      terminalWatchers.push(this.state.terminalStartupDir);
+      .filter(singleLine => singleLine !== '');
+    let terminalWatchersInstances = [];
+    if (addStartUpDirToWatchers) {
+      terminalWatchersInstances.push(terminalStartupDir);
     }
-    terminalWatchers = [...terminalWatchers, ...this.state.terminalWatchers];
+    terminalWatchersInstances = [...terminalWatchersInstances, ...terminalWatchers];
     const terminalDataObject = {
-      terminalType: this.state.terminalType,
-      terminalName: this.state.terminalName,
-      terminalStartupDir: this.state.terminalStartupDir,
+      terminalType,
+      terminalName,
+      terminalStartupDir,
       terminalStartupCommands: terminalCommandsStartup,
-      terminalWatchers
+      terminalWatchers: terminalWatchersInstances,
     };
-    if (!this.props.editMode) {
-      this.props.addNewTerminal(terminalDataObject);
+    if (!editMode) {
+      addNewTerminal(terminalDataObject);
     } else {
-      terminalDataObject.uuid = this.props.uuid;
-      this.props.editTerminal(terminalDataObject);
+      terminalDataObject.uuid = uuid;
+      editTerminal(terminalDataObject);
     }
   };
 
@@ -177,21 +188,27 @@ class AddEditTerminalWindow extends Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const {
+      classes, editMode, opened, close,
+    } = this.props;
+    const {
+      terminalType, terminalName, terminalStartupDir,
+      terminalStartupCommands, watchersMenuExpanded, addStartUpDirToWatchers,
+    } = this.state;
     return (
       <Modal
         aria-labelledby={
-          !this.props.editMode
-            ? "Add new Terminal Instance"
-            : "Edit terminal instance"
+          !editMode
+            ? 'Add new Terminal Instance'
+            : 'Edit terminal instance'
         }
         aria-describedby={
-          !this.props.editMode
-            ? "Add new Terminal instance to your list of terminals and start hacking : )"
-            : "Edit your terminal instance and hack even more : )"
+          !editMode
+            ? 'Add new Terminal instance to your list of terminals and start hacking : )'
+            : 'Edit your terminal instance and hack even more : )'
         }
-        open={this.props.opened}
-        onClose={this.props.close}
+        open={opened}
+        onClose={close}
       >
         <div style={getModalStyle()} className={classes.paper}>
           <form
@@ -199,20 +216,20 @@ class AddEditTerminalWindow extends Component {
             autoComplete="off"
             onSubmit={this.handleFormSubmit}
           >
-            {!this.props.editMode && (
-              <Typography type="title" align="center" id="modal-title">
+            {!editMode && (
+              <Typography variant="title" align="center" id="modal-title">
                 Add new Terminal
               </Typography>
             )}
-            {this.props.editMode && (
-              <Typography type="title" align="center" id="modal-title">
+            {editMode && (
+              <Typography variant="title" align="center" id="modal-title">
                 Edit Terminal
               </Typography>
             )}
             <FormControl className={classes.formControl} required>
               <InputLabel htmlFor="terminal-type">Type</InputLabel>
               <Select
-                value={this.state.terminalType}
+                value={terminalType}
                 onChange={this.handleChange}
                 input={<Input name="terminalType" id="terminal-type" />}
               >
@@ -228,7 +245,7 @@ class AddEditTerminalWindow extends Component {
                 name="terminalName"
                 id="terminal-name"
                 onChange={this.handleChange}
-                value={this.state.terminalName}
+                value={terminalName}
               />
               <FormHelperText>Enter terminal custom name</FormHelperText>
             </FormControl>
@@ -239,8 +256,8 @@ class AddEditTerminalWindow extends Component {
               <Input
                 name="terminalStartupDir"
                 id="terminal-directory"
-                value={this.state.terminalStartupDir}
-                endAdornment={
+                value={terminalStartupDir}
+                endAdornment={(
                   <InputAdornment position="end">
                     <Tooltip id="tooltip-add-new" title="Select directory">
                       <IconButton
@@ -251,7 +268,7 @@ class AddEditTerminalWindow extends Component {
                       </IconButton>
                     </Tooltip>
                   </InputAdornment>
-                }
+                )}
               />
               <FormHelperText>Terminal startup path</FormHelperText>
             </FormControl>
@@ -263,13 +280,13 @@ class AddEditTerminalWindow extends Component {
                 rowsMax="5"
                 margin="normal"
                 name="terminalStartupCommands"
-                value={this.state.terminalStartupCommands}
+                value={terminalStartupCommands}
                 onChange={this.handleChange}
               />
             </FormControl>
             <FormControl className={classes.formControl}>
               <ExpansionPanel
-                expanded={this.state.watchersMenuExpanded}
+                expanded={watchersMenuExpanded}
                 onChange={this.handleWatcherExpansionChange}
               >
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -277,21 +294,21 @@ class AddEditTerminalWindow extends Component {
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                   <FormControlLabel
-                    control={
+                    control={(
                       <Checkbox
-                        checked={this.state.addStartUpDirToWatchers}
+                        checked={addStartUpDirToWatchers}
                         onChange={this.handleChangeCheckbox(
-                          "addStartUpDirToWatchers"
+                          'addStartUpDirToWatchers',
                         )}
                         value="addStartUpDirToWatchers"
                       />
-                    }
+                    )}
                     label="Automatically include terminal startup dir"
                   />
                 </ExpansionPanelDetails>
               </ExpansionPanel>
             </FormControl>
-            {!this.props.editMode && (
+            {!editMode && (
               <Button
                 className={classes.button}
                 raised
@@ -302,7 +319,7 @@ class AddEditTerminalWindow extends Component {
                 Add
               </Button>
             )}
-            {this.props.editMode && (
+            {editMode && (
               <Button
                 className={classes.button}
                 raised
@@ -336,8 +353,8 @@ AddEditTerminalWindow.propTypes = {
     paper: PropTypes.string,
     button: PropTypes.string,
     leftIcon: PropTypes.string,
-    formControl: PropTypes.string
-  }).isRequired
+    formControl: PropTypes.string,
+  }).isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -349,27 +366,24 @@ const mapStateToProps = state => ({
   terminalStartupDir: state.TerminalAddEditWindowReducer.terminalStartupDir,
   terminalStartupCommands:
     state.TerminalAddEditWindowReducer.terminalStartupCommands,
-  terminalWatchers: state.TerminalAddEditWindowReducer.terminalWatchers
+  terminalWatchers: state.TerminalAddEditWindowReducer.terminalWatchers,
 });
 
 const mapDispatchToProps = dispatch => ({
-  close: () =>
-    dispatch(TerminalAddEditWindowActions.closeAddEditTerminalWindow()),
-  addNewTerminal: terminalData =>
-    dispatch(
-      batchActions([
-        TerminalActions.addNewTerminalInstance(terminalData),
-        TerminalAddEditWindowActions.closeAddEditTerminalWindow()
-      ])
-    ),
-  editTerminal: terminalData =>
-    dispatch(
-      batchActions([
-        TerminalActions.editTerminalInstance(terminalData),
-        TerminalActions.reloadTerminalInstance(terminalData.uuid),
-        TerminalAddEditWindowActions.closeAddEditTerminalWindow()
-      ])
-    )
+  close: () => dispatch(TerminalAddEditWindowActions.closeAddEditTerminalWindow()),
+  addNewTerminal: terminalData => dispatch(
+    batchActions([
+      TerminalActions.addNewTerminalInstance(terminalData),
+      TerminalAddEditWindowActions.closeAddEditTerminalWindow(),
+    ]),
+  ),
+  editTerminal: terminalData => dispatch(
+    batchActions([
+      TerminalActions.editTerminalInstance(terminalData),
+      TerminalActions.reloadTerminalInstance(terminalData.uuid),
+      TerminalAddEditWindowActions.closeAddEditTerminalWindow(),
+    ]),
+  ),
 });
 
 const styledComponent = withStyles(styles)(AddEditTerminalWindow);
