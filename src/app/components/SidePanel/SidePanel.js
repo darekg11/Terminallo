@@ -57,8 +57,10 @@ class SidePanel extends React.Component {
 
     const drawer = (
       <Drawer
-        type="permanent"
+        open
+        variant="permanent"
         classes={{
+          docked: classes.root,
           paper: classes.drawerPaper,
         }}
         anchor="left"
@@ -92,11 +94,7 @@ class SidePanel extends React.Component {
         </List>
       </Drawer>
     );
-    return (
-      <div className={classes.root}>
-        <div className={classes.appFrame}>{drawer}</div>
-      </div>
-    );
+    return drawer;
   }
 }
 

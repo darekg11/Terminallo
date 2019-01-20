@@ -35,7 +35,7 @@ const TerminalTabs = ({
         onChange={(event, value) => selectTerminal(value)}
         indicatorColor="primary"
         textColor="primary"
-        scrollable
+        variant="scrollable"
         scrollButtons="auto"
       >
         {terminals.map(singleTerminal => (
