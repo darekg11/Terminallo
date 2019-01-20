@@ -4,7 +4,8 @@ import './Terminal.css';
 
 class TerminalView extends Component {
   componentDidMount() {
-    const { xTermInstance } = this.props.terminal;
+    const { terminal } = this.props;
+    const { xTermInstance } = terminal;
     xTermInstance.open(this.terminalInstanceDiv);
     this.resizeTerminalView();
     window.addEventListener('resize', this.resizeTerminalView);
@@ -15,7 +16,8 @@ class TerminalView extends Component {
   }
 
   resizeTerminalView = () => {
-    const { xTermInstance, virtualTerminalInstance } = this.props.terminal;
+    const { terminal } = this.props;
+    const { xTermInstance, virtualTerminalInstance } = terminal;
     const resizedDimensions = xTermInstance.proposeGeometry();
     xTermInstance.fit();
     virtualTerminalInstance.resize(resizedDimensions.cols, resizedDimensions.rows);
