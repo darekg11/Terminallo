@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import { CircularProgress } from '@material-ui/core/CircularProgress';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 import SuccessIcon from '@material-ui/icons/SentimentVerySatisfied';
@@ -36,43 +36,48 @@ const styles = theme => ({
   },
 });
 
-const Spinner = props => (
-  <Modal
-    aria-labelledby="Spinner"
-    aria-describedby="Long running operation in progress"
-    open={props.show}
-    onClose={props.close}
-  >
-    <div style={getModalStyle()} className={props.classes.paper}>
+const Spinner = ({
+  show,
+  close,
+  classes,
+  loading,
+  loadingMessage,
+  showErrorMessage,
+  errorMessage,
+  showSuccessMessage,
+  successMessage,
+}) => (
+  <Modal aria-labelledby="Spinner" aria-describedby="Long running operation in progress" open={show} onClose={close}>
+    <div style={getModalStyle()} className={classes.paper}>
       <div className="Spinner">
-        {props.loading && (
+        {loading && (
           <div className="content">
             <CircularProgress size={50} />
-            <Typography type="title" align="center" id="modal-title">
-              {props.loadingMessage}
+            <Typography variant="h6" align="center" id="modal-title">
+              {loadingMessage}
             </Typography>
           </div>
         )}
-        {!props.loading && props.showErrorMessage && (
+        {!loading && showErrorMessage && (
           <div className="content">
             <ErrorIcon className="error-icon" />
-            <Typography type="title" align="center" id="modal-title">
-              {props.errorMessage}
+            <Typography variant="h6" align="center" id="modal-title">
+              {errorMessage}
             </Typography>
           </div>
         )}
-        {!props.loading && props.showSuccessMessage && (
+        {!loading && showSuccessMessage && (
           <div className="content">
             <SuccessIcon className="success-icon" />
             <Typography type="title" align="center" id="modal-title">
-              {props.successMessage}
+              {successMessage}
             </Typography>
           </div>
         )}
-        {!props.loading && (
+        {!loading && (
           <div className="content">
             <Divider className="divider" />
-            <Button className={props.classes.button} raised color="primary" onClick={props.close}>
+            <Button className={classes.button} raised color="primary" onClick={close}>
               OK
             </Button>
           </div>
