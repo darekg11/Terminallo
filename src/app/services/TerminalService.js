@@ -5,6 +5,9 @@ import * as fit from 'xterm/lib/addons/fit/fit';
 import TerminalTypes from '../enums/TerminalTypes';
 import * as WatcherService from './WatcherService';
 
+const commandLineEnding = os.platform() === 'win32' ? '\r\n' : '\n';
+const terminalCreationWaitIntervalMs = 200;
+
 const createNewTerminalInstance = (terminalData) => {
   const pty = require('node-pty');
 
@@ -15,6 +18,7 @@ const createNewTerminalInstance = (terminalData) => {
   const virtualTerminalInstance = pty.spawn(shellStartCommand, [], {
     name: 'xterm-color',
     cwd: terminalData.terminalStartupDir,
+    env: process.env,
   });
 
   Terminal.applyAddon(fit);
@@ -25,9 +29,11 @@ const createNewTerminalInstance = (terminalData) => {
   virtualTerminalInstance.on('data', (data) => {
     xTermInstance.write(data);
   });
-  terminalData.terminalStartupCommands.forEach((singleCommand) => {
-    virtualTerminalInstance.write(`${singleCommand}\r`);
-  });
+  setTimeout(() => {
+    terminalData.terminalStartupCommands.forEach((singleCommand) => {
+      virtualTerminalInstance.write(`${singleCommand}${commandLineEnding}`);
+    });
+  }, terminalCreationWaitIntervalMs);
   const terminalUuid = uuid.v4();
   WatcherService.addNewWatcher(terminalUuid, terminalData.terminalWatchers);
   return {
