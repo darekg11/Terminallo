@@ -15,7 +15,7 @@ let sinonSandbox = null;
 
 describe('actions', () => {
   beforeEach(() => {
-    sinonSandbox = sinon.sandbox.create();
+    sinonSandbox = sinon.createSandbox();
   });
   afterEach(() => {
     sinonSandbox.restore();

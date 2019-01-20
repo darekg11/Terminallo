@@ -8,7 +8,7 @@ let sinonSandbox = null;
 
 describe('Terminal service', () => {
   beforeEach(() => {
-    sinonSandbox = sinon.sandbox.create();
+    sinonSandbox = sinon.createSandbox();
   });
   afterEach(() => {
     sinonSandbox.restore();
@@ -84,11 +84,15 @@ describe('Terminal service', () => {
 
   describe('importTerminalsToObject method', () => {
     it('should throw error when jsonFile does not exist', () => {
-      expect(() => TerminalService.importTerminalsToObject()).to.throw('Selected file is not valid for terminals import');
+      expect(() => TerminalService.importTerminalsToObject()).to.throw(
+        'Selected file is not valid for terminals import',
+      );
     });
 
     it('should throw error when jsonFile is missing terminals property', () => {
-      expect(() => TerminalService.importTerminalsToObject({})).to.throw('Selected file is not valid for terminals import');
+      expect(() => TerminalService.importTerminalsToObject({})).to.throw(
+        'Selected file is not valid for terminals import',
+      );
     });
 
     it('should return empty array when terminals property is an empty array', () => {

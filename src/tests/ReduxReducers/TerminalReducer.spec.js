@@ -9,7 +9,7 @@ let sinonSandbox = null;
 
 describe('Terminal reducer', () => {
   beforeEach(() => {
-    sinonSandbox = sinon.sandbox.create();
+    sinonSandbox = sinon.createSandbox();
   });
   afterEach(() => {
     sinonSandbox.restore();

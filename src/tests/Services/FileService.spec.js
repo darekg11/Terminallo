@@ -9,7 +9,7 @@ chai.use(chaiAsPromised);
 
 describe('FileService', () => {
   beforeEach(() => {
-    sinonSandbox = sinon.sandbox.create();
+    sinonSandbox = sinon.createSandbox();
   });
   afterEach(() => {
     sinonSandbox.restore();
@@ -17,11 +17,15 @@ describe('FileService', () => {
 
   describe('saveJsonToFile method', () => {
     it('should throw error when filePath does not exist', () => {
-      expect(FileService.saveJsonToFile(null, {})).to.be.rejectedWith('Missing file path or passed json object is empty');
+      expect(FileService.saveJsonToFile(null, {})).to.be.rejectedWith(
+        'Missing file path or passed json object is empty',
+      );
     });
 
     it('should throw error when jsonObject does not exist', () => {
-      expect(FileService.saveJsonToFile('somePath')).to.be.rejectedWith('Missing file path or passed json object is empty');
+      expect(FileService.saveJsonToFile('somePath')).to.be.rejectedWith(
+        'Missing file path or passed json object is empty',
+      );
     });
 
     it('should throw error when filePath and jsonObject does not exist', () => {
