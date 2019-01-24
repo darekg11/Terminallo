@@ -12,10 +12,17 @@ Also, for fun.
 
 ### Limitations of Terminallo:
 
-For now it is only supports terminals for **Windows** (Pull requests are more than welcome) including:
+Currently Terminallo is tested under following operating systems and shells:
+
+#### Windows:
 
 1.  **Classic CMD**
 2.  **PowerShell**
+
+#### Linux (Ubuntu):
+
+1. **Bash**
+2. **ZSH**
 
 ### Features:
 
@@ -54,12 +61,3 @@ For now it is only supports terminals for **Windows** (Pull requests are more th
 
 **Have any idea, feature to add or bug to fix?  
 Go ahead and create Pull Requests, contribution is welcome**
-
-# Roadmap for version 1.1.0
-
-- [x] Bump `Electron` version to more recent version [Bumped to 1.8.4](https://github.com/darekg11/Terminallo/pull/29)
-- [ ] Bump code coverage to ~80%
-- [x] Get rid of nasty `82vh` [hack for terminal dynamic height](https://github.com/darekg11/Terminallo/blob/master/src/app/components/Terminal/Terminal.css#L127) [Done as part of this PR](https://github.com/darekg11/Terminallo/pull/27)
-- [x] Unify `Electron` modal dialog window mechanism in order to remove multiple code copy-pastas [Done as part of this PR](https://github.com/darekg11/Terminallo/pull/26)
-- [ ] Allow for simultaneously stream of console output to file and console window
-- [x] Automatic terminal reload after detection of changes in selected directories (`watch on multiple directories`) [For now only watch on terminal startup dir is supported](https://github.com/darekg11/Terminallo/pull/28)
