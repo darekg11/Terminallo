@@ -5,7 +5,7 @@ import TerminalAddEditWindowActions from '../actions/TerminalAddEditWindowAction
 import * as FileService from './FileService';
 
 const initializeDefaults = (reduxStore) => {
-  Mousetrap.bind(['command+p', 'ctrl+p'], () => {
+  Mousetrap.bind(['alt+p'], () => {
     const { selectedTerminal } = reduxStore.getState().TerminalsReducer;
     if (selectedTerminal !== '') {
       reduxStore.dispatch(TerminalActions.stopTerminalInstance(selectedTerminal));
@@ -13,7 +13,7 @@ const initializeDefaults = (reduxStore) => {
     return false;
   });
 
-  Mousetrap.bind(['command+r', 'ctrl+r'], () => {
+  Mousetrap.bind(['alt+r'], () => {
     const { selectedTerminal } = reduxStore.getState().TerminalsReducer;
     if (selectedTerminal !== '') {
       reduxStore.dispatch(TerminalActions.reloadTerminalInstance(selectedTerminal));
@@ -21,7 +21,7 @@ const initializeDefaults = (reduxStore) => {
     return false;
   });
 
-  Mousetrap.bind(['command+d', 'ctrl+d'], () => {
+  Mousetrap.bind(['alt+d'], () => {
     const { selectedTerminal } = reduxStore.getState().TerminalsReducer;
     if (selectedTerminal !== '') {
       reduxStore.dispatch(TerminalActions.deleteTerminalInstance(selectedTerminal));
@@ -29,7 +29,7 @@ const initializeDefaults = (reduxStore) => {
     return false;
   });
 
-  Mousetrap.bind(['command+right', 'ctrl+right'], () => {
+  Mousetrap.bind(['alt+right'], () => {
     const { selectedTerminal } = reduxStore.getState().TerminalsReducer;
     if (selectedTerminal !== '') {
       reduxStore.dispatch(TerminalActions.moveRightTerminalInstance(selectedTerminal));
@@ -37,7 +37,7 @@ const initializeDefaults = (reduxStore) => {
     return false;
   });
 
-  Mousetrap.bind(['command+left', 'ctrl+left'], () => {
+  Mousetrap.bind(['alt+left'], () => {
     const { selectedTerminal } = reduxStore.getState().TerminalsReducer;
     if (selectedTerminal !== '') {
       reduxStore.dispatch(TerminalActions.moveLeftTerminalInstance(selectedTerminal));
@@ -45,17 +45,17 @@ const initializeDefaults = (reduxStore) => {
     return false;
   });
 
-  Mousetrap.bind(['alt+right'], () => {
+  Mousetrap.bind(['shift+right'], () => {
     reduxStore.dispatch(TerminalActions.goToNextTerminalInstance());
     return false;
   });
 
-  Mousetrap.bind(['alt+left'], () => {
+  Mousetrap.bind(['shift+left'], () => {
     reduxStore.dispatch(TerminalActions.goToPreviousTerminalInstance());
     return false;
   });
 
-  Mousetrap.bind(['command+s', 'ctrl+s'], () => {
+  Mousetrap.bind(['alt+s'], () => {
     const exportFilePath = reduxStore.getState().ApplicationStateReducer.terminalsFilePath;
     if (exportFilePath !== '') {
       reduxStore.dispatch(ApplicationActions.exportTerminals(exportFilePath));
@@ -74,7 +74,7 @@ const initializeDefaults = (reduxStore) => {
     return false;
   });
 
-  Mousetrap.bind(['command+e', 'ctrl+e'], () => {
+  Mousetrap.bind(['alt+e'], () => {
     const { selectedTerminal, terminals } = reduxStore.getState().TerminalsReducer;
     if (selectedTerminal !== '') {
       const selectedTerminalInstnace = terminals.find(singleTerminal => singleTerminal.uuid === selectedTerminal);
