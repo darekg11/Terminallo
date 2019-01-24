@@ -53,46 +53,58 @@ const TerminalTabs = ({
       </div>
       {selectedTerminal !== '' && (
         <div className="panel">
-          <Tooltip id="tooltip-stop-terminal" title="Stop (CTRL + P)" placement="left">
-            <IconButton aria-label="Stop" onClick={() => stopTerminal(selectedTerminal)}>
-              <PauseIcon />
-            </IconButton>
+          <Tooltip id="tooltip-stop-terminal" title="Stop (ALT + p)" placement="left">
+            <div>
+              <IconButton aria-label="Stop" onClick={() => stopTerminal(selectedTerminal)}>
+                <PauseIcon />
+              </IconButton>
+            </div>
           </Tooltip>
-          <Tooltip id="tooltip-reload-terminal" title="Reload (CTRL + R)" placement="left">
-            <IconButton aria-label="Reload" onClick={() => reloadTerminal(selectedTerminal)}>
-              <ReloadIcon />
-            </IconButton>
+          <Tooltip id="tooltip-reload-terminal" title="Reload (ALT + p)" placement="left">
+            <div>
+              <IconButton aria-label="Reload" onClick={() => reloadTerminal(selectedTerminal)}>
+                <ReloadIcon />
+              </IconButton>
+            </div>
           </Tooltip>
-          <Tooltip id="tooltip-edit-terminal" title="Edit (CTRL + E)" placement="left">
-            <IconButton
-              aria-label="Edit"
-              onClick={() => editTerminal(terminals.find(singleTerminal => singleTerminal.uuid === selectedTerminal))}
-            >
-              <EditIcon />
-            </IconButton>
+          <Tooltip id="tooltip-edit-terminal" title="Edit (ALT + e)" placement="left">
+            <div>
+              <IconButton
+                aria-label="Edit"
+                onClick={() => editTerminal(terminals.find(singleTerminal => singleTerminal.uuid === selectedTerminal))}
+              >
+                <EditIcon />
+              </IconButton>
+            </div>
           </Tooltip>
-          <Tooltip id="tooltip-delete-terminal" title="Delete (CTRL + D)" placement="left">
-            <IconButton aria-label="Delete" onClick={() => deleteTerminal(selectedTerminal)}>
-              <DeleteIcon />
-            </IconButton>
+          <Tooltip id="tooltip-delete-terminal" title="Delete (ALT + d)" placement="left">
+            <div>
+              <IconButton aria-label="Delete" onClick={() => deleteTerminal(selectedTerminal)}>
+                <DeleteIcon />
+              </IconButton>
+            </div>
           </Tooltip>
-          <Tooltip id="tooltip-move-right-terminal" title="Move right (CTRL + ->)" placement="left">
-            <IconButton
-              aria-label="Move right"
-              onClick={() => moveTerminalRight(selectedTerminal)}
-              disabled={terminals[terminals.length - 1].uuid === selectedTerminal}
-            >
-              <RightArrowIcon />
-            </IconButton>
+          <Tooltip id="tooltip-move-right-terminal" title="Move right (ALT + ->)" placement="left">
+            <div>
+              <IconButton
+                aria-label="Move right"
+                onClick={() => moveTerminalRight(selectedTerminal)}
+                disabled={terminals[terminals.length - 1].uuid === selectedTerminal}
+              >
+                <RightArrowIcon />
+              </IconButton>
+            </div>
           </Tooltip>
-          <Tooltip id="tooltip-move-left-terminal" title="Move left (CTRL + <-)" placement="left">
-            <IconButton
-              aria-label="Move left"
-              onClick={() => moveTerminalLeft(selectedTerminal)}
-              disabled={terminals[0].uuid === selectedTerminal}
-            >
-              <LeftArrowIcon />
-            </IconButton>
+          <Tooltip id="tooltip-move-left-terminal" title="Move left (ALT + <-)" placement="left">
+            <div>
+              <IconButton
+                aria-label="Move left"
+                onClick={() => moveTerminalLeft(selectedTerminal)}
+                disabled={terminals[0].uuid === selectedTerminal}
+              >
+                <LeftArrowIcon />
+              </IconButton>
+            </div>
           </Tooltip>
         </div>
       )}
