@@ -28,15 +28,15 @@ For now it is only supports terminals for **Windows** (Pull requests are more th
 
 ### Keyboard shortcuts:
 
-`Command / CTRL + P` - stops currently executing process in currently selected terminal (`sends SIGTERM signal`)  
-`Command / CTRL + R` - reloads currently selected terminal (killing terminal instance and recreating it, including executing predefined commands)  
-`Command / CTRL + D` - removes currently selected terminal instance  
-`Command / CTRL + E` - brings up edit form for currently selected terminal instance  
-`Command / CTRL + ->` - swap places currently selected terminal instance with the next one (changing order)  
-`Command / CTRL + <-` - swap places currently selected terminal instance with the previous one (changing order)  
-`ALT + ->` - go to next terminal instance in order  
-`ALT + <-` - go to previous terminal instance in order  
-`Command / CTRL + S` - saves terminal instances
+`ALT + p` - stops currently executing process in currently selected terminal (`sends SIGTERM signal`)  
+`ALT + r` - reloads currently selected terminal (killing terminal instance and recreating it, including executing predefined commands)  
+`ALT + d` - removes currently selected terminal instance  
+`ALT + e` - brings up edit form for currently selected terminal instance  
+`ALT + ->` - swap places currently selected terminal instance with the next one (changing order)  
+`ALT + <-` - swap places currently selected terminal instance with the previous one (changing order)  
+`SHIFT + ->` - go to next terminal instance in order  
+`SHIFT + <-` - go to previous terminal instance in order  
+`ALT + s` - saves terminal instances
 
 # Development
 
