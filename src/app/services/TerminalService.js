@@ -131,7 +131,7 @@ const stopTerminalInstance = (terminalId) => {
     return;
   }
 
-  terminal.virtualTerminalInstance.write(`\x03${commandLineEnding}`);
+  terminal.virtualTerminalInstance.write('\x03');
 };
 
 const reloadTerminalInstance = (terminalId, terminalInstanceData) => {

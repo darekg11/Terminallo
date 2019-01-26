@@ -8,7 +8,7 @@ const initializeDefaults = (reduxStore) => {
   Mousetrap.bind(['alt+p'], () => {
     const { selectedTerminal } = reduxStore.getState().TerminalsReducer;
     if (selectedTerminal !== '') {
-      reduxStore.dispatch(TerminalActions.stopTerminalInstance(selectedTerminal));
+      TerminalActions.stopTerminalInstance(selectedTerminal);
     }
     return false;
   });
