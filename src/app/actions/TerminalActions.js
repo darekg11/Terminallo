@@ -53,14 +53,14 @@ const deleteTerminalInstance = terminalUUID => ({
   terminalUUID,
 });
 
-const moveRightTerminalInstance = terminalUUID => ({
+const moveRightTerminalInstance = terminalId => ({
   type: TerminalActionTypes.MOVE_RIGHT_TERMINAL_INSTANCE,
-  terminalUUID,
+  terminalId,
 });
 
-const moveLeftTerminalInstance = terminalUUID => ({
+const moveLeftTerminalInstance = terminalId => ({
   type: TerminalActionTypes.MOVE_LEFT_TERMINAL_INSTANCE,
-  terminalUUID,
+  terminalId,
 });
 
 const stopTerminalInstance = terminalUUID => ({

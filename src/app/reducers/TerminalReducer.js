@@ -114,10 +114,10 @@ export default function terminalReducer(state = initialState, action) {
       };
     }
     case TerminalActionTypes.MOVE_RIGHT_TERMINAL_INSTANCE: {
-      const { terminalUUID } = action;
+      const { terminalId } = action;
       const copiedTerminalsArray = [...state.terminals];
       const terminalInstanceToMoveIndex = copiedTerminalsArray.findIndex(
-        singleTermianl => singleTermianl.uuid === terminalUUID,
+        singleTermianl => singleTermianl.id === terminalId,
       );
       if (terminalInstanceToMoveIndex === -1 || terminalInstanceToMoveIndex === copiedTerminalsArray.length - 1) {
         return state;
@@ -133,10 +133,10 @@ export default function terminalReducer(state = initialState, action) {
       };
     }
     case TerminalActionTypes.MOVE_LEFT_TERMINAL_INSTANCE: {
-      const { terminalUUID } = action;
+      const { terminalId } = action;
       const copiedTerminalsArray = [...state.terminals];
       const terminalInstanceToMoveIndex = copiedTerminalsArray.findIndex(
-        singleTermianl => singleTermianl.uuid === terminalUUID,
+        singleTermianl => singleTermianl.id === terminalId,
       );
       if (terminalInstanceToMoveIndex === -1 || terminalInstanceToMoveIndex === 0) {
         return state;
@@ -165,7 +165,7 @@ export default function terminalReducer(state = initialState, action) {
     case TerminalActionTypes.GO_TO_NEXT_TERMINAL_INSTANCE: {
       const currentlySelectedTerminalInstance = state.selectedTerminal;
       const currentlySelectedTerminalInstanceIndex = state.terminals.findIndex(
-        singleTerminal => singleTerminal.uuid === currentlySelectedTerminalInstance,
+        singleTerminal => singleTerminal.id === currentlySelectedTerminalInstance,
       );
       if (
         currentlySelectedTerminalInstanceIndex === -1
@@ -177,13 +177,13 @@ export default function terminalReducer(state = initialState, action) {
       const terminalInstanceToSelect = state.terminals[nextInOrderTerminalInstanceIndex];
       return {
         ...state,
-        selectedTerminal: terminalInstanceToSelect.uuid,
+        selectedTerminal: terminalInstanceToSelect.id,
       };
     }
     case TerminalActionTypes.GO_TO_PREVIOUS_TERMINAL_INSTANCE: {
       const currentlySelectedTerminalInstance = state.selectedTerminal;
       const currentlySelectedTerminalInstanceIndex = state.terminals.findIndex(
-        singleTerminal => singleTerminal.uuid === currentlySelectedTerminalInstance,
+        singleTerminal => singleTerminal.id === currentlySelectedTerminalInstance,
       );
       if (currentlySelectedTerminalInstanceIndex === -1 || currentlySelectedTerminalInstanceIndex === 0) {
         return state;
@@ -192,7 +192,7 @@ export default function terminalReducer(state = initialState, action) {
       const terminalInstanceToSelect = state.terminals[previousInOrderTerminalInstanceIndex];
       return {
         ...state,
-        selectedTerminal: terminalInstanceToSelect.uuid,
+        selectedTerminal: terminalInstanceToSelect.id,
       };
     }
     default:

@@ -77,7 +77,7 @@ const initializeDefaults = (reduxStore) => {
   Mousetrap.bind(['alt+e'], () => {
     const { selectedTerminal, terminals } = reduxStore.getState().TerminalsReducer;
     if (selectedTerminal !== '') {
-      const selectedTerminalInstnace = terminals.find(singleTerminal => singleTerminal.uuid === selectedTerminal);
+      const selectedTerminalInstnace = terminals.find(singleTerminal => singleTerminal.id === selectedTerminal);
       reduxStore.dispatch(TerminalAddEditWindowActions.showEditExistingTerminalWindow(selectedTerminalInstnace));
     }
     return false;
