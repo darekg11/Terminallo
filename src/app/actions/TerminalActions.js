@@ -30,9 +30,9 @@ const editTerminalInstance = terminalEditInstanceInfo => (dispatch) => {
   );
 };
 
-const selectTerminalInstance = terminalUuid => ({
+const selectTerminalInstance = terminalId => ({
   type: TerminalActionTypes.SELECT_TERMINAL_INSTANCE,
-  terminalUUID: terminalUuid,
+  terminalId,
 });
 
 const importTerminalInstances = terminalInstances => ({
