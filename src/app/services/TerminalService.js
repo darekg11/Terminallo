@@ -118,6 +118,13 @@ const killTerminalInstance = (terminalId) => {
   terminals = terminals.filter(singleTerminal => singleTerminal.id !== terminalId);
 };
 
+const killAllTerminalInstances = () => {
+  while (terminals.length > 0) {
+    const terminalToKill = terminals[0];
+    killTerminalInstance(terminalToKill.id);
+  }
+};
+
 const reloadTerminalInstance = (terminalId, terminalInstanceData) => {
   killTerminalInstance(terminalId);
   return createNewTerminalInstance(terminalInstanceData);
@@ -139,7 +146,6 @@ const importTerminalsToObject = (jsonFile) => {
   }
   return {
     terminals: jsonFile.terminals.map(singleTerminal => ({
-      uuid: uuid.v4(),
       terminalWatchers: singleTerminal.terminalWatchers || [],
       terminalType: singleTerminal.terminalType,
       terminalName: singleTerminal.name || 'Terminal',
@@ -154,6 +160,7 @@ export {
   exportTermninalsToObject,
   hookTerminalToRenderer,
   importTerminalsToObject,
+  killAllTerminalInstances,
   killTerminalInstance,
   reloadTerminalInstance,
   resizeTerminal,

@@ -43,10 +43,17 @@ const selectTerminalInstance = terminalId => ({
   terminalId,
 });
 
-const importTerminalInstances = terminalInstances => ({
-  type: TerminalActionTypes.IMPORT_TERMINALS,
-  terminals: terminalInstances,
-});
+const importTerminalInstances = terminalInstances => (dispatch) => {
+  TerminalService.killAllTerminalInstances();
+  const mappedCreatedTerminalInstances = terminalInstances.map((singleInstance) => {
+    const createdTerminalId = TerminalService.createNewTerminalInstance(singleInstance);
+    return {
+      ...singleInstance,
+      id: createdTerminalId,
+    };
+  });
+  dispatch({ type: TerminalActionTypes.IMPORT_TERMINALS, terminals: mappedCreatedTerminalInstances });
+};
 
 const deleteTerminalInstance = terminalId => (dispatch) => {
   TerminalService.killTerminalInstance(terminalId);

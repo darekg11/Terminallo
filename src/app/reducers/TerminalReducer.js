@@ -1,6 +1,5 @@
 import { assign, isUndefined } from 'lodash';
 import TerminalActionTypes from '../actions/TerminalActionTypes';
-import * as TerminalService from '../services/TerminalService';
 
 const initialState = {
   terminals: [],
@@ -38,25 +37,10 @@ export default function terminalReducer(state = initialState, action) {
     }
     case TerminalActionTypes.IMPORT_TERMINALS: {
       const terminalInstances = action.terminals;
-      state.terminals.forEach((singleTerminalInstance) => {
-        TerminalService.killTerminalInstance(singleTerminalInstance);
-        singleTerminalInstance.xTermInstance = null;
-        singleTerminalInstance.virtualTerminalInstance = null;
-        singleTerminalInstance.watcherInstance = null;
-      });
-      const createdTerminalInstances = terminalInstances.map((singleInstance) => {
-        const createdTerminalInstance = TerminalService.createNewTerminalInstance(singleInstance);
-        return {
-          ...singleInstance,
-          uuid: createdTerminalInstance.uuid,
-          xTermInstance: createdTerminalInstance.xTermInstance,
-          virtualTerminalInstance: createdTerminalInstance.virtualTerminalInstance,
-        };
-      });
       return {
         ...state,
-        terminals: createdTerminalInstances,
-        selectedTerminal: createdTerminalInstances.length > 0 ? createdTerminalInstances[0].uuid : '',
+        terminals: terminalInstances,
+        selectedTerminal: terminalInstances.length > 0 ? terminalInstances[0].id : '',
       };
     }
     case TerminalActionTypes.RELOAD_TERMINAL_INSTANCE: {

@@ -16,9 +16,9 @@ const importTerminals = path => async (dispatch) => {
     try {
       const loadedTerminalFile = await FileService.loadJsonFromFile(path);
       const mappedTerminalInstances = TerminalService.importTerminalsToObject(loadedTerminalFile);
+      dispatch(TerminalActions.importTerminalInstances(mappedTerminalInstances.terminals));
       dispatch(
         batchActions([
-          TerminalActions.importTerminalInstances(mappedTerminalInstances.terminals),
           SpinnerActions.showSpinnerSuccess('Terminals imported successfully.'),
           setTerminalsSourcePath(path),
         ]),
