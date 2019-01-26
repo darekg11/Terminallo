@@ -60,23 +60,24 @@ export default function terminalReducer(state = initialState, action) {
       };
     }
     case TerminalActionTypes.RELOAD_TERMINAL_INSTANCE: {
-      const { id } = action;
+      const { previousId, newId } = action;
       const copiedTerminalsArray = [...state.terminals];
-      const terminalInstanceToReloadIndex = copiedTerminalsArray.findIndex(singleTermianl => singleTermianl.id === id);
+      const terminalInstanceToReloadIndex = copiedTerminalsArray.findIndex(
+        singleTermianl => singleTermianl.id === previousId,
+      );
       if (terminalInstanceToReloadIndex === -1) {
         return state;
       }
       const terminalInstanceToReload = copiedTerminalsArray[terminalInstanceToReloadIndex];
       const mergedReloadedInstance = {
         ...terminalInstanceToReload,
-        id: terminalInstanceRecreated.id,
+        id: newId,
       };
       copiedTerminalsArray[terminalInstanceToReloadIndex] = mergedReloadedInstance;
       return {
         ...state,
         terminals: copiedTerminalsArray,
-        selectedTerminal:
-          terminalUuidBeforeReloading === state.selectedTerminal ? mergedReloadedInstance.id : state.selectedTerminal,
+        selectedTerminal: previousId === state.selectedTerminal ? mergedReloadedInstance.id : state.selectedTerminal,
       };
     }
     case TerminalActionTypes.DELETE_TERMINAL_INSTANCE: {

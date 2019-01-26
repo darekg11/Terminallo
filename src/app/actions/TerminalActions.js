@@ -30,6 +30,14 @@ const editTerminalInstance = terminalEditInstanceInfo => (dispatch) => {
   );
 };
 
+const reloadTerminalInstance = terminalId => (dispatch, getState) => {
+  const previousId = terminalId;
+  const currentTerminals = getState().TerminalsReducer.terminals;
+  const configurationOfTerminal = currentTerminals.find(singleTerminal => singleTerminal.id === previousId);
+  const reloadedTerminalInstanceId = TerminalService.reloadTerminalInstance(previousId, configurationOfTerminal);
+  dispatch({ type: TerminalActionTypes.RELOAD_TERMINAL_INSTANCE, previousId, newId: reloadedTerminalInstanceId });
+};
+
 const selectTerminalInstance = terminalId => ({
   type: TerminalActionTypes.SELECT_TERMINAL_INSTANCE,
   terminalId,
@@ -38,11 +46,6 @@ const selectTerminalInstance = terminalId => ({
 const importTerminalInstances = terminalInstances => ({
   type: TerminalActionTypes.IMPORT_TERMINALS,
   terminals: terminalInstances,
-});
-
-const reloadTerminalInstance = terminalUUID => ({
-  type: TerminalActionTypes.RELOAD_TERMINAL_INSTANCE,
-  terminalUUID,
 });
 
 const deleteTerminalInstance = terminalUUID => ({
