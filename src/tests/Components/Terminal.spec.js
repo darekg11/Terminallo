@@ -10,17 +10,7 @@ Enzyme.configure({ adapter: new Adapter() });
 describe('Terminal component tests', () => {
   it('should render', () => {
     const terminalInstance = {
-      xTermInstance: {
-        open: () => {},
-        fit: () => {},
-        proposeGeometry: () => ({
-          cols: 20,
-          rows: 20,
-        }),
-      },
-      virtualTerminalInstance: {
-        resize: () => {},
-      },
+      id: '123456',
     };
     const wrapper = shallow(<Terminal terminal={terminalInstance} />);
     expect(wrapper).to.have.length(1);

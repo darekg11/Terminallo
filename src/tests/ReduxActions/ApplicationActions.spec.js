@@ -142,11 +142,9 @@ describe('actions', () => {
       terminals: [
         {
           name: 'test1',
-          uuid: '1234',
         },
         {
           name: 'test2',
-          uuid: '45678',
         },
       ],
     };
@@ -166,11 +164,9 @@ describe('actions', () => {
             terminals: [
               {
                 name: 'test1',
-                uuid: '1234',
               },
               {
                 name: 'test2',
-                uuid: '45678',
               },
             ],
           },

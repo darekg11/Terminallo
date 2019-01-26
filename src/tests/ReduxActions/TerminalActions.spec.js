@@ -21,12 +21,13 @@ describe('actions', () => {
       terminalStartupCommands: ['command1', 'command2'],
     };
 
-    expect(TerminalActions.addNewTerminalInstance(terminalData)).to.deep.equal(expectedAction);
+    expect(TerminalActions.addNewTerminalAction(terminalData)).to.deep.equal(expectedAction);
   });
 
   it('should create an action to edit terminal instance', () => {
     const expectedAction = {
       type: TerminalActionTypes.EDIT_TERMINAL_INSTANCE,
+      previousId: 'term-whatever-id',
       terminal: {
         terminalType: 'TERMINAL TEST TYPE',
         terminalName: 'TEST TERMINAL',
@@ -42,18 +43,18 @@ describe('actions', () => {
       terminalStartupCommands: ['command1', 'command2'],
     };
 
-    expect(TerminalActions.editTerminalInstance(terminalData)).to.deep.equal(expectedAction);
+    expect(TerminalActions.editTerminalAction('term-whatever-id', terminalData)).to.deep.equal(expectedAction);
   });
 
   it('should create an action to select terminal instance', () => {
     const expectedAction = {
       type: TerminalActionTypes.SELECT_TERMINAL_INSTANCE,
-      terminalUUID: '123456789',
+      terminalId: '123456789',
     };
     expect(TerminalActions.selectTerminalInstance('123456789')).to.deep.equal(expectedAction);
   });
 
-  it('should create an action to export terminal instances', () => {
+  it('should create an action to import terminal instances', () => {
     const expectedAction = {
       type: TerminalActionTypes.IMPORT_TERMINALS,
       terminals: [
@@ -73,29 +74,30 @@ describe('actions', () => {
         terminalName: 'test2',
       },
     ];
-    expect(TerminalActions.importTerminalInstances(testTerminalInstances)).to.deep.equal(expectedAction);
+    expect(TerminalActions.importTerminalsAction(testTerminalInstances)).to.deep.equal(expectedAction);
   });
 
   it('should create an action to reload terminal instance', () => {
     const expectedAction = {
       type: TerminalActionTypes.RELOAD_TERMINAL_INSTANCE,
-      terminalUUID: '123456789',
+      previousId: '567',
+      newId: '123456789',
     };
-    expect(TerminalActions.reloadTerminalInstance('123456789')).to.deep.equal(expectedAction);
+    expect(TerminalActions.reloadTerminalAction('567', '123456789')).to.deep.equal(expectedAction);
   });
 
   it('should create an action to delete terminal instance', () => {
     const expectedAction = {
       type: TerminalActionTypes.DELETE_TERMINAL_INSTANCE,
-      terminalUUID: '123456789',
+      terminalId: '123456789',
     };
-    expect(TerminalActions.deleteTerminalInstance('123456789')).to.deep.equal(expectedAction);
+    expect(TerminalActions.deleteTerminalAction('123456789')).to.deep.equal(expectedAction);
   });
 
   it('should create an action to move terminal instance to right', () => {
     const expectedAction = {
       type: TerminalActionTypes.MOVE_RIGHT_TERMINAL_INSTANCE,
-      terminalUUID: '123456789',
+      terminalId: '123456789',
     };
     expect(TerminalActions.moveRightTerminalInstance('123456789')).to.deep.equal(expectedAction);
   });
@@ -103,17 +105,9 @@ describe('actions', () => {
   it('should create an action to move terminal instance to left', () => {
     const expectedAction = {
       type: TerminalActionTypes.MOVE_LEFT_TERMINAL_INSTANCE,
-      terminalUUID: '123456789',
+      terminalId: '123456789',
     };
     expect(TerminalActions.moveLeftTerminalInstance('123456789')).to.deep.equal(expectedAction);
-  });
-
-  it('should create an action to stop terminal instance', () => {
-    const expectedAction = {
-      type: TerminalActionTypes.STOP_TERMINAL_INSTANCE,
-      terminalUUID: '123456789',
-    };
-    expect(TerminalActions.stopTerminalInstance('123456789')).to.deep.equal(expectedAction);
   });
 
   it('should create an action to go to next terminal instance', () => {

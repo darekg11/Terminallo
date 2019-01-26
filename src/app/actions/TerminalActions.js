@@ -3,6 +3,11 @@ import * as TerminalService from '../services/TerminalService';
 import TerminalActionTypes from './TerminalActionTypes';
 import TerminalAddEditWindowActions from './TerminalAddEditWindowActions';
 
+const addNewTerminalAction = terminalConfiguration => ({
+  type: TerminalActionTypes.ADD_TERMINAL_INSTANCE,
+  terminal: terminalConfiguration,
+});
+
 const addNewTerminalInstance = terminalNewInstanceInfo => (dispatch) => {
   const createdTerminalInstanceId = TerminalService.createNewTerminalInstance(terminalNewInstanceInfo);
   const terminalConfiguration = {
@@ -11,11 +16,17 @@ const addNewTerminalInstance = terminalNewInstanceInfo => (dispatch) => {
   };
   dispatch(
     batchActions([
-      { type: TerminalActionTypes.ADD_TERMINAL_INSTANCE, terminal: terminalConfiguration },
+      addNewTerminalAction(terminalConfiguration),
       TerminalAddEditWindowActions.closeAddEditTerminalWindow(),
     ]),
   );
 };
+
+const editTerminalAction = (previousId, terminal) => ({
+  type: TerminalActionTypes.EDIT_TERMINAL_INSTANCE,
+  previousId,
+  terminal,
+});
 
 const editTerminalInstance = terminalEditInstanceInfo => (dispatch) => {
   const previousId = terminalEditInstanceInfo.id;
@@ -24,23 +35,34 @@ const editTerminalInstance = terminalEditInstanceInfo => (dispatch) => {
   updatedTerminalData.id = reloadedTerminalInstanceId;
   dispatch(
     batchActions([
-      { type: TerminalActionTypes.EDIT_TERMINAL_INSTANCE, previousId, terminal: updatedTerminalData },
+      editTerminalAction(previousId, updatedTerminalData),
       TerminalAddEditWindowActions.closeAddEditTerminalWindow(),
     ]),
   );
 };
+
+const reloadTerminalAction = (previousId, newId) => ({
+  type: TerminalActionTypes.RELOAD_TERMINAL_INSTANCE,
+  previousId,
+  newId,
+});
 
 const reloadTerminalInstance = terminalId => (dispatch, getState) => {
   const previousId = terminalId;
   const currentTerminals = getState().TerminalsReducer.terminals;
   const configurationOfTerminal = currentTerminals.find(singleTerminal => singleTerminal.id === previousId);
   const reloadedTerminalInstanceId = TerminalService.reloadTerminalInstance(previousId, configurationOfTerminal);
-  dispatch({ type: TerminalActionTypes.RELOAD_TERMINAL_INSTANCE, previousId, newId: reloadedTerminalInstanceId });
+  dispatch(reloadTerminalAction(previousId, reloadedTerminalInstanceId));
 };
 
 const selectTerminalInstance = terminalId => ({
   type: TerminalActionTypes.SELECT_TERMINAL_INSTANCE,
   terminalId,
+});
+
+const importTerminalsAction = terminals => ({
+  type: TerminalActionTypes.IMPORT_TERMINALS,
+  terminals,
 });
 
 const importTerminalInstances = terminalInstances => (dispatch) => {
@@ -52,12 +74,17 @@ const importTerminalInstances = terminalInstances => (dispatch) => {
       id: createdTerminalId,
     };
   });
-  dispatch({ type: TerminalActionTypes.IMPORT_TERMINALS, terminals: mappedCreatedTerminalInstances });
+  dispatch(importTerminalsAction(mappedCreatedTerminalInstances));
 };
+
+const deleteTerminalAction = terminalId => ({
+  type: TerminalActionTypes.DELETE_TERMINAL_INSTANCE,
+  terminalId,
+});
 
 const deleteTerminalInstance = terminalId => (dispatch) => {
   TerminalService.killTerminalInstance(terminalId);
-  dispatch({ type: TerminalActionTypes.DELETE_TERMINAL_INSTANCE, terminalId });
+  dispatch(deleteTerminalAction(terminalId));
 };
 
 const moveRightTerminalInstance = terminalId => ({
@@ -83,11 +110,16 @@ const goToPreviousTerminalInstance = () => ({
 });
 
 export default {
+  addNewTerminalAction,
   addNewTerminalInstance,
+  editTerminalAction,
   editTerminalInstance,
   selectTerminalInstance,
+  importTerminalsAction,
   importTerminalInstances,
+  reloadTerminalAction,
   reloadTerminalInstance,
+  deleteTerminalAction,
   deleteTerminalInstance,
   moveRightTerminalInstance,
   moveLeftTerminalInstance,
