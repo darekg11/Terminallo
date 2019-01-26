@@ -48,10 +48,10 @@ const importTerminalInstances = terminalInstances => ({
   terminals: terminalInstances,
 });
 
-const deleteTerminalInstance = terminalUUID => ({
-  type: TerminalActionTypes.DELETE_TERMINAL_INSTANCE,
-  terminalUUID,
-});
+const deleteTerminalInstance = terminalId => (dispatch) => {
+  TerminalService.killTerminalInstance(terminalId);
+  dispatch({ type: TerminalActionTypes.DELETE_TERMINAL_INSTANCE, terminalId });
+};
 
 const moveRightTerminalInstance = terminalId => ({
   type: TerminalActionTypes.MOVE_RIGHT_TERMINAL_INSTANCE,

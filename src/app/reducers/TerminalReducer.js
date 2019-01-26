@@ -81,10 +81,10 @@ export default function terminalReducer(state = initialState, action) {
       };
     }
     case TerminalActionTypes.DELETE_TERMINAL_INSTANCE: {
-      const { terminalUUID } = action;
+      const { terminalId } = action;
       const copiedTerminalsArray = [...state.terminals];
       const terminalInstanceToDeleteIndex = copiedTerminalsArray.findIndex(
-        singleTermianl => singleTermianl.uuid === terminalUUID,
+        singleTermianl => singleTermianl.id === terminalId,
       );
       if (terminalInstanceToDeleteIndex === -1) {
         return state;
@@ -94,18 +94,13 @@ export default function terminalReducer(state = initialState, action) {
         uuidOfNextTerminalToSelectAfterDelete = '';
       } else if (terminalInstanceToDeleteIndex === copiedTerminalsArray.length - 1) {
         const previousToLastTerminal = copiedTerminalsArray[copiedTerminalsArray.length - 2];
-        uuidOfNextTerminalToSelectAfterDelete = previousToLastTerminal.uuid;
+        uuidOfNextTerminalToSelectAfterDelete = previousToLastTerminal.id;
       } else {
         const nextTerminal = copiedTerminalsArray[terminalInstanceToDeleteIndex + 1];
-        uuidOfNextTerminalToSelectAfterDelete = nextTerminal.uuid;
+        uuidOfNextTerminalToSelectAfterDelete = nextTerminal.id;
       }
-      const terminalInstanceToDelete = copiedTerminalsArray[terminalInstanceToDeleteIndex];
-      TerminalService.killTerminalInstance(terminalInstanceToDelete);
-      terminalInstanceToDelete.xTermInstance = null;
-      terminalInstanceToDelete.virtualTerminalInstance = null;
-      terminalInstanceToDelete.watcherInstance = null;
       const terminalInstancesAfterDelete = copiedTerminalsArray.filter(
-        singleTermianl => singleTermianl.uuid !== terminalUUID,
+        singleTermianl => singleTermianl.id !== terminalId,
       );
       return {
         ...state,

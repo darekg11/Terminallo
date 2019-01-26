@@ -10,7 +10,7 @@ import * as WatcherService from './WatcherService';
 const commandLineEnding = os.platform() === 'win32' ? '\r\n' : '\n';
 const terminalCreationWaitIntervalMs = 200;
 
-const terminals = [];
+let terminals = [];
 
 const KEY_COMBINATIONS_THAT_SHOULD_BUBBLE_UP_FROM_TERMINAL = [
   'alt+p',
@@ -115,6 +115,7 @@ const killTerminalInstance = (terminalId) => {
     terminal.virtualTerminalInstance.kill();
   }
   WatcherService.removeWatcher(terminalId);
+  terminals = terminals.filter(singleTerminal => singleTerminal.id !== terminalId);
 };
 
 const reloadTerminalInstance = (terminalId, terminalInstanceData) => {
