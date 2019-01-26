@@ -146,7 +146,7 @@ const mapDispatchToProps = dispatch => ({
   deleteTerminal: terminalId => dispatch(TerminalActions.deleteTerminalInstance(terminalId)),
   moveTerminalRight: terminalId => dispatch(TerminalActions.moveRightTerminalInstance(terminalId)),
   moveTerminalLeft: terminalId => dispatch(TerminalActions.moveLeftTerminalInstance(terminalId)),
-  stopTerminal: terminalId => dispatch(TerminalActions.stopTerminalInstance(terminalId)),
+  stopTerminal: terminalId => TerminalActions.stopTerminalInstance(terminalId),
   editTerminal: terminalInstance => dispatch(AddEditTerminalWindowActions.showEditExistingTerminalWindow(terminalInstance)),
 });
 

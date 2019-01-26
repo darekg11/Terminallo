@@ -125,6 +125,15 @@ const killAllTerminalInstances = () => {
   }
 };
 
+const stopTerminalInstance = (terminalId) => {
+  const terminal = terminals.find(singleTerminal => singleTerminal.id === terminalId);
+  if (isUndefined(terminal)) {
+    return;
+  }
+
+  terminal.virtualTerminalInstance.write(`\x03${commandLineEnding}`);
+};
+
 const reloadTerminalInstance = (terminalId, terminalInstanceData) => {
   killTerminalInstance(terminalId);
   return createNewTerminalInstance(terminalInstanceData);
@@ -164,4 +173,5 @@ export {
   killTerminalInstance,
   reloadTerminalInstance,
   resizeTerminal,
+  stopTerminalInstance,
 };

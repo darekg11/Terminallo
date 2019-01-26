@@ -70,10 +70,9 @@ const moveLeftTerminalInstance = terminalId => ({
   terminalId,
 });
 
-const stopTerminalInstance = terminalUUID => ({
-  type: TerminalActionTypes.STOP_TERMINAL_INSTANCE,
-  terminalUUID,
-});
+const stopTerminalInstance = (terminalId) => {
+  TerminalService.stopTerminalInstance(terminalId);
+};
 
 const goToNextTerminalInstance = () => ({
   type: TerminalActionTypes.GO_TO_NEXT_TERMINAL_INSTANCE,
