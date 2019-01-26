@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { batchActions } from 'redux-batched-actions';
 import os from 'os';
 import { forIn } from 'lodash';
 import { withStyles } from '@material-ui/core/styles';
@@ -87,8 +86,8 @@ class AddEditTerminalWindow extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { uuid } = this.props;
-    if (uuid !== nextProps.uuid) {
+    const { id } = this.props;
+    if (id !== nextProps.id) {
       const {
         terminalType,
         terminalName,
@@ -152,7 +151,7 @@ class AddEditTerminalWindow extends Component {
       terminalName,
     } = this.state;
     const {
-      addNewTerminal, editTerminal, editMode, uuid,
+      addNewTerminal, editTerminal, editMode, id,
     } = this.props;
     event.preventDefault();
     const terminalCommandsStartup = terminalStartupCommands
@@ -173,7 +172,7 @@ class AddEditTerminalWindow extends Component {
     if (!editMode) {
       addNewTerminal(terminalDataObject);
     } else {
-      terminalDataObject.uuid = uuid;
+      terminalDataObject.id = id;
       editTerminal(terminalDataObject);
     }
   };
@@ -340,7 +339,7 @@ class AddEditTerminalWindow extends Component {
 AddEditTerminalWindow.propTypes = {
   opened: PropTypes.bool.isRequired,
   editMode: PropTypes.bool.isRequired,
-  uuid: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   terminalType: PropTypes.string.isRequired,
   terminalName: PropTypes.string.isRequired,
   terminalStartupDir: PropTypes.string.isRequired,
@@ -360,7 +359,7 @@ AddEditTerminalWindow.propTypes = {
 const mapStateToProps = state => ({
   opened: state.TerminalAddEditWindowReducer.windowOpened,
   editMode: state.TerminalAddEditWindowReducer.editMode,
-  uuid: state.TerminalAddEditWindowReducer.uuid,
+  id: state.TerminalAddEditWindowReducer.id,
   terminalType: state.TerminalAddEditWindowReducer.terminalType,
   terminalName: state.TerminalAddEditWindowReducer.terminalName,
   terminalStartupDir: state.TerminalAddEditWindowReducer.terminalStartupDir,
@@ -371,19 +370,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   close: () => dispatch(TerminalAddEditWindowActions.closeAddEditTerminalWindow()),
-  addNewTerminal: terminalData => dispatch(
-    batchActions([
-      TerminalActions.addNewTerminalInstance(terminalData),
-      TerminalAddEditWindowActions.closeAddEditTerminalWindow(),
-    ]),
-  ),
-  editTerminal: terminalData => dispatch(
-    batchActions([
-      TerminalActions.editTerminalInstance(terminalData),
-      TerminalActions.reloadTerminalInstance(terminalData.uuid),
-      TerminalAddEditWindowActions.closeAddEditTerminalWindow(),
-    ]),
-  ),
+  addNewTerminal: terminalData => dispatch(TerminalActions.addNewTerminalInstance(terminalData)),
+  editTerminal: terminalData => dispatch(TerminalActions.editTerminalInstance(terminalData)),
 });
 
 const styledComponent = withStyles(styles)(AddEditTerminalWindow);

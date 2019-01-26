@@ -10,36 +10,31 @@ const initialState = {
 export default function terminalReducer(state = initialState, action) {
   switch (action.type) {
     case TerminalActionTypes.ADD_TERMINAL_INSTANCE: {
-      const createdTerminalInstance = TerminalService.createNewTerminalInstance(action.terminal);
-      const newTerminalInstance = action.terminal;
-      newTerminalInstance.uuid = createdTerminalInstance.uuid;
-      newTerminalInstance.xTermInstance = createdTerminalInstance.xTermInstance;
-      newTerminalInstance.virtualTerminalInstance = createdTerminalInstance.virtualTerminalInstance;
       return {
         ...state,
-        terminals: [...state.terminals, newTerminalInstance],
-        selectedTerminal: newTerminalInstance.uuid,
+        terminals: [...state.terminals, action.terminal],
+        selectedTerminal: action.terminal.id,
       };
     }
     case TerminalActionTypes.EDIT_TERMINAL_INSTANCE: {
-      const destinationUUID = action.terminal.uuid;
+      const destinationId = action.previousId;
       const copiedTerminalsArray = [...state.terminals];
       const terminalInstanceIndex = copiedTerminalsArray.findIndex(
-        singleTerminal => singleTerminal.uuid === destinationUUID,
+        singleTerminal => singleTerminal.id === destinationId,
       );
       if (terminalInstanceIndex === -1) {
         return state;
       }
       assign(copiedTerminalsArray[terminalInstanceIndex], action.terminal);
-      return { ...state, terminals: copiedTerminalsArray };
+      return { ...state, terminals: copiedTerminalsArray, selectedTerminal: action.terminal.id };
     }
     case TerminalActionTypes.SELECT_TERMINAL_INSTANCE: {
-      const destinationUUID = action.terminalUUID;
-      const terminalInstance = state.terminals.find(singleTerminal => singleTerminal.uuid === destinationUUID);
+      const destinationId = action.terminalId;
+      const terminalInstance = state.terminals.find(singleTerminal => singleTerminal.id === destinationId);
       if (isUndefined(terminalInstance)) {
         return state;
       }
-      return { ...state, selectedTerminal: terminalInstance.uuid };
+      return { ...state, selectedTerminal: terminalInstance.id };
     }
     case TerminalActionTypes.IMPORT_TERMINALS: {
       const terminalInstances = action.terminals;
@@ -65,30 +60,23 @@ export default function terminalReducer(state = initialState, action) {
       };
     }
     case TerminalActionTypes.RELOAD_TERMINAL_INSTANCE: {
-      const { terminalUUID } = action;
+      const { id } = action;
       const copiedTerminalsArray = [...state.terminals];
-      const terminalInstanceToReloadIndex = copiedTerminalsArray.findIndex(
-        singleTermianl => singleTermianl.uuid === terminalUUID,
-      );
+      const terminalInstanceToReloadIndex = copiedTerminalsArray.findIndex(singleTermianl => singleTermianl.id === id);
       if (terminalInstanceToReloadIndex === -1) {
         return state;
       }
       const terminalInstanceToReload = copiedTerminalsArray[terminalInstanceToReloadIndex];
-      const terminalUuidBeforeReloading = terminalInstanceToReload.uuid;
-      TerminalService.killTerminalInstance(terminalInstanceToReload);
-      const terminalInstanceRecreated = TerminalService.createNewTerminalInstance(terminalInstanceToReload);
       const mergedReloadedInstance = {
         ...terminalInstanceToReload,
-        uuid: terminalInstanceRecreated.uuid,
-        xTermInstance: terminalInstanceRecreated.xTermInstance,
-        virtualTerminalInstance: terminalInstanceRecreated.virtualTerminalInstance,
+        id: terminalInstanceRecreated.id,
       };
       copiedTerminalsArray[terminalInstanceToReloadIndex] = mergedReloadedInstance;
       return {
         ...state,
         terminals: copiedTerminalsArray,
         selectedTerminal:
-          terminalUuidBeforeReloading === state.selectedTerminal ? mergedReloadedInstance.uuid : state.selectedTerminal,
+          terminalUuidBeforeReloading === state.selectedTerminal ? mergedReloadedInstance.id : state.selectedTerminal,
       };
     }
     case TerminalActionTypes.DELETE_TERMINAL_INSTANCE: {

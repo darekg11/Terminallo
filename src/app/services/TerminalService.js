@@ -1,5 +1,6 @@
 import os from 'os';
 import * as uuid from 'uuid';
+import { isUndefined } from 'lodash';
 import { Terminal } from 'xterm';
 import * as fit from 'xterm/lib/addons/fit/fit';
 import Mousetrap from 'mousetrap';
@@ -8,6 +9,8 @@ import * as WatcherService from './WatcherService';
 
 const commandLineEnding = os.platform() === 'win32' ? '\r\n' : '\n';
 const terminalCreationWaitIntervalMs = 200;
+
+const terminals = [];
 
 const KEY_COMBINATIONS_THAT_SHOULD_BUBBLE_UP_FROM_TERMINAL = [
   'alt+p',
@@ -70,12 +73,53 @@ const createNewTerminalInstance = (terminalData) => {
     });
   }, terminalCreationWaitIntervalMs);
   const terminalUuid = uuid.v4();
-  WatcherService.addNewWatcher(terminalUuid, terminalData.terminalWatchers);
-  return {
-    uuid: terminalUuid,
-    xTermInstance,
-    virtualTerminalInstance,
-  };
+  const terminalId = `terminal-${terminalUuid}`;
+  WatcherService.addNewWatcher(terminalId, terminalData.terminalWatchers);
+  terminals.push({ id: terminalId, xTermInstance, virtualTerminalInstance });
+  return terminalId;
+};
+
+const resizeTerminal = (terminalId) => {
+  const terminal = terminals.find(singleTerminal => singleTerminal.id === terminalId);
+  if (isUndefined(terminal)) {
+    return;
+  }
+
+  const { xTermInstance, virtualTerminalInstance } = terminal;
+  const resizedDimensions = xTermInstance.proposeGeometry();
+  xTermInstance.fit();
+  virtualTerminalInstance.resize(resizedDimensions.cols, resizedDimensions.rows);
+};
+
+const hookTerminalToRenderer = (terminalId, renderedElement) => {
+  const terminal = terminals.find(singleTerminal => singleTerminal.id === terminalId);
+  if (isUndefined(terminal)) {
+    return;
+  }
+
+  const { xTermInstance } = terminal;
+  xTermInstance.open(renderedElement);
+  resizeTerminal(terminalId);
+};
+
+const killTerminalInstance = (terminalId) => {
+  const terminal = terminals.find(singleTerminal => singleTerminal.id === terminalId);
+  if (isUndefined(terminal)) {
+    return;
+  }
+
+  if (terminal.xTermInstance) {
+    terminal.xTermInstance.destroy();
+  }
+  if (terminal.virtualTerminalInstance) {
+    terminal.virtualTerminalInstance.kill();
+  }
+  WatcherService.removeWatcher(terminalId);
+};
+
+const reloadTerminalInstance = (terminalId, terminalInstanceData) => {
+  killTerminalInstance(terminalId);
+  return createNewTerminalInstance(terminalInstanceData);
 };
 
 const exportTermninalsToObject = terminalInstances => ({
@@ -104,16 +148,12 @@ const importTerminalsToObject = (jsonFile) => {
   };
 };
 
-const killTerminalInstance = (terminalInstance) => {
-  if (terminalInstance.xTermInstance) {
-    terminalInstance.xTermInstance.destroy();
-  }
-  if (terminalInstance.virtualTerminalInstance) {
-    terminalInstance.virtualTerminalInstance.kill();
-  }
-  WatcherService.removeWatcher(terminalInstance.uuid);
-};
-
 export {
-  createNewTerminalInstance, exportTermninalsToObject, importTerminalsToObject, killTerminalInstance,
+  createNewTerminalInstance,
+  exportTermninalsToObject,
+  hookTerminalToRenderer,
+  importTerminalsToObject,
+  killTerminalInstance,
+  reloadTerminalInstance,
+  resizeTerminal,
 };

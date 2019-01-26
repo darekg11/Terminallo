@@ -81,10 +81,10 @@ class SidePanel extends React.Component {
             <List disablePadding>
               {terminals.map(singleTerminal => (
                 <ListItem
-                  key={singleTerminal.uuid}
+                  key={singleTerminal.id}
                   button
                   className={classes.nested}
-                  onClick={() => selectTerminal(singleTerminal.uuid)}
+                  onClick={() => selectTerminal(singleTerminal.id)}
                 >
                   <ListItemText inset primary={singleTerminal.terminalName} />
                 </ListItem>
@@ -122,7 +122,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  selectTerminal: terminalUUID => dispatch(TerminalActions.selectTerminalInstance(terminalUUID)),
+  selectTerminal: terminalId => dispatch(TerminalActions.selectTerminalInstance(terminalId)),
 });
 
 const styledComponent = withStyles(styles)(SidePanel);

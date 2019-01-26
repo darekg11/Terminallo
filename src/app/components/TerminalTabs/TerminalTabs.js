@@ -39,16 +39,16 @@ const TerminalTabs = ({
         scrollButtons="auto"
       >
         {terminals.map(singleTerminal => (
-          <Tab key={singleTerminal.uuid} label={singleTerminal.terminalName} value={singleTerminal.uuid} />
+          <Tab key={singleTerminal.id} label={singleTerminal.terminalName} value={singleTerminal.id} />
         ))}
       </Tabs>
     )}
     <div className="terminal-area">
       <div className="terminal">
         {terminals
-          .filter(singleTerminal => singleTerminal.uuid === selectedTerminal)
+          .filter(singleTerminal => singleTerminal.id === selectedTerminal)
           .map(singleTerminal => (
-            <Terminal key={singleTerminal.uuid} terminal={singleTerminal} />
+            <Terminal key={singleTerminal.id} terminal={singleTerminal} />
           ))}
       </div>
       {selectedTerminal !== '' && (
@@ -71,7 +71,7 @@ const TerminalTabs = ({
             <div>
               <IconButton
                 aria-label="Edit"
-                onClick={() => editTerminal(terminals.find(singleTerminal => singleTerminal.uuid === selectedTerminal))}
+                onClick={() => editTerminal(terminals.find(singleTerminal => singleTerminal.id === selectedTerminal))}
               >
                 <EditIcon />
               </IconButton>
@@ -89,7 +89,7 @@ const TerminalTabs = ({
               <IconButton
                 aria-label="Move right"
                 onClick={() => moveTerminalRight(selectedTerminal)}
-                disabled={terminals[terminals.length - 1].uuid === selectedTerminal}
+                disabled={terminals[terminals.length - 1].id === selectedTerminal}
               >
                 <RightArrowIcon />
               </IconButton>
@@ -100,7 +100,7 @@ const TerminalTabs = ({
               <IconButton
                 aria-label="Move left"
                 onClick={() => moveTerminalLeft(selectedTerminal)}
-                disabled={terminals[0].uuid === selectedTerminal}
+                disabled={terminals[0].id === selectedTerminal}
               >
                 <LeftArrowIcon />
               </IconButton>
@@ -116,17 +116,7 @@ TerminalTabs.propTypes = {
   terminals: PropTypes.arrayOf(
     PropTypes.shape({
       terminalName: PropTypes.string.isRequired,
-      uuid: PropTypes.string.isRequired,
-      xTermInstance: PropTypes.shape({
-        open: PropTypes.func.isRequired,
-        fit: PropTypes.func.isRequired,
-        on: PropTypes.func.isRequired,
-        write: PropTypes.func.isRequired,
-      }).isRequired,
-      virtualTerminalInstance: PropTypes.shape({
-        on: PropTypes.func.isRequired,
-        write: PropTypes.func.isRequired,
-      }).isRequired,
+      id: PropTypes.string.isRequired,
       terminalStartupCommands: PropTypes.arrayOf(PropTypes.string),
     }),
   ),
@@ -142,7 +132,7 @@ TerminalTabs.propTypes = {
 
 TerminalTabs.defaultProps = {
   terminals: [],
-  selectedTerminal: {},
+  selectedTerminal: '',
 };
 
 const mapStateToProps = state => ({
@@ -151,12 +141,12 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  selectTerminal: terminalUUID => dispatch(TerminalActions.selectTerminalInstance(terminalUUID)),
-  reloadTerminal: terminalUUID => dispatch(TerminalActions.reloadTerminalInstance(terminalUUID)),
-  deleteTerminal: terminalUUID => dispatch(TerminalActions.deleteTerminalInstance(terminalUUID)),
-  moveTerminalRight: terminalUUID => dispatch(TerminalActions.moveRightTerminalInstance(terminalUUID)),
-  moveTerminalLeft: terminalUUID => dispatch(TerminalActions.moveLeftTerminalInstance(terminalUUID)),
-  stopTerminal: terminalUUID => dispatch(TerminalActions.stopTerminalInstance(terminalUUID)),
+  selectTerminal: terminalId => dispatch(TerminalActions.selectTerminalInstance(terminalId)),
+  reloadTerminal: terminalId => dispatch(TerminalActions.reloadTerminalInstance(terminalId)),
+  deleteTerminal: terminalId => dispatch(TerminalActions.deleteTerminalInstance(terminalId)),
+  moveTerminalRight: terminalId => dispatch(TerminalActions.moveRightTerminalInstance(terminalId)),
+  moveTerminalLeft: terminalId => dispatch(TerminalActions.moveLeftTerminalInstance(terminalId)),
+  stopTerminal: terminalId => dispatch(TerminalActions.stopTerminalInstance(terminalId)),
   editTerminal: terminalInstance => dispatch(AddEditTerminalWindowActions.showEditExistingTerminalWindow(terminalInstance)),
 });
 

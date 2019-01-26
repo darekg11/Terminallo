@@ -3,7 +3,7 @@ import AddEditTerminalWindowActionTypes from '../actions/TerminalAddEditWindowAc
 const initialState = {
   windowOpened: false,
   editMode: false,
-  uuid: '',
+  id: '',
   terminalType: '',
   terminalName: '',
   terminalStartupDir: '',
@@ -20,7 +20,7 @@ export default function addEditTerminalWindowState(state = initialState, action)
       return {
         windowOpened: true,
         editMode: true,
-        uuid: action.terminal.uuid,
+        id: action.terminal.id,
         terminalType: action.terminal.terminalType,
         terminalName: action.terminal.terminalName,
         terminalStartupDir: action.terminal.terminalStartupDir,

@@ -1,14 +1,34 @@
+import { batchActions } from 'redux-batched-actions';
+import * as TerminalService from '../services/TerminalService';
 import TerminalActionTypes from './TerminalActionTypes';
+import TerminalAddEditWindowActions from './TerminalAddEditWindowActions';
 
-const addNewTerminalInstance = terminalNewInstanceInfo => ({
-  type: TerminalActionTypes.ADD_TERMINAL_INSTANCE,
-  terminal: terminalNewInstanceInfo,
-});
+const addNewTerminalInstance = terminalNewInstanceInfo => (dispatch) => {
+  const createdTerminalInstanceId = TerminalService.createNewTerminalInstance(terminalNewInstanceInfo);
+  const terminalConfiguration = {
+    ...terminalNewInstanceInfo,
+    id: createdTerminalInstanceId,
+  };
+  dispatch(
+    batchActions([
+      { type: TerminalActionTypes.ADD_TERMINAL_INSTANCE, terminal: terminalConfiguration },
+      TerminalAddEditWindowActions.closeAddEditTerminalWindow(),
+    ]),
+  );
+};
 
-const editTerminalInstance = terminal => ({
-  type: TerminalActionTypes.EDIT_TERMINAL_INSTANCE,
-  terminal,
-});
+const editTerminalInstance = terminalEditInstanceInfo => (dispatch) => {
+  const previousId = terminalEditInstanceInfo.id;
+  const reloadedTerminalInstanceId = TerminalService.reloadTerminalInstance(previousId, terminalEditInstanceInfo);
+  const updatedTerminalData = terminalEditInstanceInfo;
+  updatedTerminalData.id = reloadedTerminalInstanceId;
+  dispatch(
+    batchActions([
+      { type: TerminalActionTypes.EDIT_TERMINAL_INSTANCE, previousId, terminal: updatedTerminalData },
+      TerminalAddEditWindowActions.closeAddEditTerminalWindow(),
+    ]),
+  );
+};
 
 const selectTerminalInstance = terminalUuid => ({
   type: TerminalActionTypes.SELECT_TERMINAL_INSTANCE,
