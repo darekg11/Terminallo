@@ -120,7 +120,6 @@
       "!.gitignore",
       "!babel.config.js",
       "!jest.init.js",
-      "!LICENSE",
       "!npm_install.sh",
       "!package-lock.json",
       "!package.json",

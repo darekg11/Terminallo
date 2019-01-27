@@ -8,7 +8,7 @@ describe('TerminalAddEditWindow reducer', () => {
     const expectedInitialState = {
       windowOpened: false,
       editMode: false,
-      uuid: '',
+      id: '',
       terminalType: '',
       terminalName: '',
       terminalStartupDir: '',
@@ -23,7 +23,7 @@ describe('TerminalAddEditWindow reducer', () => {
     const initialState = {
       windowOpened: false,
       editMode: true,
-      uuid: '1234',
+      id: '1234',
       terminalType: 'CMD',
       terminalName: 'Test Terminal',
       terminalStartupDir: 'SomePath',
@@ -38,7 +38,7 @@ describe('TerminalAddEditWindow reducer', () => {
     const expectedState = {
       windowOpened: true,
       editMode: false,
-      uuid: '',
+      id: '',
       terminalType: '',
       terminalName: '',
       terminalStartupDir: '',
@@ -53,7 +53,7 @@ describe('TerminalAddEditWindow reducer', () => {
     const state = TerminalAddEditWindowReducer(undefined, {
       type: TerminalAddEditWindowActionTypes.EDIT_EXISTING_TERMINAL_INSTANCE,
       terminal: {
-        uuid: '1234',
+        id: '1234',
         terminalType: 'CMD',
         terminalName: 'Test Terminal',
         terminalStartupDir: 'SomePath',
@@ -65,7 +65,7 @@ describe('TerminalAddEditWindow reducer', () => {
     const expectedState = {
       windowOpened: true,
       editMode: true,
-      uuid: '1234',
+      id: '1234',
       terminalType: 'CMD',
       terminalName: 'Test Terminal',
       terminalStartupDir: 'SomePath',
@@ -80,7 +80,7 @@ describe('TerminalAddEditWindow reducer', () => {
     const initialState = {
       windowOpened: true,
       editMode: true,
-      uuid: '1234',
+      id: '1234',
       terminalType: 'CMD',
       terminalName: 'Test Terminal',
       terminalStartupDir: 'SomePath',
@@ -95,7 +95,7 @@ describe('TerminalAddEditWindow reducer', () => {
     const expectedState = {
       windowOpened: false,
       editMode: false,
-      uuid: '',
+      id: '',
       terminalType: '',
       terminalName: '',
       terminalStartupDir: '',

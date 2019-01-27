@@ -109,7 +109,7 @@ const killTerminalInstance = (terminalId) => {
   }
 
   if (terminal.xTermInstance) {
-    terminal.xTermInstance.destroy();
+    terminal.xTermInstance.dispose();
   }
   if (terminal.virtualTerminalInstance) {
     terminal.virtualTerminalInstance.kill();
