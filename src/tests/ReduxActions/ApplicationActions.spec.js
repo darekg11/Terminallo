@@ -150,26 +150,32 @@ describe('actions', () => {
     };
     sinonSandbox.stub(FileService, 'loadJsonFromFile').returns({ terminals: [] });
     sinonSandbox.stub(TerminalService, 'importTerminalsToObject').returns(sampleTerminalInstances);
+    sinonSandbox.stub(TerminalService, 'killAllTerminalInstances').returns();
+    const createTerminalStub = sinonSandbox.stub(TerminalService, 'createNewTerminalInstance');
+    createTerminalStub.onCall(0).returns('1234');
+    createTerminalStub.onCall(1).returns('4321');
     const expectedActions = [
       {
         type: SpinnerActionTypes.SPINNER_SHOW,
         loadingMessage: 'Importing terminals... Please wait',
       },
       {
+        type: TerminalActionTypes.IMPORT_TERMINALS,
+        terminals: [
+          {
+            id: '1234',
+            name: 'test1',
+          },
+          {
+            id: '4321',
+            name: 'test2',
+          },
+        ],
+      },
+      {
         type: 'BATCHING_REDUCER.BATCH',
         meta: { batch: true },
         payload: [
-          {
-            type: TerminalActionTypes.IMPORT_TERMINALS,
-            terminals: [
-              {
-                name: 'test1',
-              },
-              {
-                name: 'test2',
-              },
-            ],
-          },
           {
             type: SpinnerActionTypes.SPINNER_LOADING_SUCCESS,
             successMessage: 'Terminals imported successfully.',
