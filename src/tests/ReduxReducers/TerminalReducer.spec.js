@@ -1,19 +1,9 @@
 import { expect } from 'chai';
 import 'chai/register-should';
-import sinon from 'sinon';
 import TerminalReducer from '../../app/reducers/TerminalReducer';
 import TerminalActionTypes from '../../app/actions/TerminalActionTypes';
-import * as TerminalService from '../../app/services/TerminalService';
-
-let sinonSandbox = null;
 
 describe('Terminal reducer', () => {
-  beforeEach(() => {
-    sinonSandbox = sinon.createSandbox();
-  });
-  afterEach(() => {
-    sinonSandbox.restore();
-  });
   it('should return initial state', () => {
     const state = TerminalReducer(undefined, {});
     const expectedInitialState = {
@@ -25,20 +15,10 @@ describe('Terminal reducer', () => {
   });
 
   it('should handle ADD_TERMINAL_INSTANCE', () => {
-    sinonSandbox.stub(TerminalService, 'createNewTerminalInstance').returns({
-      xTermInstance: {
-        fit: () => {},
-        on: () => {},
-        write: () => {},
-      },
-      virtualTerminalInstance: {
-        on: () => {},
-        write: () => {},
-      },
-    });
     const state = TerminalReducer(undefined, {
       type: TerminalActionTypes.ADD_TERMINAL_INSTANCE,
       terminal: {
+        id: '1234',
         terminalType: 'CMD',
         terminalName: 'Some Test',
         terminalStartupDir: '../some',
@@ -46,32 +26,20 @@ describe('Terminal reducer', () => {
       },
     });
 
-    expect(state.selectedTerminal).to.not.equal('');
+    expect(state.selectedTerminal).to.equal('1234');
     expect(state.terminals.length).to.be.equal(1);
     expect(state.terminals[0].terminalName).to.be.equal('Some Test');
-    expect(state.terminals[0].uuid).to.be.equal(state.selectedTerminal);
-    expect(typeof state.terminals[0].xTermInstance.fit).to.be.equal('function');
-    expect(typeof state.terminals[0].xTermInstance.on).to.be.equal('function');
-    expect(typeof state.terminals[0].xTermInstance.write).to.be.equal('function');
-    expect(typeof state.terminals[0].virtualTerminalInstance.on).to.be.equal('function');
-    expect(typeof state.terminals[0].virtualTerminalInstance.write).to.be.equal('function');
+    expect(state.terminals[0].id).to.be.equal(state.selectedTerminal);
+    expect(state.terminals[0].terminalType).to.be.equal('CMD');
+    expect(state.terminals[0].terminalStartupDir).to.be.equal('../some');
+    expect(state.terminals[0].terminalWatchers).to.deep.equal(['somePath']);
   });
 
   it('should handle SELECT_TERMINAL_INSTANCE - select new terminal instance when it can be found', () => {
-    sinonSandbox.stub(TerminalService, 'createNewTerminalInstance').returns({
-      xTermInstance: {
-        fit: () => {},
-        on: () => {},
-        write: () => {},
-      },
-      virtualTerminalInstance: {
-        on: () => {},
-        write: () => {},
-      },
-    });
     const state = TerminalReducer(undefined, {
       type: TerminalActionTypes.ADD_TERMINAL_INSTANCE,
       terminal: {
+        id: '1234',
         terminalType: 'CMD',
         terminalName: 'Some Test',
         terminalStartupDir: '../some',
@@ -82,6 +50,7 @@ describe('Terminal reducer', () => {
     const stateAfterSecondAdd = TerminalReducer(state, {
       type: TerminalActionTypes.ADD_TERMINAL_INSTANCE,
       terminal: {
+        id: '4321',
         terminalType: 'CMD',
         terminalName: 'Some Test 2',
         terminalStartupDir: '../some',
@@ -91,42 +60,29 @@ describe('Terminal reducer', () => {
 
     const finalState = TerminalReducer(stateAfterSecondAdd, {
       type: TerminalActionTypes.SELECT_TERMINAL_INSTANCE,
-      terminalUUID: state.terminals[0].uuid,
+      terminalId: state.terminals[0].id,
     });
 
     expect(finalState.terminals).to.have.lengthOf(2);
-    expect(finalState.selectedTerminal).to.equal(finalState.terminals[0].uuid);
+    expect(finalState.selectedTerminal).to.equal(finalState.terminals[0].id);
     expect(finalState.terminals[0].terminalName).to.be.equal('Some Test');
-    expect(finalState.terminals[0].uuid).to.not.equal('');
-    expect(typeof finalState.terminals[0].xTermInstance.fit).to.be.equal('function');
-    expect(typeof finalState.terminals[0].xTermInstance.on).to.be.equal('function');
-    expect(typeof finalState.terminals[0].xTermInstance.write).to.be.equal('function');
-    expect(typeof finalState.terminals[0].virtualTerminalInstance.on).to.be.equal('function');
-    expect(typeof finalState.terminals[0].virtualTerminalInstance.write).to.be.equal('function');
+    expect(finalState.terminals[0].id).to.equal('1234');
+    expect(finalState.terminals[0].terminalType).to.be.equal('CMD');
+    expect(finalState.terminals[0].terminalStartupDir).to.be.equal('../some');
+    expect(finalState.terminals[0].terminalWatchers).to.deep.equal(['somePath1']);
+
     expect(finalState.terminals[1].terminalName).to.be.equal('Some Test 2');
-    expect(finalState.terminals[1].uuid).to.not.equal('');
-    expect(typeof finalState.terminals[1].xTermInstance.fit).to.be.equal('function');
-    expect(typeof finalState.terminals[1].xTermInstance.on).to.be.equal('function');
-    expect(typeof finalState.terminals[1].xTermInstance.write).to.be.equal('function');
-    expect(typeof finalState.terminals[1].virtualTerminalInstance.on).to.be.equal('function');
-    expect(typeof finalState.terminals[1].virtualTerminalInstance.write).to.be.equal('function');
+    expect(finalState.terminals[1].id).to.equal('4321');
+    expect(finalState.terminals[1].terminalType).to.be.equal('CMD');
+    expect(finalState.terminals[1].terminalStartupDir).to.be.equal('../some');
+    expect(finalState.terminals[1].terminalWatchers).to.deep.equal(['somePath2']);
   });
 
   it('should handle SELECT_TERMINAL_INSTANCE - do not select new terminal instance when it can not be found', () => {
-    sinonSandbox.stub(TerminalService, 'createNewTerminalInstance').returns({
-      xTermInstance: {
-        fit: () => {},
-        on: () => {},
-        write: () => {},
-      },
-      virtualTerminalInstance: {
-        on: () => {},
-        write: () => {},
-      },
-    });
     const state = TerminalReducer(undefined, {
       type: TerminalActionTypes.ADD_TERMINAL_INSTANCE,
       terminal: {
+        id: '1234',
         terminalType: 'CMD',
         terminalName: 'Some Test',
         terminalStartupDir: '../some',
@@ -137,6 +93,7 @@ describe('Terminal reducer', () => {
     const stateAfterSecondAdd = TerminalReducer(state, {
       type: TerminalActionTypes.ADD_TERMINAL_INSTANCE,
       terminal: {
+        id: '5678',
         terminalType: 'CMD',
         terminalName: 'Some Test 2',
         terminalStartupDir: '../some',
@@ -146,52 +103,35 @@ describe('Terminal reducer', () => {
 
     const finalState = TerminalReducer(stateAfterSecondAdd, {
       type: TerminalActionTypes.SELECT_TERMINAL_INSTANCE,
-      terminalUUID: 'randomValue',
+      terminalId: 'randomValue',
     });
 
     expect(finalState.terminals).to.have.lengthOf(2);
-    expect(finalState.selectedTerminal).to.equal(finalState.terminals[1].uuid);
+    expect(finalState.selectedTerminal).to.equal(finalState.terminals[1].id);
     expect(finalState.terminals[0].terminalName).to.be.equal('Some Test');
-    expect(finalState.terminals[0].uuid).to.not.equal('');
-    expect(typeof finalState.terminals[0].xTermInstance.fit).to.be.equal('function');
-    expect(typeof finalState.terminals[0].xTermInstance.on).to.be.equal('function');
-    expect(typeof finalState.terminals[0].xTermInstance.write).to.be.equal('function');
-    expect(typeof finalState.terminals[0].virtualTerminalInstance.on).to.be.equal('function');
-    expect(typeof finalState.terminals[0].virtualTerminalInstance.write).to.be.equal('function');
+    expect(finalState.terminals[0].id).equal('1234');
+    expect(finalState.terminals[0].terminalType).to.be.equal('CMD');
+    expect(finalState.terminals[0].terminalStartupDir).to.be.equal('../some');
+    expect(finalState.terminals[0].terminalWatchers).to.deep.equal(['somePath1']);
+
     expect(finalState.terminals[1].terminalName).to.be.equal('Some Test 2');
-    expect(finalState.terminals[1].uuid).to.not.equal('');
-    expect(typeof finalState.terminals[1].xTermInstance.fit).to.be.equal('function');
-    expect(typeof finalState.terminals[1].xTermInstance.on).to.be.equal('function');
-    expect(typeof finalState.terminals[1].xTermInstance.write).to.be.equal('function');
-    expect(typeof finalState.terminals[1].virtualTerminalInstance.on).to.be.equal('function');
-    expect(typeof finalState.terminals[1].virtualTerminalInstance.write).to.be.equal('function');
+    expect(finalState.terminals[1].id).to.equal('5678');
+    expect(finalState.terminals[1].terminalType).to.be.equal('CMD');
+    expect(finalState.terminals[1].terminalStartupDir).to.be.equal('../some');
+    expect(finalState.terminals[1].terminalWatchers).to.deep.equal(['somePath2']);
   });
 
   it('should handle IMPORT_TERMINALS - importing non zero terminals', () => {
-    sinonSandbox.spy(TerminalService, 'killTerminalInstance');
-    const stub = sinonSandbox.stub(TerminalService, 'createNewTerminalInstance');
-    stub.onCall(0).returns({
-      xTermInstance: {},
-      virtualTerminalInstance: {},
-      uuid: '1234abcd',
-    });
-
-    stub.onCall(1).returns({
-      xTermInstance: {},
-      virtualTerminalInstance: {},
-      uuid: '5678efgh',
-    });
-
     const importingTerminals = [
       {
-        uuid: '1234abcd',
+        id: '1234abcd',
         terminalType: 'terminalType1',
         terminalName: 'Terminal1234',
         terminalStartupDir: 'somePath',
         terminalStartupCommands: ['firstCmd', 'secondCmd'],
       },
       {
-        uuid: '5678efgh',
+        id: '5678efgh',
         terminalType: 'terminalType2',
         terminalName: 'Terminal5678',
         terminalStartupDir: 'somePath2',
@@ -217,22 +157,18 @@ describe('Terminal reducer', () => {
     const expectedState = {
       terminals: [
         {
-          uuid: '1234abcd',
+          id: '1234abcd',
           terminalType: 'terminalType1',
           terminalName: 'Terminal1234',
           terminalStartupDir: 'somePath',
           terminalStartupCommands: ['firstCmd', 'secondCmd'],
-          xTermInstance: {},
-          virtualTerminalInstance: {},
         },
         {
-          uuid: '5678efgh',
+          id: '5678efgh',
           terminalType: 'terminalType2',
           terminalName: 'Terminal5678',
           terminalStartupDir: 'somePath2',
           terminalStartupCommands: ['firstCmd2', 'secondCmd2'],
-          xTermInstance: {},
-          virtualTerminalInstance: {},
         },
       ],
       selectedTerminal: '1234abcd',
@@ -244,16 +180,9 @@ describe('Terminal reducer', () => {
     });
 
     expect(finalState).to.deep.equal(expectedState);
-    expect(TerminalService.killTerminalInstance.callCount).to.be.equal(3);
   });
 
   it('should handle IMPORT_TERMINALS - importing zero terminals', () => {
-    sinonSandbox.spy(TerminalService, 'killTerminalInstance');
-    sinonSandbox.stub(TerminalService, 'createNewTerminalInstance').returns({
-      xTermInstance: {},
-      virtualTerminalInstance: {},
-    });
-
     const importingTerminals = [];
 
     const initialState = {
@@ -282,83 +211,70 @@ describe('Terminal reducer', () => {
     });
 
     expect(finalState).to.deep.equal(expectedState);
-    expect(TerminalService.killTerminalInstance.callCount).to.be.equal(3);
   });
 
   it('should handle RELOAD_TERMINAL_INSTANCE - reloading terminal that does not exist', () => {
     const initialState = {
       terminals: [
         {
+          id: '1234',
           terminalName: 'First terminal',
         },
         {
+          id: '5678',
           terminalName: 'Second terminal',
         },
         {
+          id: '90',
           terminalName: 'Third terminal',
         },
       ],
-      selectedTerminal: 'someTestUUID',
+      selectedTerminal: '1234',
     };
 
     const expectedState = {
       terminals: [
         {
+          id: '1234',
           terminalName: 'First terminal',
         },
         {
+          id: '5678',
           terminalName: 'Second terminal',
         },
         {
+          id: '90',
           terminalName: 'Third terminal',
         },
       ],
-      selectedTerminal: 'someTestUUID',
+      selectedTerminal: '1234',
     };
 
     const finalState = TerminalReducer(initialState, {
       type: TerminalActionTypes.RELOAD_TERMINAL_INSTANCE,
-      terminalUUID: 'not-existing-uuid',
+      previousId: '5555',
+      newId: '1111',
     });
 
     expect(finalState).to.deep.equal(expectedState);
   });
 
   it('should handle RELOAD_TERMINAL_INSTANCE - reloading terminal that does exist', () => {
-    sinonSandbox.spy(TerminalService, 'killTerminalInstance');
-    sinonSandbox.stub(TerminalService, 'createNewTerminalInstance').returns({
-      xTermInstance: {
-        fit: () => {},
-        on: () => {},
-        write: () => {},
-      },
-      virtualTerminalInstance: {
-        on: () => {},
-        write: () => {},
-      },
-    });
-
     const initialState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
         {
-          uuid: '2',
+          id: '2',
           terminalName: 'Second terminal',
           terminalType: 'CMD',
           terminalStartupCommands: ['cmd1', 'cmd2'],
           terminalStartupDir: 'somePath',
-          xTermInstance: {
-            destroy: sinon.spy(),
-          },
-          virtualTerminalInstance: {
-            kill: sinon.spy(),
-          },
         },
         {
-          uuid: '3',
+          id: '3',
           terminalName: 'Third terminal',
         },
       ],
@@ -366,18 +282,19 @@ describe('Terminal reducer', () => {
     };
 
     const firstTerminalExpected = {
-      uuid: '1',
+      id: '1',
       terminalName: 'First terminal',
     };
 
     const thirdTerminalExpected = {
-      uuid: '3',
+      id: '3',
       terminalName: 'Third terminal',
     };
 
     const finalState = TerminalReducer(initialState, {
       type: TerminalActionTypes.RELOAD_TERMINAL_INSTANCE,
-      terminalUUID: '2',
+      previousId: '2',
+      newId: '4',
     });
 
     expect(finalState.selectedTerminal).to.not.equal('2');
@@ -388,13 +305,7 @@ describe('Terminal reducer', () => {
     expect(finalState.terminals[1].terminalType).to.be.equal('CMD');
     expect(finalState.terminals[1].terminalStartupCommands).to.deep.equal(['cmd1', 'cmd2']);
     expect(finalState.terminals[1].terminalStartupDir).to.deep.equal('somePath');
-    expect(finalState.terminals[1].uuid).to.be.equal(finalState.selectedTerminal);
-    expect(typeof finalState.terminals[1].xTermInstance.fit).to.be.equal('function');
-    expect(typeof finalState.terminals[1].xTermInstance.on).to.be.equal('function');
-    expect(typeof finalState.terminals[1].xTermInstance.write).to.be.equal('function');
-    expect(typeof finalState.terminals[1].virtualTerminalInstance.on).to.be.equal('function');
-    expect(typeof finalState.terminals[1].virtualTerminalInstance.write).to.be.equal('function');
-    expect(TerminalService.killTerminalInstance.callCount).to.be.equal(1);
+    expect(finalState.terminals[1].id).to.be.equal(finalState.selectedTerminal);
   });
 
   it('should handle DELETE_TERMINAL_INSTANCE - delete terminal that does not exist', () => {
@@ -430,7 +341,7 @@ describe('Terminal reducer', () => {
 
     const finalState = TerminalReducer(initialState, {
       type: TerminalActionTypes.DELETE_TERMINAL_INSTANCE,
-      terminalUUID: 'not-existing-uuid',
+      terminalId: 'not-existing-uuid',
     });
 
     expect(finalState).to.deep.equal(expectedState);
@@ -440,7 +351,7 @@ describe('Terminal reducer', () => {
     const initialState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
       ],
@@ -454,7 +365,7 @@ describe('Terminal reducer', () => {
 
     const finalState = TerminalReducer(initialState, {
       type: TerminalActionTypes.DELETE_TERMINAL_INSTANCE,
-      terminalUUID: '1',
+      terminalId: '1',
     });
 
     expect(finalState).to.deep.equal(expectedState);
@@ -464,15 +375,15 @@ describe('Terminal reducer', () => {
     const initialState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
         {
-          uuid: '2',
+          id: '2',
           terminalName: 'Second terminal',
         },
         {
-          uuid: '3',
+          id: '3',
           terminalName: 'Third terminal',
         },
       ],
@@ -483,11 +394,11 @@ describe('Terminal reducer', () => {
       selectedTerminal: '2',
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
         {
-          uuid: '2',
+          id: '2',
           terminalName: 'Second terminal',
         },
       ],
@@ -495,7 +406,7 @@ describe('Terminal reducer', () => {
 
     const finalState = TerminalReducer(initialState, {
       type: TerminalActionTypes.DELETE_TERMINAL_INSTANCE,
-      terminalUUID: '3',
+      terminalId: '3',
     });
 
     expect(finalState).to.deep.equal(expectedState);
@@ -505,23 +416,23 @@ describe('Terminal reducer', () => {
     const initialState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
         {
-          uuid: '2',
+          id: '2',
           terminalName: 'Second terminal',
         },
         {
-          uuid: '3',
+          id: '3',
           terminalName: 'Third terminal',
         },
         {
-          uuid: '4',
+          id: '4',
           terminalName: 'Fourth terminal',
         },
         {
-          uuid: '5',
+          id: '5',
           terminalName: 'Fifth terminal',
         },
       ],
@@ -532,19 +443,19 @@ describe('Terminal reducer', () => {
       selectedTerminal: '4',
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
         {
-          uuid: '2',
+          id: '2',
           terminalName: 'Second terminal',
         },
         {
-          uuid: '4',
+          id: '4',
           terminalName: 'Fourth terminal',
         },
         {
-          uuid: '5',
+          id: '5',
           terminalName: 'Fifth terminal',
         },
       ],
@@ -552,7 +463,7 @@ describe('Terminal reducer', () => {
 
     const finalState = TerminalReducer(initialState, {
       type: TerminalActionTypes.DELETE_TERMINAL_INSTANCE,
-      terminalUUID: '3',
+      terminalId: '3',
     });
 
     expect(finalState).to.deep.equal(expectedState);
@@ -562,7 +473,7 @@ describe('Terminal reducer', () => {
     const initialState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
       ],
@@ -572,7 +483,7 @@ describe('Terminal reducer', () => {
     const expectedState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
       ],
@@ -581,7 +492,7 @@ describe('Terminal reducer', () => {
 
     const finalState = TerminalReducer(initialState, {
       type: TerminalActionTypes.MOVE_RIGHT_TERMINAL_INSTANCE,
-      terminalUUID: '1',
+      terminalId: '2',
     });
 
     expect(finalState).to.deep.equal(expectedState);
@@ -591,11 +502,11 @@ describe('Terminal reducer', () => {
     const initialState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
         {
-          uuid: '2',
+          id: '2',
           terminalName: 'Second terminal',
         },
       ],
@@ -605,11 +516,11 @@ describe('Terminal reducer', () => {
     const expectedState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
         {
-          uuid: '2',
+          id: '2',
           terminalName: 'Second terminal',
         },
       ],
@@ -618,7 +529,7 @@ describe('Terminal reducer', () => {
 
     const finalState = TerminalReducer(initialState, {
       type: TerminalActionTypes.MOVE_RIGHT_TERMINAL_INSTANCE,
-      terminalUUID: '2',
+      terminalId: '2',
     });
 
     expect(finalState).to.deep.equal(expectedState);
@@ -628,23 +539,23 @@ describe('Terminal reducer', () => {
     const initialState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
         {
-          uuid: '2',
+          id: '2',
           terminalName: 'Second terminal',
         },
         {
-          uuid: '3',
+          id: '3',
           terminalName: 'Third terminal',
         },
         {
-          uuid: '4',
+          id: '4',
           terminalName: 'Fourth terminal',
         },
         {
-          uuid: '5',
+          id: '5',
           terminalName: 'Fifth terminal',
         },
       ],
@@ -654,23 +565,23 @@ describe('Terminal reducer', () => {
     const expectedState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
         {
-          uuid: '2',
+          id: '2',
           terminalName: 'Second terminal',
         },
         {
-          uuid: '4',
+          id: '4',
           terminalName: 'Fourth terminal',
         },
         {
-          uuid: '3',
+          id: '3',
           terminalName: 'Third terminal',
         },
         {
-          uuid: '5',
+          id: '5',
           terminalName: 'Fifth terminal',
         },
       ],
@@ -679,7 +590,7 @@ describe('Terminal reducer', () => {
 
     const finalState = TerminalReducer(initialState, {
       type: TerminalActionTypes.MOVE_RIGHT_TERMINAL_INSTANCE,
-      terminalUUID: '3',
+      terminalId: '3',
     });
 
     expect(finalState).to.deep.equal(expectedState);
@@ -689,7 +600,7 @@ describe('Terminal reducer', () => {
     const initialState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
       ],
@@ -699,7 +610,7 @@ describe('Terminal reducer', () => {
     const expectedState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
       ],
@@ -708,7 +619,7 @@ describe('Terminal reducer', () => {
 
     const finalState = TerminalReducer(initialState, {
       type: TerminalActionTypes.MOVE_LEFT_TERMINAL_INSTANCE,
-      terminalUUID: '1',
+      terminalId: '4',
     });
 
     expect(finalState).to.deep.equal(expectedState);
@@ -718,11 +629,11 @@ describe('Terminal reducer', () => {
     const initialState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
         {
-          uuid: '2',
+          id: '2',
           terminalName: 'Second terminal',
         },
       ],
@@ -732,11 +643,11 @@ describe('Terminal reducer', () => {
     const expectedState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
         {
-          uuid: '2',
+          id: '2',
           terminalName: 'Second terminal',
         },
       ],
@@ -745,7 +656,7 @@ describe('Terminal reducer', () => {
 
     const finalState = TerminalReducer(initialState, {
       type: TerminalActionTypes.MOVE_LEFT_TERMINAL_INSTANCE,
-      terminalUUID: '1',
+      terminalId: '1',
     });
 
     expect(finalState).to.deep.equal(expectedState);
@@ -755,23 +666,23 @@ describe('Terminal reducer', () => {
     const initialState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
         {
-          uuid: '2',
+          id: '2',
           terminalName: 'Second terminal',
         },
         {
-          uuid: '3',
+          id: '3',
           terminalName: 'Third terminal',
         },
         {
-          uuid: '4',
+          id: '4',
           terminalName: 'Fourth terminal',
         },
         {
-          uuid: '5',
+          id: '5',
           terminalName: 'Fifth terminal',
         },
       ],
@@ -781,23 +692,23 @@ describe('Terminal reducer', () => {
     const expectedState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
         {
-          uuid: '3',
+          id: '3',
           terminalName: 'Third terminal',
         },
         {
-          uuid: '2',
+          id: '2',
           terminalName: 'Second terminal',
         },
         {
-          uuid: '4',
+          id: '4',
           terminalName: 'Fourth terminal',
         },
         {
-          uuid: '5',
+          id: '5',
           terminalName: 'Fifth terminal',
         },
       ],
@@ -806,109 +717,17 @@ describe('Terminal reducer', () => {
 
     const finalState = TerminalReducer(initialState, {
       type: TerminalActionTypes.MOVE_LEFT_TERMINAL_INSTANCE,
-      terminalUUID: '3',
+      terminalId: '3',
     });
 
     expect(finalState).to.deep.equal(expectedState);
-  });
-
-  it('should handle STOP_TERMINAL_INSTANCE - stoping terminal that does not exist', () => {
-    const initialState = {
-      terminals: [
-        {
-          terminalName: 'First terminal',
-        },
-        {
-          terminalName: 'Second terminal',
-        },
-        {
-          terminalName: 'Third terminal',
-        },
-      ],
-      selectedTerminal: 'someTestUUID',
-    };
-
-    const expectedState = {
-      terminals: [
-        {
-          terminalName: 'First terminal',
-        },
-        {
-          terminalName: 'Second terminal',
-        },
-        {
-          terminalName: 'Third terminal',
-        },
-      ],
-      selectedTerminal: 'someTestUUID',
-    };
-
-    const finalState = TerminalReducer(initialState, {
-      type: TerminalActionTypes.STOP_TERMINAL_INSTANCE,
-      terminalUUID: 'not-existing-uuid',
-    });
-
-    expect(finalState).to.deep.equal(expectedState);
-  });
-
-  it('should handle STOP_TERMINAL_INSTANCE - stop terminal that does exist', () => {
-    const initialState = {
-      terminals: [
-        {
-          uuid: '1',
-          terminalName: 'First terminal',
-        },
-        {
-          uuid: '2',
-          terminalName: 'Second terminal',
-          terminalType: 'CMD',
-          terminalStartupCommands: ['cmd1', 'cmd2'],
-          terminalStartupDir: 'somePath',
-          virtualTerminalInstance: {
-            write: sinon.spy(),
-          },
-        },
-        {
-          uuid: '3',
-          terminalName: 'Third terminal',
-        },
-      ],
-      selectedTerminal: '2',
-    };
-
-    const finalState = TerminalReducer(initialState, {
-      type: TerminalActionTypes.STOP_TERMINAL_INSTANCE,
-      terminalUUID: '2',
-    });
-
-    const firstTerminalExpected = {
-      uuid: '1',
-      terminalName: 'First terminal',
-    };
-
-    const thirdTerminalExpected = {
-      uuid: '3',
-      terminalName: 'Third terminal',
-    };
-
-    expect(finalState.selectedTerminal).to.equal('2');
-    expect(finalState.terminals.length).to.be.equal(3);
-    expect(finalState.terminals[0]).to.deep.equal(firstTerminalExpected);
-    expect(finalState.terminals[2]).to.deep.equal(thirdTerminalExpected);
-    expect(finalState.terminals[1].terminalName).to.be.equal('Second terminal');
-    expect(finalState.terminals[1].terminalType).to.be.equal('CMD');
-    expect(finalState.terminals[1].terminalStartupCommands).to.deep.equal(['cmd1', 'cmd2']);
-    expect(finalState.terminals[1].terminalStartupDir).to.deep.equal('somePath');
-    expect(finalState.terminals[1].uuid).to.be.equal(finalState.selectedTerminal);
-    expect(finalState.terminals[1].virtualTerminalInstance.write.callCount).to.be.equal(1);
-    expect(finalState.terminals[1].virtualTerminalInstance.write.getCall(0).args[0]).to.be.equal('\x03');
   });
 
   it('should handle GO_TO_NEXT_TERMINAL_INSTANCE - should not change state when terminal instance does not exist', () => {
     const initialState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
       ],
@@ -918,7 +737,7 @@ describe('Terminal reducer', () => {
     const expectedState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
       ],
@@ -936,11 +755,11 @@ describe('Terminal reducer', () => {
     const initialState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
         {
-          uuid: '2',
+          id: '2',
           terminalName: 'Second terminal',
         },
       ],
@@ -950,11 +769,11 @@ describe('Terminal reducer', () => {
     const expectedState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
         {
-          uuid: '2',
+          id: '2',
           terminalName: 'Second terminal',
         },
       ],
@@ -968,27 +787,27 @@ describe('Terminal reducer', () => {
     expect(finalState).to.deep.equal(expectedState);
   });
 
-  it('should handle GO_TO_NEXTTERMINAL_INSTANCE - should change terminal when selected terminal is in the middle', () => {
+  it('should handle GO_TO_NEXT_TERMINAL_INSTANCE - should change terminal when selected terminal is in the middle', () => {
     const initialState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
         {
-          uuid: '2',
+          id: '2',
           terminalName: 'Second terminal',
         },
         {
-          uuid: '3',
+          id: '3',
           terminalName: 'Third terminal',
         },
         {
-          uuid: '4',
+          id: '4',
           terminalName: 'Fourth terminal',
         },
         {
-          uuid: '5',
+          id: '5',
           terminalName: 'Fifth terminal',
         },
       ],
@@ -998,23 +817,23 @@ describe('Terminal reducer', () => {
     const expectedState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
         {
-          uuid: '2',
+          id: '2',
           terminalName: 'Second terminal',
         },
         {
-          uuid: '3',
+          id: '3',
           terminalName: 'Third terminal',
         },
         {
-          uuid: '4',
+          id: '4',
           terminalName: 'Fourth terminal',
         },
         {
-          uuid: '5',
+          id: '5',
           terminalName: 'Fifth terminal',
         },
       ],
@@ -1032,7 +851,7 @@ describe('Terminal reducer', () => {
     const initialState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
       ],
@@ -1042,7 +861,7 @@ describe('Terminal reducer', () => {
     const expectedState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
       ],
@@ -1060,11 +879,11 @@ describe('Terminal reducer', () => {
     const initialState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
         {
-          uuid: '2',
+          id: '2',
           terminalName: 'Second terminal',
         },
       ],
@@ -1074,11 +893,11 @@ describe('Terminal reducer', () => {
     const expectedState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
         {
-          uuid: '2',
+          id: '2',
           terminalName: 'Second terminal',
         },
       ],
@@ -1096,23 +915,23 @@ describe('Terminal reducer', () => {
     const initialState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
         {
-          uuid: '2',
+          id: '2',
           terminalName: 'Second terminal',
         },
         {
-          uuid: '3',
+          id: '3',
           terminalName: 'Third terminal',
         },
         {
-          uuid: '4',
+          id: '4',
           terminalName: 'Fourth terminal',
         },
         {
-          uuid: '5',
+          id: '5',
           terminalName: 'Fifth terminal',
         },
       ],
@@ -1122,23 +941,23 @@ describe('Terminal reducer', () => {
     const expectedState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
         },
         {
-          uuid: '2',
+          id: '2',
           terminalName: 'Second terminal',
         },
         {
-          uuid: '3',
+          id: '3',
           terminalName: 'Third terminal',
         },
         {
-          uuid: '4',
+          id: '4',
           terminalName: 'Fourth terminal',
         },
         {
-          uuid: '5',
+          id: '5',
           terminalName: 'Fifth terminal',
         },
       ],
@@ -1156,7 +975,7 @@ describe('Terminal reducer', () => {
     const initialState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
           terminalType: 'CMD',
           terminalStartupDir: 'somePath',
@@ -1169,7 +988,7 @@ describe('Terminal reducer', () => {
     const expectedState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
           terminalType: 'CMD',
           terminalStartupDir: 'somePath',
@@ -1181,8 +1000,9 @@ describe('Terminal reducer', () => {
 
     const finalState = TerminalReducer(initialState, {
       type: TerminalActionTypes.EDIT_TERMINAL_INSTANCE,
+      previousId: 'randomBlabla',
       terminal: {
-        uuid: 'randomBlabla',
+        id: '5678',
         terminalName: 'First Edited Name',
         terminalType: 'CMD Edited',
         terminalStartupDir: 'somePath Edited',
@@ -1197,7 +1017,7 @@ describe('Terminal reducer', () => {
     const initialState = {
       terminals: [
         {
-          uuid: '1',
+          id: '1',
           terminalName: 'First terminal',
           terminalType: 'CMD',
           terminalStartupDir: 'somePath',
@@ -1210,20 +1030,21 @@ describe('Terminal reducer', () => {
     const expectedState = {
       terminals: [
         {
-          uuid: '1',
+          id: '4',
           terminalName: 'First Edited Name',
           terminalType: 'CMD Edited',
           terminalStartupDir: 'somePath Edited',
           terminalStartupCommands: ['cmd1 Edited', 'cmd2 Edited'],
         },
       ],
-      selectedTerminal: '1234abcd',
+      selectedTerminal: '4',
     };
 
     const finalState = TerminalReducer(initialState, {
       type: TerminalActionTypes.EDIT_TERMINAL_INSTANCE,
+      previousId: '1',
       terminal: {
-        uuid: '1',
+        id: '4',
         terminalName: 'First Edited Name',
         terminalType: 'CMD Edited',
         terminalStartupDir: 'somePath Edited',
