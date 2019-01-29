@@ -164,9 +164,19 @@ const importTerminalsToObject = (jsonFile) => {
   };
 };
 
+const focusTerminalInstance = (currentTerminalInstance) => {
+  const terminal = terminals.find(singleTerminal => singleTerminal.id === currentTerminalInstance);
+  if (isUndefined(terminal)) {
+    return;
+  }
+
+  terminal.xTermInstance.focus();
+};
+
 export {
   createNewTerminalInstance,
   exportTermninalsToObject,
+  focusTerminalInstance,
   hookTerminalToRenderer,
   importTerminalsToObject,
   killAllTerminalInstances,

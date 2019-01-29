@@ -207,4 +207,63 @@ describe('Terminal - Logic actions', () => {
     expect(TerminalService.stopTerminalInstance.callCount).to.be.equal(1);
     expect(TerminalService.stopTerminalInstance.getCall(0).args[0]).to.be.equal('0987');
   });
+
+  it('should create an action to select terminal instance', () => {
+    sinonSandbox.stub(TerminalService, 'focusTerminalInstance').returns();
+    const mockedTerminalIdToSelect = '0987';
+    const expectedActions = [
+      {
+        type: TerminalActionTypes.SELECT_TERMINAL_INSTANCE,
+        terminalId: '0987',
+      },
+    ];
+    const store = mockStore({
+      TerminalsReducer: {
+        terminals: [],
+        selectedTerminal: '',
+      },
+    });
+    store.dispatch(TerminalActions.selectTerminalInstance(mockedTerminalIdToSelect));
+    expect(store.getActions()).to.deep.equal(expectedActions);
+    expect(TerminalService.focusTerminalInstance.callCount).to.be.equal(1);
+    expect(TerminalService.focusTerminalInstance.getCall(0).args[0]).to.be.equal('0987');
+  });
+
+  it('should create an action to go to next terminal instance', () => {
+    sinonSandbox.stub(TerminalService, 'focusTerminalInstance').returns();
+    const expectedActions = [
+      {
+        type: TerminalActionTypes.GO_TO_NEXT_TERMINAL_INSTANCE,
+      },
+    ];
+    const store = mockStore({
+      TerminalsReducer: {
+        terminals: [],
+        selectedTerminal: '0987',
+      },
+    });
+    store.dispatch(TerminalActions.goToNextTerminalInstance());
+    expect(store.getActions()).to.deep.equal(expectedActions);
+    expect(TerminalService.focusTerminalInstance.callCount).to.be.equal(1);
+    expect(TerminalService.focusTerminalInstance.getCall(0).args[0]).to.be.equal('0987');
+  });
+
+  it('should create an action to go to previous terminal instance', () => {
+    sinonSandbox.stub(TerminalService, 'focusTerminalInstance').returns();
+    const expectedActions = [
+      {
+        type: TerminalActionTypes.GO_TO_PREVIOUS_TERMINAL_INSTANCE,
+      },
+    ];
+    const store = mockStore({
+      TerminalsReducer: {
+        terminals: [],
+        selectedTerminal: '0987',
+      },
+    });
+    store.dispatch(TerminalActions.goToPreviousTerminalInstance());
+    expect(store.getActions()).to.deep.equal(expectedActions);
+    expect(TerminalService.focusTerminalInstance.callCount).to.be.equal(1);
+    expect(TerminalService.focusTerminalInstance.getCall(0).args[0]).to.be.equal('0987');
+  });
 });

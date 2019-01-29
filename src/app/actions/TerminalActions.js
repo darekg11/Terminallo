@@ -53,12 +53,18 @@ const reloadTerminalInstance = terminalId => (dispatch, getState) => {
   const configurationOfTerminal = currentTerminals.find(singleTerminal => singleTerminal.id === previousId);
   const reloadedTerminalInstanceId = TerminalService.reloadTerminalInstance(previousId, configurationOfTerminal);
   dispatch(reloadTerminalAction(previousId, reloadedTerminalInstanceId));
+  TerminalService.focusTerminalInstance(reloadedTerminalInstanceId);
 };
 
-const selectTerminalInstance = terminalId => ({
+const selectTerminalInstanceAction = terminalId => ({
   type: TerminalActionTypes.SELECT_TERMINAL_INSTANCE,
   terminalId,
 });
+
+const selectTerminalInstance = terminalId => (dispatch) => {
+  dispatch(selectTerminalInstanceAction(terminalId));
+  TerminalService.focusTerminalInstance(terminalId);
+};
 
 const importTerminalsAction = terminals => ({
   type: TerminalActionTypes.IMPORT_TERMINALS,
@@ -82,9 +88,11 @@ const deleteTerminalAction = terminalId => ({
   terminalId,
 });
 
-const deleteTerminalInstance = terminalId => (dispatch) => {
+const deleteTerminalInstance = terminalId => (dispatch, getState) => {
   TerminalService.killTerminalInstance(terminalId);
   dispatch(deleteTerminalAction(terminalId));
+  const currentlySelectedTerminal = getState().TerminalsReducer.selectedTerminal;
+  TerminalService.focusTerminalInstance(currentlySelectedTerminal);
 };
 
 const moveRightTerminalInstance = terminalId => ({
@@ -101,19 +109,32 @@ const stopTerminalInstance = (terminalId) => {
   TerminalService.stopTerminalInstance(terminalId);
 };
 
-const goToNextTerminalInstance = () => ({
+const goToNextTerminalInstanceAction = () => ({
   type: TerminalActionTypes.GO_TO_NEXT_TERMINAL_INSTANCE,
 });
 
-const goToPreviousTerminalInstance = () => ({
+const goToNextTerminalInstance = () => (dispatch, getState) => {
+  dispatch(goToNextTerminalInstanceAction());
+  const currentlySelectedTerminal = getState().TerminalsReducer.selectedTerminal;
+  TerminalService.focusTerminalInstance(currentlySelectedTerminal);
+};
+
+const goToPreviousTerminalInstanceAction = () => ({
   type: TerminalActionTypes.GO_TO_PREVIOUS_TERMINAL_INSTANCE,
 });
+
+const goToPreviousTerminalInstance = () => (dispatch, getState) => {
+  dispatch(goToPreviousTerminalInstanceAction());
+  const currentlySelectedTerminal = getState().TerminalsReducer.selectedTerminal;
+  TerminalService.focusTerminalInstance(currentlySelectedTerminal);
+};
 
 export default {
   addNewTerminalAction,
   addNewTerminalInstance,
   editTerminalAction,
   editTerminalInstance,
+  selectTerminalInstanceAction,
   selectTerminalInstance,
   importTerminalsAction,
   importTerminalInstances,
@@ -124,6 +145,8 @@ export default {
   moveRightTerminalInstance,
   moveLeftTerminalInstance,
   stopTerminalInstance,
+  goToNextTerminalInstanceAction,
   goToNextTerminalInstance,
+  goToPreviousTerminalInstanceAction,
   goToPreviousTerminalInstance,
 };

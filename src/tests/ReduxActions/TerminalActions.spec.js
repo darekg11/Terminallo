@@ -51,7 +51,7 @@ describe('actions', () => {
       type: TerminalActionTypes.SELECT_TERMINAL_INSTANCE,
       terminalId: '123456789',
     };
-    expect(TerminalActions.selectTerminalInstance('123456789')).to.deep.equal(expectedAction);
+    expect(TerminalActions.selectTerminalInstanceAction('123456789')).to.deep.equal(expectedAction);
   });
 
   it('should create an action to import terminal instances', () => {
@@ -114,13 +114,13 @@ describe('actions', () => {
     const expectedAction = {
       type: TerminalActionTypes.GO_TO_NEXT_TERMINAL_INSTANCE,
     };
-    expect(TerminalActions.goToNextTerminalInstance()).to.deep.equal(expectedAction);
+    expect(TerminalActions.goToNextTerminalInstanceAction()).to.deep.equal(expectedAction);
   });
 
   it('should create an action to go to previous terminal instance', () => {
     const expectedAction = {
       type: TerminalActionTypes.GO_TO_PREVIOUS_TERMINAL_INSTANCE,
     };
-    expect(TerminalActions.goToPreviousTerminalInstance()).to.deep.equal(expectedAction);
+    expect(TerminalActions.goToPreviousTerminalInstanceAction()).to.deep.equal(expectedAction);
   });
 });
