@@ -4,6 +4,8 @@ import sinon from 'sinon';
 import * as TerminalService from '../../app/services/TerminalService';
 import * as WatcherService from '../../app/services/WatcherService';
 
+const pty = require('node-pty');
+
 let sinonSandbox = null;
 
 describe('Terminal service', () => {
@@ -26,7 +28,7 @@ describe('Terminal service', () => {
     it('should return converted terminals', () => {
       const input = [
         {
-          uuid: '1234abcd',
+          id: '1234abcd',
           terminalType: 'CMD',
           terminalName: 'Test 1',
           terminalStartupDir: '../someDir/dir1',
@@ -34,7 +36,7 @@ describe('Terminal service', () => {
           terminalWatchers: ['../someDir', '../../someDir2'],
         },
         {
-          uuid: '1234abcd5678',
+          id: '1234abcd5678',
           terminalType: 'CMD',
           terminalName: 'Test 2',
           terminalStartupDir: '../someDir/dir2',
@@ -103,7 +105,7 @@ describe('Terminal service', () => {
       const testInput = {
         terminals: [
           {
-            uuid: 'test1234',
+            id: 'test1234',
             terminalType: 'someTerminalType',
             name: 'Terminal1',
             terminalStartupDir: 'SomePath',
@@ -111,7 +113,7 @@ describe('Terminal service', () => {
             terminalWatchers: ['someDir1', 'someDir2'],
           },
           {
-            uuid: 'test5678',
+            id: 'test5678',
             terminalType: 'anotherTerminalType',
             name: 'Terminal2',
             terminalStartupDir: 'SomeDifferentPath',
@@ -121,7 +123,7 @@ describe('Terminal service', () => {
         ],
       };
       const result = TerminalService.importTerminalsToObject(testInput);
-      expect(result.terminals[0].uuid).to.not.be.equal('test1234');
+      expect(result.terminals[0].id).to.not.be.equal('test1234');
       expect(result.terminals[0].terminalType).to.be.equal('someTerminalType');
       expect(result.terminals[0].terminalName).to.be.equal('Terminal1');
       expect(result.terminals[0].terminalStartupDir).to.be.equal('SomePath');
@@ -130,7 +132,7 @@ describe('Terminal service', () => {
       expect(result.terminals[0].terminalWatchers[0]).to.be.equal('someDir1');
       expect(result.terminals[0].terminalWatchers[1]).to.be.equal('someDir2');
 
-      expect(result.terminals[1].uuid).to.not.be.equal('test5678');
+      expect(result.terminals[1].id).to.not.be.equal('test5678');
       expect(result.terminals[1].terminalType).to.be.equal('anotherTerminalType');
       expect(result.terminals[1].terminalName).to.be.equal('Terminal2');
       expect(result.terminals[1].terminalStartupDir).to.be.equal('SomeDifferentPath');
@@ -167,9 +169,68 @@ describe('Terminal service', () => {
     });
   });
 
+  describe('createNewTerminalInstance', () => {
+    it('should create terminal instances, watchers and execute startup commands - unix', (done) => {
+      sinonSandbox.spy(WatcherService, 'addNewWatcher');
+      const virtualTerminalInstanceMock = {
+        write: sinonSandbox.stub().returns({}),
+        on: sinonSandbox.stub().returns({}),
+      };
+      sinonSandbox.stub(pty, 'spawn').returns(virtualTerminalInstanceMock);
+      const terminalData = {
+        terminalType: 'BASH',
+        terminalStartupDir: '/home/test',
+        terminalStartupCommands: ['pwd', 'ls -l'],
+        terminalWatchers: ['/home/test/first', '/home/test/second'],
+      };
+
+      TerminalService.createNewTerminalInstance(terminalData);
+      setTimeout(() => {
+        expect(pty.spawn.calledOnce).to.be.equal(true);
+        expect(pty.spawn.getCall(0).args[0]).to.be.equal('bash');
+        expect(pty.spawn.getCall(0).args[2].name).to.be.equal('xterm-color');
+        expect(pty.spawn.getCall(0).args[2].cwd).to.be.equal('/home/test');
+        expect(virtualTerminalInstanceMock.write.callCount).to.be.equal(2);
+        expect(virtualTerminalInstanceMock.write.getCall(0).args[0]).to.be.equal('pwd\n');
+        expect(virtualTerminalInstanceMock.write.getCall(1).args[0]).to.be.equal('ls -l\n');
+        expect(WatcherService.addNewWatcher.callCount).to.be.equal(1);
+        expect(WatcherService.addNewWatcher.getCall(0).args[0]).to.not.be.equal('');
+        expect(WatcherService.addNewWatcher.getCall(0).args[1][0]).to.be.equal('/home/test/first');
+        expect(WatcherService.addNewWatcher.getCall(0).args[1][1]).to.be.equal('/home/test/second');
+        done();
+      }, 500);
+    });
+  });
+
+  it('should create terminal instances, watchers and execute startup commands - windows', (done) => {
+    sinonSandbox.spy(WatcherService, 'addNewWatcher');
+    const virtualTerminalInstanceMock = {
+      write: sinonSandbox.stub().returns({}),
+      on: sinonSandbox.stub().returns({}),
+    };
+    sinonSandbox.stub(pty, 'spawn').returns(virtualTerminalInstanceMock);
+    const terminalData = {
+      terminalType: 'CMD',
+      terminalStartupDir: 'C:/someDir',
+      terminalStartupCommands: ['dir', 'mkdir'],
+      terminalWatchers: ['C:/someDir/first', 'C:/someDir/second'],
+    };
+
+    TerminalService.createNewTerminalInstance(terminalData);
+    setTimeout(() => {
+      expect(pty.spawn.calledOnce).to.be.equal(true);
+      expect(pty.spawn.getCall(0).args[0]).to.be.equal('cmd');
+      expect(pty.spawn.getCall(0).args[2].name).to.be.equal('xterm-color');
+      expect(pty.spawn.getCall(0).args[2].cwd).to.be.equal('C:/someDir');
+      expect(virtualTerminalInstanceMock.write.callCount).to.be.equal(2);
+      expect(virtualTerminalInstanceMock.write.getCall(0).args[0]).to.be.equal('dir\n');
+      expect(virtualTerminalInstanceMock.write.getCall(1).args[0]).to.be.equal('mkdir\n');
+      done();
+    }, 500);
+  });
+
   describe('killTerminalInstance method', () => {
     it('should call closing method on terminal instance', () => {
-      sinonSandbox.spy(WatcherService, 'removeWatcher');
       const terminalInstance = {
         uuid: 'someUuid',
         xTermInstance: {
