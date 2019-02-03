@@ -1,3 +1,5 @@
+import os from 'os';
+import { Terminal } from 'xterm';
 import { expect } from 'chai';
 import 'chai/register-should';
 import sinon from 'sinon';
@@ -171,6 +173,7 @@ describe('Terminal service', () => {
 
   describe('createNewTerminalInstance', () => {
     it('should create terminal instances, watchers and execute startup commands - unix', (done) => {
+      sinonSandbox.stub(os, 'platform').returns('unix');
       sinonSandbox.spy(WatcherService, 'addNewWatcher');
       const virtualTerminalInstanceMock = {
         write: sinonSandbox.stub().returns({}),
@@ -204,6 +207,7 @@ describe('Terminal service', () => {
 
   it('should create terminal instances, watchers and execute startup commands - windows', (done) => {
     sinonSandbox.spy(WatcherService, 'addNewWatcher');
+    sinonSandbox.stub(os, 'platform').returns('win32');
     const virtualTerminalInstanceMock = {
       write: sinonSandbox.stub().returns({}),
       on: sinonSandbox.stub().returns({}),
@@ -219,7 +223,7 @@ describe('Terminal service', () => {
     TerminalService.createNewTerminalInstance(terminalData);
     setTimeout(() => {
       expect(pty.spawn.calledOnce).to.be.equal(true);
-      expect(pty.spawn.getCall(0).args[0]).to.be.equal('cmd');
+      expect(pty.spawn.getCall(0).args[0]).to.be.equal('cmd.exe');
       expect(pty.spawn.getCall(0).args[2].name).to.be.equal('xterm-color');
       expect(pty.spawn.getCall(0).args[2].cwd).to.be.equal('C:/someDir');
       expect(virtualTerminalInstanceMock.write.callCount).to.be.equal(2);
@@ -229,25 +233,110 @@ describe('Terminal service', () => {
     }, 500);
   });
 
+  describe('resizeTerminal method', () => {
+    it('should resize terminal if terminal instance is registered', () => {
+      sinonSandbox.stub(os, 'platform').returns('unix');
+      const virtualTerminalInstanceMock = {
+        write: sinonSandbox.stub().returns({}),
+        on: sinonSandbox.stub().returns({}),
+        resize: sinonSandbox.stub().returns({}),
+      };
+      const xTermInstance = {
+        applyAddon: sinonSandbox.stub().returns({}),
+        proposeGeometry: sinonSandbox.stub().returns({ rows: 20, cols: 50 }),
+        fit: sinonSandbox.stub().returns({}),
+        attachCustomKeyEventHandler: sinonSandbox.stub().returns({}),
+      };
+      sinonSandbox.stub(Terminal, 'applyAddon').returns(xTermInstance.applyAddon);
+      sinonSandbox.stub(Terminal.prototype, 'proposeGeometry').returns(xTermInstance.proposeGeometry);
+      sinonSandbox.stub(Terminal.prototype, 'fit').returns(xTermInstance.fit);
+      sinonSandbox
+        .stub(Terminal.prototype, 'attachCustomKeyEventHandler')
+        .returns(xTermInstance.attachCustomKeyEventHandler);
+      sinonSandbox.stub(pty, 'spawn').returns(virtualTerminalInstanceMock);
+      const terminalData = {
+        terminalType: 'BASH',
+        terminalStartupDir: '/home/test',
+        terminalStartupCommands: ['pwd', 'ls -l'],
+        terminalWatchers: ['/home/test/first', '/home/test/second'],
+      };
+
+      const terminalId = TerminalService.createNewTerminalInstance(terminalData);
+      TerminalService.resizeTerminal(terminalId);
+      expect(Terminal.prototype.proposeGeometry.calledOnce).to.be.equal(true);
+      expect(Terminal.prototype.fit.calledOnce).to.be.equal(true);
+      expect(virtualTerminalInstanceMock.resize.calledOnce).to.be.equal(true);
+    });
+
+    it('should not resize terminal if terminal instance is not registered', () => {
+      sinonSandbox.stub(os, 'platform').returns('unix');
+      const virtualTerminalInstanceMock = {
+        write: sinonSandbox.stub().returns({}),
+        on: sinonSandbox.stub().returns({}),
+        resize: sinonSandbox.stub().returns({}),
+      };
+      const xTermInstance = {
+        applyAddon: sinonSandbox.stub().returns({}),
+        proposeGeometry: sinonSandbox.stub().returns({ rows: 20, cols: 50 }),
+        fit: sinonSandbox.stub().returns({}),
+        attachCustomKeyEventHandler: sinonSandbox.stub().returns({}),
+      };
+      sinonSandbox.stub(Terminal, 'applyAddon').returns(xTermInstance.applyAddon);
+      sinonSandbox.stub(Terminal.prototype, 'proposeGeometry').returns(xTermInstance.proposeGeometry);
+      sinonSandbox.stub(Terminal.prototype, 'fit').returns(xTermInstance.fit);
+      sinonSandbox
+        .stub(Terminal.prototype, 'attachCustomKeyEventHandler')
+        .returns(xTermInstance.attachCustomKeyEventHandler);
+      sinonSandbox.stub(pty, 'spawn').returns(virtualTerminalInstanceMock);
+      const terminalData = {
+        terminalType: 'BASH',
+        terminalStartupDir: '/home/test',
+        terminalStartupCommands: ['pwd', 'ls -l'],
+        terminalWatchers: ['/home/test/first', '/home/test/second'],
+      };
+
+      TerminalService.createNewTerminalInstance(terminalData);
+      TerminalService.resizeTerminal('not-existing');
+      expect(Terminal.prototype.proposeGeometry.callCount).to.be.equal(0);
+      expect(Terminal.prototype.fit.callCount).to.be.equal(0);
+      expect(virtualTerminalInstanceMock.resize.callCount).to.be.equal(0);
+    });
+  });
+
   describe('killTerminalInstance method', () => {
     it('should call closing method on terminal instance', () => {
-      const terminalInstance = {
-        uuid: 'someUuid',
-        xTermInstance: {
-          destroy: sinon.spy(),
-        },
-        virtualTerminalInstance: {
-          kill: sinon.spy(),
-        },
-        watcherInstance: {
-          close: sinon.spy(),
-        },
+      sinonSandbox.stub(os, 'platform').returns('unix');
+      sinonSandbox.stub(WatcherService, 'removeWatcher');
+      const virtualTerminalInstanceMock = {
+        write: sinonSandbox.stub().returns({}),
+        on: sinonSandbox.stub().returns({}),
+        resize: sinonSandbox.stub().returns({}),
+        kill: sinonSandbox.stub().returns({}),
       };
-      TerminalService.killTerminalInstance(terminalInstance);
-      expect(terminalInstance.xTermInstance.destroy.calledOnce).to.be.equal(true);
-      expect(terminalInstance.virtualTerminalInstance.kill.calledOnce).to.be.equal(true);
+      const xTermInstance = {
+        applyAddon: sinonSandbox.stub().returns({}),
+        attachCustomKeyEventHandler: sinonSandbox.stub().returns({}),
+        dispose: sinonSandbox.stub().returns({}),
+      };
+      sinonSandbox.stub(Terminal, 'applyAddon').returns(xTermInstance.applyAddon);
+      sinonSandbox.stub(Terminal.prototype, 'dispose').returns(xTermInstance.dispose);
+      sinonSandbox
+        .stub(Terminal.prototype, 'attachCustomKeyEventHandler')
+        .returns(xTermInstance.attachCustomKeyEventHandler);
+      sinonSandbox.stub(pty, 'spawn').returns(virtualTerminalInstanceMock);
+      const terminalData = {
+        terminalType: 'BASH',
+        terminalStartupDir: '/home/test',
+        terminalStartupCommands: ['pwd', 'ls -l'],
+        terminalWatchers: ['/home/test/first', '/home/test/second'],
+      };
+
+      const createdTerminalInstanceId = TerminalService.createNewTerminalInstance(terminalData);
+      TerminalService.killTerminalInstance(createdTerminalInstanceId);
+      expect(Terminal.prototype.dispose.calledOnce).to.be.equal(true);
+      expect(virtualTerminalInstanceMock.kill.calledOnce).to.be.equal(true);
       expect(WatcherService.removeWatcher.calledOnce).to.be.equal(true);
-      expect(WatcherService.removeWatcher.getCall(0).args[0]).to.be.equal('someUuid');
+      expect(WatcherService.removeWatcher.getCall(0).args[0]).to.be.equal(createdTerminalInstanceId);
     });
   });
 });
