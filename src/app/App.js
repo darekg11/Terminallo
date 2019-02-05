@@ -10,12 +10,15 @@ import './App.css';
 
 const store = configureStore();
 
-ReactDOM.render(
+const App = () => (
   <Provider store={store}>
     <MainWindow />
-  </Provider>,
-  document.getElementById('root'),
+  </Provider>
 );
+
+ReactDOM.render(<App />, document.getElementById('root') || document.createElement('div'));
 
 KeyboardShourtcutsService.initializeDefaults(store);
 WatcherService.initialize(store);
+
+export default App;
